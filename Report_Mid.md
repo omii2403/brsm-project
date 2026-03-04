@@ -12,11 +12,10 @@ institute: "International Institute of Information Technology, Hyderabad"
 date: "March 2026"
 geometry: "a4paper, margin=2.5cm, top=3cm, bottom=3cm"
 fontsize: 11pt
-linestretch: 1.4
+linestretch: 1.15
 numbersections: true
-toc: true
-toc-depth: 2
-secnumdepth: 3
+toc: false
+secnumdepth: 2
 header-includes:
   - \usepackage{booktabs}
   - \usepackage{float}
@@ -59,22 +58,14 @@ abstract: |
 
 ## Background and Motivation
 
-The Verbal Fluency Task (VFT) is a widely used cognitive paradigm in which
-participants freely recall as many category members as possible within a
-fixed time window \cite{troyer1997}.  The resulting sequence of words encodes
-rich information about the structure of semantic memory: *how many* words are
-produced, *how quickly*, and *in what order*.  Behavioural signatures such as
-clustering (consecutive retrieval of semantically related words) and switching
-(abrupt topic change marked by a long pause) have been extensively documented in
-English-speaking populations, yet Hindi-speaking samples remain underexplored.
-
-The present study collects VFT data from university students at IIIT Hyderabad
-and applies the full statistical pipeline from the BRSM course --- descriptive
-statistics, data visualisation, and hypothesis testing ---
-to characterise Hindi retrieval dynamics.  A second task, the Spatial
-Arrangement Method (SpAM) \cite{hout2013}, will complement the VFT by providing
-an independent measure of semantic neighbourhood structure; SpAM analysis is
-planned as the second phase and is not yet complete.
+The Verbal Fluency Task (VFT) is a cognitive paradigm in which participants
+freely recall category members within a fixed time window \cite{troyer1997}.
+Behavioural signatures such as clustering (bursts of semantically related words)
+and switching (long pauses at subcategory boundaries) are well-documented in
+English-speaking populations but remain underexplored in Hindi.  The present
+study applies the full BRSM statistical pipeline to characterise retrieval
+dynamics in a Hindi-speaking student cohort at IIIT Hyderabad.  A Spatial
+Arrangement Method (SpAM) task \cite{hout2013} is planned as Phase 2.
 
 ## Research Questions
 
@@ -130,16 +121,7 @@ disorder.
 
 Figure~1 shows the demographic breakdown as a combined panel.
 
-![\textbf{Figure 1.} Participant demographics: (A) Gender distribution (pie chart); (B) Age histogram with mean (red dashed) and median (green dot-dash) reference lines; (C) Education level in years (bar chart); (D) State/UT of origin (horizontal bar; blue = North/Central, orange = South/East India). $N = 35$.](images/demo_fig05_combined.png){width=97%}
-
-## Measurement Scales
-
-The variables span all four measurement scales:
-
-- **Nominal** --- Semantic domain (animals, foods, colours, body-parts); gender; state of origin; language tag (Hindi/English)
-- **Ordinal** --- Serial position of each word within the retrieval sequence
-- **Interval** --- Spatial coordinates from the SpAM task (arbitrary origin; *planned*)
-- **Ratio** --- IRT in milliseconds (true zero); total word count; years of education
+![-\textbf{Figure 1.} Participant demographics: (A) Gender; (B) Age histogram; (C) Education; (D) State of origin. $N = 35$.](images/demo_fig05_combined.png){width=97%}
 
 
 # Materials, Procedure, and Data
@@ -150,20 +132,7 @@ The experiment was delivered through a custom web application hosted
 online.  Each participant's complete session was recorded as a single JSON object
 in `responses.json`, keyed by a unique `session_id`.
 
-**`responses.json` structure** (per participant entry):
-
-| Field | Description |
-|:------|:------------|
-| `subject_id` | Numeric; e.g., `10255` |
-| `trial_type` | `html-keyboard-response` for VFT, `html-button-response` for SpAM |
-| `domain` | `animals`, `foods`, `colours`, `body-parts` (plus practice domains) |
-| `tagged_responses` | JSON string array of `{response, tag}` objects |
-| `response_times` | JSON string array of per-keystroke response latencies (ms) |
-| `droppedwords` | SpAM spatial coordinates per word: `x_norm`, `y_norm` in $[0,1]$ |
-
-The raw JSON was parsed in Python (`gen_demographics.py` and the VFT notebook)
-to extract per-word response times and compute IRTs as the difference between
-successive `response_times` values within each domain trial.
+Each session is stored as a JSON object containing `subject_id`, `domain`, per-word `response_times` arrays (ms), `tagged_responses` (word + script tag), and `droppedwords` (SpAM spatial coordinates). IRTs were computed as $\text{IRT}_i = t_i - t_{i-1}$ per domain trial.
 
 ## Verbal Fluency Task Procedure
 
@@ -199,25 +168,7 @@ adaptive threshold (mean IRT $+$ 1~SD of that participant's IRTs) was used as
 the switching criterion.  Any IRT exceeding this threshold was coded as a
 **cluster switch**.
 
-## Merged Dataset Description
-
-The file `merged_vft_spam_responses.csv` (1,040 rows after merging VFT and SpAM
-position data) contains the following columns:
-
-| Column | Type | Description |
-|:-------|:-----|:------------|
-| `subject_id` | int | Participant identifier |
-| `session_id` | str | session key |
-| `domain` | str | Semantic domain (animals/foods/colours/body-parts) |
-| `position` | int | Serial position within the retrieval sequence |
-| `word` | str | Recalled word |
-| `language_type` | str | `Hindi` or `English` |
-| `rt_ms` | float | Inter-response time (ms) |
-| `x` | float | SpAM x coordinate, normalised to $[0,1]$ |
-| `y` | float | SpAM y coordinate, normalised to $[0,1]$ |
-
-The combination of `rt_ms` (temporal behaviour) and `(x, y)` (spatial
-representation) enables the cross-task correlation planned under RQ4.
+The merged file `merged_vft_spam_responses.csv` (1,040 rows) combines per-word IRT (`rt_ms`) with SpAM spatial coordinates (`x`, `y`), enabling the RQ4 cross-task correlation.
 
 
 # Exploratory Data Analysis
@@ -264,20 +215,17 @@ normal curve.
 
 Table: \textbf{Table 2.} Overall descriptive statistics for Hindi IRT ($n = 712$).
 
-| Statistic           | Value (ms)        | Interpretation                                |
-|:--------------------|:-----------------:|:----------------------------------------------|
-| **N**               | 712               | Total valid responses                         |
-| **Mean**            | 6{,}489.5         | Average retrieval time (pulled by tail)       |
-| **Median**          | 5{,}389.4         | Robust centre; preferred summary              |
-| **Mode**            | 6{,}410.0         | Most frequent IRT value                       |
-| **Std Dev**         | 5{,}018.8         | High variability (within vs between clusters) |
-| **Min**             | 732.8             | Fastest retrieval                             |
-| **Max**             | 42{,}634.4        | Slowest (cluster-switch pause)                |
-| **Q1 (25th pct)**   | 3{,}280.8         |                                               |
-| **Q3 (75th pct)**   | 8{,}155.6         |                                               |
-| **IQR**             | 4{,}874.8         | Robust spread                                 |
-| **Skewness**        | 2.54              | Strongly right-skewed                         |
-| **Kurtosis**        | 9.89              | Leptokurtic (heavy-tailed)                    |
+| Statistic           | Value (ms)        |
+|:--------------------|:-----------------:|
+| **N**               | 712               |
+| **Mean**            | 6{,}489.5         |
+| **Median**          | 5{,}389.4         |
+| **Std Dev**         | 5{,}018.8         |
+| **Min**             | 732.8             |
+| **Max**             | 42{,}634.4        |
+| **IQR**             | 4{,}874.8         |
+| **Skewness**        | 2.54              |
+| **Kurtosis**        | 9.89              |
 
 The right skew is a **theoretically expected signature**: within-cluster
 retrievals (fast) form a dense left-side peak, while cluster-switch pauses
@@ -294,65 +242,27 @@ exhibited higher mean IRTs and strong positive skew.
 
 Table: \textbf{Table 3.} IRT descriptive statistics by semantic domain.
 
-| Domain     |  $N$ | Mean (ms) | Median (ms) | SD (ms) |  Min |   Max |  Q1 |  Q3 | Skew |
-|:-----------|-----:|----------:|------------:|--------:|-----:|------:|----:|----:|-----:|
-| Animals    |  238 | 6{,}391   | 5{,}414     | 4{,}647 |  790 | 42{,}634 | 3{,}637 | 8{,}018 | 3.06 |
-| Body-parts |  177 | 6{,}872   | 5{,}724     | 4{,}994 | 1{,}013 | 32{,}357 | 3{,}852 | 8{,}458 | 2.51 |
-| Colours    |   41 | 4{,}975   | 3{,}484     | 3{,}512 |  772 | 14{,}126 | 2{,}187 | 7{,}872 | 0.70 |
-| Foods      |  256 | 6{,}559   | 5{,}205     | 5{,}525 |  733 | 35{,}677 | 2{,}846 | 8{,}053 | 2.28 |
+| Domain     |  $N$ | Mean (ms) | Median (ms) | SD (ms) | Skew |
+|:-----------|-----:|----------:|------------:|--------:|-----:|
+| Animals    |  238 | 6{,}391   | 5{,}414     | 4{,}647 | 3.06 |
+| Body-parts |  177 | 6{,}872   | 5{,}724     | 4{,}994 | 2.51 |
+| Colours    |   41 | 4{,}975   | 3{,}484     | 3{,}512 | 0.70 |
+| Foods      |  256 | 6{,}559   | 5{,}205     | 5{,}525 | 2.28 |
 
 
 # Data Visualisation
 
-## Plot 1 — Histogram
+Figures 4--8 summarise the IRT distributions, domain comparisons, serial position effects, and cluster metrics.
 
-Figure~3 (shown above) provides the full distribution view.  The bimodal
-tendency — a dense mass below 10{,}000~ms with a mode near 6{,}400~ms, and a
-right tail extending to $\sim$42{,}000~ms — is consistent with two latent
-retrieval regimes (within-cluster vs cluster-switch).
+![\textbf{Figure 4.} \textit{Violin / box plots of IRT by domain.} Centre line = median; box = Q1--Q3; whiskers = $1.5 \times \text{IQR}$; dots = outliers. Colours is tightest; Body-parts is slowest.](images/vft_fig02_violin_irt.png){width=84%}
 
-## Plot 2 — Box Plot / Violin Plot
+![\textbf{Figure 5.} \textit{Mean and median IRT per domain} (error bars $= \pm 1$ SE). Colours fastest; Body-parts slowest; mean $>$ median in all domains confirms right skew.](images/vft_fig05_bar_mean_irt.png){width=84%}
 
-Figure~4 displays the IRT distribution per domain via violin plots overlaid on
-box plots.  Body-parts has the highest median and whisker range; Colours is
-distinctly tighter and lower.  The many high-end outliers across all domains are
-cluster-switch events.
+![\textbf{Figure 6.} \textit{Serial position vs IRT.} Positive OLS slope in all four domains confirms lexical exhaustion: later words take progressively longer.](images/vft_fig07_word_irt_position.png){width=88%}
 
-![\textbf{Figure 4.} \textit{Plot 2 --- Violin / box plots of IRT by domain.} Centre line = median; box = Q1--Q3; whiskers = $1.5 \times \text{IQR}$; dots = outliers. Colours is tightest (closed vocabulary); Body-parts is slowest.](images/vft_fig02_violin_irt.png){width=84%}
+![\textbf{Figure 7.} \textit{Raincloud plot of Hindi IRT.} Half-violin + box + jittered points per domain. Confirms right-skewed, heavy-tailed distributions.](images/vft_fig03_raincloud_irt.png){width=88%}
 
-## Plot 3 — Bar Chart: Mean and Median IRT per Domain
-
-Figure~5 shows mean and median IRT per domain with standard error bars.  For all
-domains the mean exceeds the median, confirming right skew.  Body-parts has the
-highest mean; Colours the lowest.
-
-![\textbf{Figure 5.} \textit{Plot 3 --- Bar charts of mean (top) and median (bottom) IRT per domain.} Error bars $= \pm 1$ SE. Colours is fastest; Body-parts is slowest.](images/vft_fig05_bar_mean_irt.png){width=84%}
-
-## Plot 4 — Scatter Plot: Serial Position vs IRT
-
-Figure~6 plots each word produced by each participant against its serial
-position in the sequence, with per-domain OLS trend lines.  The positive slope
-in all four domains confirms the **serial position effect** (lexical
-exhaustion): words retrieved later take progressively longer, as early
-sub-clusters are depleted and the participant must search more broadly.
-
-![\textbf{Figure 6.} \textit{Plot 4 --- Scatter plot of serial position vs IRT.} Each point is one word from one participant. Positive slope in all domains confirms lexical exhaustion.](images/vft_fig07_word_irt_position.png){width=88%}
-
-## Supplementary: Raincloud Plot
-
-Figure~7 displays a raincloud plot combining a half-violin density estimate, a
-box plot, and individual data points (jittered), providing the richest single
-view of the IRT distribution structure.
-
-![\textbf{Figure 7.} \textit{Raincloud plot of Hindi IRT.} Half-violin (density) + box + jittered points. Each domain shown separately. Confirms right-skewed distributions with heavy-tailed switches.](images/vft_fig03_raincloud_irt.png){width=88%}
-
-## Supplementary: Cluster Scoring
-
-Figure~8 summarises per-participant cluster metrics: mean cluster size and switch
-count by domain.  Higher mean cluster sizes in Foods and Animals relative to
-Colours are consistent with the richer semantic structure of those categories.
-
-![\textbf{Figure 8.} \textit{Cluster scoring by domain.} Mean cluster size (left) and switch count (right) per participant per domain.  Foods and Animals show most clustering; Colours is close to ceiling given its small vocabulary.](images/vft_fig06_cluster_scoring.png){width=84%}
+![\textbf{Figure 8.} \textit{Cluster scoring by domain.} Mean cluster size (left) and switch count (right). Foods and Animals show most clustering; Colours near ceiling.](images/vft_fig06_cluster_scoring.png){width=84%}
 
 
 # Hypothesis Testing
@@ -412,24 +322,19 @@ Table: \textbf{Table 4.} Hypothesis test results.
 
 The following analyses are planned upon completion of SpAM data collection:
 
-1. **Consensus distance matrices** --- Pairwise Euclidean distances from the SpAM
-   arena averaged across all 35 participants, producing a $30 \times 30$
-   consensus distance matrix per domain.
+1. **Consensus distance matrices and heatmaps** --- Pairwise Euclidean distances
+   averaged across participants, producing a $30 \times 30$ matrix per domain,
+   visualised as heatmaps with hierarchically sorted rows/columns.
 
-2. **Heatmap visualisation** --- Consensus matrices displayed as heatmaps; rows and
-   columns sorted by hierarchical clustering to reveal block structure.
+2. **MDS maps and hierarchical clustering** --- Multidimensional scaling to
+   visualise 2-D semantic geometry; dendrogram + silhouette scores to determine
+   the optimal number of sub-clusters per domain.
 
-3. **MDS maps** --- Multidimensional scaling of the consensus matrix to visualise
-   the 2-D semantic geometry of each domain.
+3. **RQ4 cross-task correlation** --- Pearson $r$ between each word's mean SpAM
+   neighbourhood distance and its mean VFT IRT, pooled and per domain, with
+   BH correction applied.
 
-4. **Dendrogram + silhouette** --- Hierarchical clustering with silhouette scores
-   to determine the optimal number of semantic sub-clusters.
-
-5. **RQ4 cross-task correlation** --- Pearson $r$ between each word's mean SpAM
-   neighbourhood distance and its mean VFT IRT, pooled across domains and
-   per domain.  BH correction applied.
-
-6. **Domain comparison** --- Bar charts comparing vocabulary size, mean SpAM
+4. **Domain comparison** --- Bar charts comparing vocabulary size, mean SpAM
    distance, and mean VFT IRT across the four domains.
 
 
