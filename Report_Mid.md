@@ -1,4 +1,4 @@
----
+﻿---
 title: |
   Semantic Organisation and Retrieval Dynamics in
   Hindi Verbal Fluency
@@ -10,11 +10,11 @@ author:
   - "Ankit Chavda (Roll No.~2025201045)"
 institute: "International Institute of Information Technology, Hyderabad"
 date: "March 2026"
-geometry: "a4paper, margin=2.5cm, top=3cm, bottom=3cm"
+geometry: "a4paper, margin=2cm, top=2.2cm, bottom=2.2cm"
 fontsize: 11pt
-linestretch: 1.15
+linestretch: 1.2
 numbersections: true
-toc: false
+toc: true
 secnumdepth: 2
 header-includes:
   - \usepackage{booktabs}
@@ -32,7 +32,7 @@ header-includes:
   - \fancyhead[R]{\small\textit{BRSM Course Report}}
   - \fancyfoot[C]{\thepage}
   - \usepackage{parskip}
-  - \setlength{\parskip}{6pt}
+  - \setlength{\parskip}{3pt}
   - \renewcommand{\abstractname}{Abstract}
 abstract: |
   This mid-project report presents experimental details, research hypotheses,
@@ -84,20 +84,7 @@ technique:
 
 ## Experimental Design
 
-The study employs a **within-subjects** design: each participant completes both
-the VFT and the SpAM task within the same session.
-
-| Design element       | Value                                         |
-|:---------------------|:----------------------------------------------|
-| Design type          | Within-subjects (repeated measures)           |
-| Independent variable | Semantic domain (nominal; 4 levels)           |
-| Dependent variable   | Inter-response time --- IRT (ratio; ms)       |
-| Secondary DV         | Total words produced (ratio; count)           |
-| Control variable     | Trial duration (fixed at 1~min per domain)    |
-| Potential confound   | Word order / primacy effects within sequences |
-
-The **IRT** is measured on a *ratio scale* (true zero, equal intervals,
-meaningful ratios).  Semantic domain is *nominal*.  Total word count is *ratio*.
+The study employs a **within-subjects** repeated-measures design. The independent variable is semantic domain (nominal; 4 levels); the primary dependent variable is inter-response time (IRT, ratio scale, ms); the secondary DV is total words produced. Trial duration is fixed at 1~min per domain.
 
 ## Participants and Demographics
 
@@ -119,9 +106,6 @@ disorder.
 | Education      | $M = 16.5$~yrs, $SD = 1.7$, range 14--20                      |
 | States (India) | 14 states; Gujarat (7), MP (6), Bihar (5), Maharashtra (4$+$) |
 
-Figure~1 shows the demographic breakdown as a combined panel.
-
-![-\textbf{Figure 1.} Participant demographics: (A) Gender; (B) Age histogram; (C) Education; (D) State of origin. $N = 35$.](images/demo_fig05_combined.png){width=97%}
 
 
 # Materials, Procedure, and Data
@@ -146,27 +130,9 @@ The four target domains were administered in a fixed order — Animals, Foods,
 Colours, Body-parts --- each preceded by a 1-minute Furniture practice trial to
 familiarise participants with the typing interface and warm up fluency.
 
-## Data Processing Pipeline
+## Data Processing
 
-```
-responses.json
-    ↓  parse response_times arrays, compute IRT = t[i] − t[i−1]
-    ↓  tag language_type: Hindi script → "Hindi", Latin → "English"
-vft_responses.csv                  (35 participants × 4 domains × N words)
-    ↓  subset language_type == "Hindi"  → df_hh  (712 valid responses)
-    ↓  cluster detection: switching criterion = mean + 1 SD per participant
-merged_vft_spam_responses.csv      (adds SpAM x_norm, y_norm coordinates)
-```
-
-**Language labelling:** Responses typed in Devanagari script or identified
-as unambiguous Hindi lexical items were tagged `Hindi`; all others `English`.
-The Hindi subset (53\,\% of all tokens) forms the primary analysis dataset.
-
-**Cluster detection:** Following \cite{troyer1997}, consecutive responses
-sharing a semantic subcategory were grouped into one cluster.  A per-participant
-adaptive threshold (mean IRT $+$ 1~SD of that participant's IRTs) was used as
-the switching criterion.  Any IRT exceeding this threshold was coded as a
-**cluster switch**.
+Raw JSON was parsed in Python to extract per-word IRTs ($\text{IRT}_i = t_i - t_{i-1}$). Devanagari responses were tagged `Hindi`; Latin-script entries `English`. The Hindi subset (53\,\% of tokens; $n = 712$) forms the analysis dataset. Clusters were identified following \cite{troyer1997} using a per-participant adaptive switch threshold (mean IRT $+$ 1~SD).
 
 The merged file `merged_vft_spam_responses.csv` (1,040 rows) combines per-word IRT (`rt_ms`) with SpAM spatial coordinates (`x`, `y`), enabling the RQ4 cross-task correlation.
 
@@ -191,14 +157,6 @@ Colours has the fewest tokens, consistent with the closed-class vocabulary size
 (approximately 10--15 basic colour terms in Hindi).  Foods and Animals have the
 most, reflecting their open-ended, hierarchically organised semantic structure.
 
-## Language Distribution
-
-Figure~2 shows the proportion of Hindi vs English tokens across all domains.
-Overall, 53\,\% of responses were Hindi.  Colours showed the highest proportion
-of English responses (red, blue, green), while Animals and Body-parts were more
-Hindi-dominant.
-
-![\textbf{Figure 2.} \textit{Language distribution across domains.} Pie chart of Hindi vs English overall (left); stacked bar proportion by domain (right). Colours domain shows highest English proportion due to loanwords.](images/vft_fig04_pie_language.png){width=88%}
 
 
 # Descriptive Statistics
@@ -227,10 +185,6 @@ Table: \textbf{Table 2.} Overall descriptive statistics for Hindi IRT ($n = 712$
 | **Skewness**        | 2.54              |
 | **Kurtosis**        | 9.89              |
 
-The right skew is a **theoretically expected signature**: within-cluster
-retrievals (fast) form a dense left-side peak, while cluster-switch pauses
-(slow) generate the extended right tail.
-
 ![\textbf{Figure 3.} \textit{Plot 1 --- Histogram of Hindi IRT.} Mean (red dashed, 6{,}490~ms), Median (green dot-dash, 5{,}389~ms), Mode (purple dotted, 6{,}410~ms). Mean $>$ Median confirms positive skew. Domain-level histograms shown in right panel.](images/vft_fig01_irt_histogram.png){width=94%}
 
 ## IRT by Semantic Domain
@@ -252,17 +206,9 @@ Table: \textbf{Table 3.} IRT descriptive statistics by semantic domain.
 
 # Data Visualisation
 
-Figures 4--8 summarise the IRT distributions, domain comparisons, serial position effects, and cluster metrics.
+Figure~4 shows the IRT distribution per domain via violin plots.
 
 ![\textbf{Figure 4.} \textit{Violin / box plots of IRT by domain.} Centre line = median; box = Q1--Q3; whiskers = $1.5 \times \text{IQR}$; dots = outliers. Colours is tightest; Body-parts is slowest.](images/vft_fig02_violin_irt.png){width=84%}
-
-![\textbf{Figure 5.} \textit{Mean and median IRT per domain} (error bars $= \pm 1$ SE). Colours fastest; Body-parts slowest; mean $>$ median in all domains confirms right skew.](images/vft_fig05_bar_mean_irt.png){width=84%}
-
-![\textbf{Figure 6.} \textit{Serial position vs IRT.} Positive OLS slope in all four domains confirms lexical exhaustion: later words take progressively longer.](images/vft_fig07_word_irt_position.png){width=88%}
-
-![\textbf{Figure 7.} \textit{Raincloud plot of Hindi IRT.} Half-violin + box + jittered points per domain. Confirms right-skewed, heavy-tailed distributions.](images/vft_fig03_raincloud_irt.png){width=88%}
-
-![\textbf{Figure 8.} \textit{Cluster scoring by domain.} Mean cluster size (left) and switch count (right). Foods and Animals show most clustering; Colours near ceiling.](images/vft_fig06_cluster_scoring.png){width=84%}
 
 
 # Hypothesis Testing
@@ -338,18 +284,7 @@ The following analyses are planned upon completion of SpAM data collection:
    distance, and mean VFT IRT across the four domains.
 
 
-# Summary of Mid-Project Status
-
-| Component | Status | Key finding |
-|:----------|:------:|:------------|
-| Data collection | Complete | $N = 35$; 4 domains; 712 valid Hindi IRTs |
-| Data exploration | Complete | Right-skewed IRT; Colours fastest, Body-parts slowest |
-| Descriptive statistics | Complete | Median preferred; IQR = 4,875 ms |
-| Visualisations (4 plots) | Complete | Histogram, violin, bar, scatter |
-| Hypothesis testing | Complete | RQ1 $d = 1.51$; RQ3 $r = .57$; RQ2 ns |
-| SpAM analysis (RQ4) | Planned | — |
-
-\vspace{1.5em}
+# Summary
 
 > **Overall mid-project conclusion:** The clustering-and-switching model holds
 > for Hindi-speaking participants at IIIT Hyderabad.  Within-cluster retrievals
