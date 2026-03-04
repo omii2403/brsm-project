@@ -297,6 +297,23 @@ progressively longer, reflecting progressive depletion of semantic sub-clusters.
 
 ![\textbf{Figure 5.} \textit{Plot 4 --- Scatter plot of serial position vs IRT.} Each point is one word produced by one participant. Trend lines fitted with OLS per domain. Positive slope in all domains confirms lexical exhaustion.](C:/Users/kotad/OneDrive/Desktop/BRSM/images/vft_fig07_word_irt_position.png){width=88%}
 
+## Cluster Scoring Overview
+
+Clusters were identified using an **adaptive per-sequence threshold**
+(mean~$+$~1~SD of each participant's IRT sequence for that domain): any IRT
+exceeding the threshold was classified as a cluster switch, and consecutive
+words below it formed one cluster.  Figure~5b shows the resulting distributions
+of mean cluster size and total switch count across participants, together with
+mean cluster size broken down by domain.
+
+The mean cluster size across all participants exceeded 1 ($M > 1$), confirming
+that retrievals are not random --- participants systematically produce runs of
+semantically related consecutive words.  Foods and Animals yielded the largest
+mean cluster sizes (deeper sub-categorical structure), whereas Colours produced
+the smallest clusters (restricted closed-class vocabulary).
+
+![\textbf{Figure 5b.} \textit{VFT Cluster Scoring.} Left: distribution of mean cluster size (words per cluster) across participants. Centre: distribution of total switch count per participant. Right: mean cluster size by domain. Foods and Animals exhibit the richest sub-cluster structure; Colours is the most constrained.](C:/Users/kotad/OneDrive/Desktop/BRSM/images/vft_fig06_cluster_scoring.png){width=94%}
+
 
 # Hypothesis Testing
 
