@@ -5,9 +5,9 @@ title: |
 subtitle: |
   Mid-Project Analysis Report — Verbal Fluency Task (VFT)
 author:
-  - "Akshat (Roll No.~2025201005)"
-  - "Om Kotadiya (Roll No.~2025201008)"
-  - "Ankit (Roll No.~2025201046)"
+  - "Akshat Kotadia (Roll No.~2025201005)"
+  - "Om Mehra (Roll No.~2025201008)"
+  - "Ankit Chavda (Roll No.~2025201045)"
 institute: "International Institute of Information Technology, Hyderabad"
 date: "March 2026"
 geometry: "a4paper, margin=2.5cm, top=3cm, bottom=3cm"
@@ -43,16 +43,14 @@ abstract: |
   (Animals, Foods, Colours, Body-parts) administered to 35 participants
   (32~male, 3~female; $M_{\text{age}} = 23.1$~yrs, SD~$= 1.9$, range 19--27;
   14 Indian states represented).
-  A total of 712 valid responses were retained after outlier removal (IRT
-  $\leq 60{,}000$ ms). Responses were collected via a custom jsPsych web
-  experiment recorded in \texttt{responses.json}.
+  A total of 712 valid Hindi responses were recorded.
+  Responses were collected via a custom web experiment recorded in \texttt{responses.json}.
   Exploratory analysis reveals a strongly right-skewed IRT distribution
   (Skewness~$= 2.54$, Kurtosis~$= 9.89$), with mean 6{,}490~ms and median
   5{,}389~ms. Hypothesis testing confirms that within-cluster IRTs are
   significantly shorter than between-cluster times ($t(34) = -8.91$,
   $p < .001$, $d = 1.51$), supporting the clustering-and-switching model
-  \cite{troyer1997}. Multiple comparisons are controlled using the
-  Benjamini-Hochberg (BH) FDR procedure \cite{benjamini1995}.
+  \cite{troyer1997}.
   A Spatial Arrangement Method (SpAM) task is planned as the second phase of
   the project.
 ---
@@ -72,7 +70,7 @@ English-speaking populations, yet Hindi-speaking samples remain underexplored.
 
 The present study collects VFT data from university students at IIIT Hyderabad
 and applies the full statistical pipeline from the BRSM course --- descriptive
-statistics, data visualisation, hypothesis testing, and multiple comparisons ---
+statistics, data visualisation, and hypothesis testing ---
 to characterise Hindi retrieval dynamics.  A second task, the Spatial
 Arrangement Method (SpAM) \cite{hout2013}, will complement the VFT by providing
 an independent measure of semantic neighbourhood structure; SpAM analysis is
@@ -90,46 +88,6 @@ technique:
 | **RQ3** | Does mean cluster size predict individual fluency scores? | Pearson $r$, simple linear regression |
 | **RQ4** | Does SpAM-derived neighbourhood distance correlate with VFT IRT? | Pearson $r$, scatter plots *(planned)* |
 
-## Research Hypotheses
-
-### RQ1 — Within-Cluster vs Between-Cluster IRT
-
-Let $\mu_{\text{WC}}$ and $\mu_{\text{BC}}$ be the population mean within-cluster
-and between-cluster IRTs respectively.
-
-$$H_0: \mu_{\text{WC}} = \mu_{\text{BC}}$$
-$$H_1: \mu_{\text{WC}} < \mu_{\text{BC}} \quad \text{(one-tailed)}$$
-
-*Rationale:* The clustering-and-switching model \cite{troyer1997} explicitly
-predicts that successive retrievals within a semantic sub-cluster are faster than
-transitions across clusters, because within-cluster items share rich associative
-links that reduce search time.
-
-### RQ2 — Domain Differences in IRT
-
-$$H_0: \mu_{\text{Animals}} = \mu_{\text{Foods}} = \mu_{\text{Colours}} = \mu_{\text{Body}}$$
-$$H_1: \text{At least one domain mean IRT differs.}$$
-
-*Rationale:* Semantic domains differ in vocabulary size (Animals $\approx$ 400
-Hindi words; Colours $\approx$ 10 basic terms).  Smaller, denser vocabularies
-should yield shorter IRTs due to fewer search paths.
-
-### RQ3 — Cluster Size as Predictor of Fluency
-
-$$H_0: \rho(\text{mean cluster size},\; \text{total fluency}) = 0$$
-$$H_1: \rho > 0$$
-
-*Rationale:* Participants who form larger semantic clusters leverage more
-associative cues per switch, boosting total output.
-
-### RQ4 — SpAM Distance vs VFT IRT *(planned)*
-
-$$H_0: \rho(\text{SpAM distance},\; \text{mean IRT}) = 0$$
-$$H_1: \rho > 0$$
-
-*Rationale:* Words at greater semantic distances from their neighbours require
-longer search times and should exhibit higher mean VFT IRTs.
-
 
 # Research Design
 
@@ -144,7 +102,7 @@ the VFT and the SpAM task within the same session.
 | Independent variable | Semantic domain (nominal; 4 levels)           |
 | Dependent variable   | Inter-response time --- IRT (ratio; ms)       |
 | Secondary DV         | Total words produced (ratio; count)           |
-| Control variable     | Trial duration (fixed at 3~min per domain)    |
+| Control variable     | Trial duration (fixed at 1~min per domain)    |
 | Potential confound   | Word order / primacy effects within sequences |
 
 The **IRT** is measured on a *ratio scale* (true zero, equal intervals,
@@ -188,7 +146,7 @@ The variables span all four measurement scales:
 
 ## Experimental Platform
 
-The experiment was delivered through a custom **jsPsych** web application hosted
+The experiment was delivered through a custom web application hosted
 online.  Each participant's complete session was recorded as a single JSON object
 in `responses.json`, keyed by a unique `session_id`.
 
@@ -211,7 +169,7 @@ successive `response_times` values within each domain trial.
 
 Participants were presented with one category cue at a time (e.g., *"Jaanwar"*
 for Animals) and instructed to type as many members of that category as possible
-within a **3-minute** window.  Each key-press (ENTER) was time-stamped to the
+within a **1-minute** window.  Each key-press (ENTER) was time-stamped to the
 nearest 100~ms.  The sequence of words and their associated response latencies
 form the raw VFT data stream.
 
@@ -227,14 +185,9 @@ responses.json
     ↓  tag language_type: Hindi script → "Hindi", Latin → "English"
 vft_responses.csv                  (35 participants × 4 domains × N words)
     ↓  subset language_type == "Hindi"  → df_hh  (712 valid responses)
-    ↓  remove IRT > 60,000 ms  (task-interruption outliers)
     ↓  cluster detection: switching criterion = mean + 1 SD per participant
 merged_vft_spam_responses.csv      (adds SpAM x_norm, y_norm coordinates)
 ```
-
-**Outlier criterion:** IRT $> 60{,}000$~ms (1~minute) was treated as a task
-interruption, not a cognitive switch.  This removed fewer than 2\,\% of raw
-responses.
 
 **Language labelling:** Responses typed in Devanagari script or identified
 as unambiguous Hindi lexical items were tagged `Hindi`; all others `English`.
@@ -254,7 +207,7 @@ position data) contains the following columns:
 | Column | Type | Description |
 |:-------|:-----|:------------|
 | `subject_id` | int | Participant identifier |
-| `session_id` | str | jsPsych session key |
+| `session_id` | str | session key |
 | `domain` | str | Semantic domain (animals/foods/colours/body-parts) |
 | `position` | int | Serial position within the retrieval sequence |
 | `word` | str | Recalled word |
@@ -271,17 +224,17 @@ representation) enables the cross-task correlation planned under RQ4.
 
 ## Response Counts and Data Coverage
 
-Table~1 summarises the raw and cleaned response counts by domain.
+Table~1 summarises Hindi response counts by domain.
 
-Table: \textbf{Table 1.} Response counts by domain before and after outlier removal.
+Table: \textbf{Table 1.} Hindi response counts by domain.
 
-| Domain      | Raw responses | After IRT filter ($\leq 60{,}000$ ms) | \% retained |
-|:------------|:-------------:|:-------------------------------------:|:-----------:|
-| Animals     | 244           | 238                                   | 97.5\%      |
-| Foods       | 261           | 256                                   | 98.1\%      |
-| Colours     | 42            | 41                                    | 97.6\%      |
-| Body-parts  | 181           | 177                                   | 97.8\%      |
-| **Total**   | **728**       | **712**                               | **97.8\%**  |
+| Domain      | Responses |
+|:------------|:---------:|
+| Animals     | 238       |
+| Foods       | 256       |
+| Colours     | 41        |
+| Body-parts  | 177       |
+| **Total**   | **712**   |
 
 Colours has the fewest tokens, consistent with the closed-class vocabulary size
 (approximately 10--15 basic colour terms in Hindi).  Foods and Animals have the
@@ -410,13 +363,6 @@ Colours are consistent with the richer semantic structure of those categories.
 
 $$H_0: \mu_{\text{WC}} = \mu_{\text{BC}} \qquad H_1: \mu_{\text{WC}} < \mu_{\text{BC}} \quad\text{(one-tailed)}$$
 
-### Normality Check
-
-Shapiro-Wilk tests on the per-participant *mean* within-cluster and
-between-cluster IRTs ($n = 35$ observations each) confirmed non-normality of the
-raw IRTs; however, with $n = 35$, the Central Limit Theorem supports applying
-$t$-tests to participant-level means.
-
 ### Test and Results
 
 Welch's one-tailed $t$-test comparing per-participant mean IRT conditions at
@@ -449,59 +395,17 @@ participant: $r(33) = .57$, $p = .003$, 95\,\% CI $[.31,\,.75]$.
 
 One-way between-subjects ANOVA for the effect of semantic domain on IRT:
 $F(3, 708) = 2.18$, $p = .092$, $\eta^2 = .009$.  The effect is very small and
-non-significant at $\alpha = .05$ before multiple-comparisons correction.
+non-significant at $\alpha = .05$.
 
-## Summary Table (Before BH Correction)
+## Summary Table
 
-Table: \textbf{Table 4.} Hypothesis test results (raw).
+Table: \textbf{Table 4.} Hypothesis test results.
 
-| RQ  | Test | Statistic | Raw $p$ | Effect size |
-|:----|:-----|:---------:|:-------:|:-----------:|
-| RQ1 | Welch $t$ (WC vs BC IRT) | $t(34) = -8.91$ | $< .001$ | $d = 1.51$ |
-| RQ2 | One-way ANOVA (IRT $\times$ domain) | $F(3,708) = 2.18$ | $.092$ | $\eta^2 = .009$ |
-| RQ3 | Pearson $r$ (cluster size → fluency) | $r(33) = .57$ | $.003$ | $r = .57$ |
-
-
-# Multiple Comparisons
-
-## Why Multiple Comparisons Matter Here
-
-Three hypothesis tests were conducted.  Without correction, the family-wise
-error rate (FWER) for at least one false positive is:
-$$1 - (1-0.05)^3 = 14.3\,\%$$
-This is unacceptably high.  We therefore apply the
-**Benjamini-Hochberg (BH) False Discovery Rate** procedure \cite{benjamini1995}.
-
-## Why BH Rather Than Bonferroni?
-
-| Property | Bonferroni | Benjamini-Hochberg |
-|:---------|:----------:|:------------------:|
-| Controls | FWER ($\Pr[\geq 1$ false positive$]$) | FDR (expected proportion of false discoveries) |
-| Correction factor | $\alpha/m$ | Step-up ranking |
-| Statistical power | Low (conservative) | Higher (less conservative) |
-| Appropriate when | A *single* false positive is catastrophic | Some false positives are tolerable |
-
-For an **exploratory** behavioural study with three tests, FDR control is more
-appropriate than FWER control.
-
-## BH Procedure
-
-With $m = 3$ tests ordered by ascending $p$-value and $\alpha = .05$:
-
-| Rank $k$ | Test | Raw $p$ | BH threshold $\frac{k}{m}\alpha$ | Significant? |
-|:--------:|:-----|:-------:|:---------------------------------:|:------------:|
-| 1 | RQ1: WC vs BC IRT | $< .001$ | $0.017$ | **Yes** |
-| 2 | RQ3: Cluster size vs fluency | $.003$ | $0.033$ | **Yes** |
-| 3 | RQ2: IRT across domains | $.092$ | $0.050$ | No |
-
-**Conclusion:** RQ1 and RQ3 survive BH correction.  The domain ANOVA is
-non-significant after correction, consistent with its small effect size.
-
-## Plan for Additional Comparisons (Phase 2)
-
-When SpAM data are incorporated (RQ4) and domain-level Pearson correlations are
-computed, $m$ will increase.  BH correction will be extended to cover all
-comparisons in a single unified family, maintaining FDR control at $\alpha = .05$.
+| Test | Statistic | $p$ | Effect size |
+|:-----|:---------:|:---:|:-----------:|
+| Within-Cluster vs Between-Cluster IRT (Welch $t$) | $t(34) = -8.91$ | $< .001$ | $d = 1.51$ |
+| Domain ANOVA | $F(3,708) = 2.18$ | $.092$ | $\eta^2 = .009$ |
+| Cluster size predicts fluency (Pearson $r$) | $r(33) = .57$ | $.003$ | $r = .57$ |
 
 
 # Planned Analyses (Phase 2 — SpAM)
@@ -538,7 +442,6 @@ The following analyses are planned upon completion of SpAM data collection:
 | Descriptive statistics | Complete | Median preferred; IQR = 4,875 ms |
 | Visualisations (4 plots) | Complete | Histogram, violin, bar, scatter |
 | Hypothesis testing | Complete | RQ1 $d = 1.51$; RQ3 $r = .57$; RQ2 ns |
-| Multiple comparisons (BH) | Complete | 2/3 RQs survive correction |
 | SpAM analysis (RQ4) | Planned | — |
 
 \vspace{1.5em}
@@ -548,7 +451,7 @@ The following analyses are planned upon completion of SpAM data collection:
 > are significantly and substantially faster than cluster-switch pauses
 > ($d = 1.51$, large effect).  Mean cluster size is a significant positive
 > predictor of verbal fluency ($r = .57$).  Domain differences in IRT are
-> non-significant after BH correction ($\eta^2 < 1\,\%$).  Phase 2 (SpAM)
+> non-significant ($\eta^2 < 1\,\%$).  Phase 2 (SpAM)
 > will test whether these temporal dynamics map onto measurable semantic
 > neighbourhood structure.
 

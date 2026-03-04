@@ -29,7 +29,7 @@
       html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
 
       /* ─── Deck ─────────────────────────────────────────────── */
-      #deck { display: flex; width: calc(19 * 100vw); height: 100vh; transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
+      #deck { display: flex; width: calc(16 * 100vw); height: 100vh; transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
       .slide { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px 64px; position: relative; overflow: hidden; }
 
       /* ─── Navigation ──────────────────────────────────────── */
@@ -235,9 +235,9 @@
             <span style="font-size:0.95rem">Experimental details · Research hypotheses · Exploratory results · Planned analyses</span>
           </p>
           <div class="title-authors">
-            <div class="author-pill"><span>Akshat</span> &mdash; 2025201005</div>
-            <div class="author-pill"><span>Om Kotadiya</span> &mdash; 2025201008</div>
-            <div class="author-pill"><span>Ankit</span> &mdash; 2025201046</div>
+            <div class="author-pill"><span>Akshat Kotadia</span> &mdash; 2025201005</div>
+            <div class="author-pill"><span>Om Mehra</span> &mdash; 2025201008</div>
+            <div class="author-pill"><span>Ankit Chavda</span> &mdash; 2025201045</div>
           </div>
           <div style="margin-top:28px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap;">
             <div style="background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:10px 20px;font-size:0.85rem;">
@@ -262,10 +262,9 @@
             <div>
               <ul class="bullets" style="margin-top:0">
                 <li><strong>Background &amp; Motivation</strong> — Why study Hindi VFT?</li>
-                <li><strong>Research Hypotheses</strong> — Four RQs with formal H₀/H₁</li>
-                <li><strong>Experimental Design</strong> — Within-subjects, 4 domains, 3 min</li>
+                <li><strong>Experimental Design</strong> — Within-subjects, 4 domains, 1 min</li>
                 <li><strong>Participants &amp; Demographics</strong> — N=35, 14 states</li>
-                <li><strong>Data Platform</strong> — jsPsych, responses.json structure</li>
+                <li><strong>Data Platform</strong> — Custom web experiment, responses.json</li>
                 <li><strong>Data Pipeline</strong> — JSON → CSV → analysis</li>
               </ul>
             </div>
@@ -274,8 +273,7 @@
                 <li><strong>Exploratory Analysis</strong> — Response counts, language mix</li>
                 <li><strong>Descriptive Stats</strong> — IRT distribution, domain breakdown</li>
                 <li><strong>Visualisations</strong> — 4 plot types (histogram, box, bar, scatter)</li>
-                <li><strong>Hypothesis Testing</strong> — RQ1 (clustering), RQ3 (fluency)</li>
-                <li><strong>Multiple Comparisons</strong> — BH FDR procedure</li>
+                <li><strong>Hypothesis Testing</strong> — Within-Cluster vs Between-Cluster IRT; Cluster Size &amp; Fluency</li>
                 <li><strong>Next Steps</strong> — SpAM spatial similarity task</li>
               </ul>
             </div>
@@ -291,14 +289,10 @@
             <div class="slide-label">Background &amp; Motivation</div>
             <h2>Why Do Words Come Out in <span class="accent">Clusters</span>?</h2>
           </div>
-          <div class="grid grid-2" style="gap:16px;margin-bottom:16px">
+          <div class="grid grid-3" style="gap:16px;margin-bottom:16px">
             <div class="card accent-top">
               <h3>Clustering-and-Switching Model</h3>
               <p>Troyer, Moscovitch &amp; Winocur (1997): free recall proceeds in bursts of semantically related words (clusters), separated by longer pauses at subcategory boundaries (switches). Proposed for English-speaking adults — does it hold for Hindi?</p>
-            </div>
-            <div class="card gold-top">
-              <h3>Lexical Foraging Hypothesis</h3>
-              <p>Hills et al. (2012): semantic memory retrieval resembles animal foraging. Exploit a local patch (cluster) until depleted, then switch. Maps onto graph-theoretic neighbourhood density — testable with SpAM distances.</p>
             </div>
             <div class="card green-top">
               <h3>The Hindi Context</h3>
@@ -315,75 +309,14 @@
         </div>
       </div>
 
-      <!-- ═══ SLIDE 4 · HYPOTHESES ════════════════════════════════ -->
-      <div class="slide">
-        <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--gold),var(--accent),var(--purple));"></div>
-        <div style="max-width:900px;width:100%">
-          <div class="slide-header">
-            <div class="slide-label">Research Hypotheses</div>
-            <h2>Four Research Questions with Formal H₀ / H₁</h2>
-          </div>
-          <div class="scroll-body">
-            <table>
-              <thead>
-                <tr><th>RQ</th><th>Hypothesis</th><th>H₀</th><th>H₁</th><th>Test</th><th>Status</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="badge rq1">RQ1</span></td>
-                  <td>Within-cluster IRT &lt; Between-cluster IRT</td>
-                  <td style="font-size:0.8rem">µ<sub>WC</sub> = µ<sub>BC</sub></td>
-                  <td style="font-size:0.8rem">µ<sub>WC</sub> &lt; µ<sub>BC</sub></td>
-                  <td style="font-size:0.8rem">Welch <em>t</em> (1-tail)</td>
-                  <td><span class="badge done">Done ✓</span></td>
-                </tr>
-                <tr>
-                  <td><span class="badge rq2">RQ2</span></td>
-                  <td>IRT differs across semantic domains</td>
-                  <td style="font-size:0.8rem">µ<sub>A</sub> = µ<sub>F</sub> = µ<sub>C</sub> = µ<sub>B</sub></td>
-                  <td style="font-size:0.8rem">At least one differs</td>
-                  <td style="font-size:0.8rem">One-way ANOVA</td>
-                  <td><span class="badge done">Done ✓</span></td>
-                </tr>
-                <tr>
-                  <td><span class="badge rq3">RQ3</span></td>
-                  <td>Mean cluster size predicts fluency</td>
-                  <td style="font-size:0.8rem">ρ = 0</td>
-                  <td style="font-size:0.8rem">ρ &gt; 0</td>
-                  <td style="font-size:0.8rem">Pearson <em>r</em> + regression</td>
-                  <td><span class="badge done">Done ✓</span></td>
-                </tr>
-                <tr>
-                  <td><span class="badge rq4">RQ4</span></td>
-                  <td>SpAM neighbourhood distance ↔ VFT IRT</td>
-                  <td style="font-size:0.8rem">ρ = 0</td>
-                  <td style="font-size:0.8rem">ρ &gt; 0</td>
-                  <td style="font-size:0.8rem">Pearson <em>r</em> + scatter</td>
-                  <td><span class="badge planned">Planned</span></td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="margin-top:18px;" class="grid grid-2" style="gap:14px">
-              <div class="finding-box" style="border-left-color:var(--green)">
-                <h3 style="color:var(--green)">Rationale: RQ1</h3>
-                <p>Clustering-and-switching model predicts bursts of fast retrievals (within-cluster) interrupted by long pauses (between-cluster). This is the central theoretical claim we test.</p>
-              </div>
-              <div class="finding-box" style="border-left-color:var(--gold)">
-                <h3 style="color:var(--gold)">Rationale: RQ3</h3>
-                <p>Participants who form larger clusters leverage richer associative links per switch, maximising output per unit time. Positive correlation is the expected direction.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- ═══ SLIDE 5 · EXPERIMENTAL DESIGN ═══════════════════════ -->
+      <!-- ═══ SLIDE 4 · EXPERIMENTAL DESIGN ═══════════════════════ -->
       <div class="slide">
         <div class="stripe" style="background:var(--gold);"></div>
         <div style="max-width:900px;width:100%">
           <div class="slide-header">
             <div class="slide-label">Experimental Design</div>
-            <h2>Within-Subjects · 4 Semantic Domains · 3 Minutes Each</h2>
+            <h2>Within-Subjects · 4 Semantic Domains · 1 Minute Each</h2>
           </div>
           <div class="grid grid-2" style="gap:18px;margin-bottom:18px">
             <div>
@@ -394,7 +327,7 @@
                   <tr><td>IV (nominal)</td><td>Semantic domain — 4 levels</td></tr>
                   <tr><td>DV (ratio)</td><td>Inter-response time (IRT, ms)</td></tr>
                   <tr><td>Secondary DV</td><td>Total words produced (count)</td></tr>
-                  <tr><td>Trial duration</td><td>3 min / domain (fixed)</td></tr>
+                  <tr><td>Trial duration</td><td>1 min / domain (fixed)</td></tr>
                   <tr><td>Task order</td><td>Animals → Foods → Colours → Body-parts</td></tr>
                   <tr><td>Warm-up</td><td>1-min Furniture practice trial</td></tr>
                   <tr><td>Potential confound</td><td>Serial position / primacy within trial</td></tr>
@@ -412,7 +345,7 @@
                 </ul>
               </div>
               <div style="background:rgba(210,153,34,0.08);border:1px solid rgba(210,153,34,0.3);border-radius:8px;padding:13px 16px">
-                <p style="font-size:0.85rem"><span class="gold">IRT definition:</span> Time (ms) between successive ENTER key-presses within a domain trial. First word IRT = time from trial start. Outliers (IRT &gt; 60,000 ms) removed as task interruptions.</p>
+                <p style="font-size:0.85rem"><span class="gold">IRT definition:</span> Time (ms) between successive ENTER key-presses within a domain trial. First word IRT = time from trial start.</p>
               </div>
             </div>
           </div>
@@ -493,7 +426,7 @@
         <div style="max-width:900px;width:100%">
           <div class="slide-header">
             <div class="slide-label">Data Collection Platform</div>
-            <h2>Custom jsPsych Web Experiment → <span class="gold">responses.json</span></h2>
+            <h2>Custom Web Experiment → <span class="gold">responses.json</span></h2>
           </div>
           <div class="grid grid-2" style="gap:18px;margin-bottom:18px">
             <div>
@@ -512,13 +445,13 @@
             <div>
               <h3 style="margin-bottom:10px">What the Experiment Captures</h3>
               <ul class="bullets">
-                <li><strong>VFT phase</strong> — Participant types words freely in 3-min window; every ENTER keypress is time-stamped</li>
+                <li><strong>VFT phase</strong> — Participant types words freely in 1-min window; every ENTER keypress is time-stamped</li>
                 <li><strong>SpAM phase</strong> — Participant drag-arranges word tokens on canvas; normalised x, y position recorded per word</li>
                 <li><strong>Practice trial</strong> — 1-min Furniture category warm-up; same format as real trials</li>
                 <li><strong>Instruction trails</strong> — Hindi-language instructions delivered in-browser; consent implicit via start button</li>
               </ul>
               <div style="margin-top:12px;background:rgba(63,185,80,0.08);border:1px solid rgba(63,185,80,0.25);border-radius:8px;padding:10px 14px">
-                <p style="font-size:0.82rem"><span class="green">IRT computation:</span> IRT<sub>i</sub> = response_times[i] − response_times[i−1].  First word resets to time from trial onset. Outliers (IRT > 60,000 ms) trimmed.</p>
+                <p style="font-size:0.82rem"><span class="green">IRT computation:</span> IRT<sub>i</sub> = response_times[i] − response_times[i−1].  First word resets to time from trial onset.</p>
               </div>
             </div>
           </div>
@@ -539,21 +472,16 @@
             <h2>From Raw JSON to Analysis-Ready CSV</h2>
           </div>
           <div class="pipe" style="margin-bottom:18px;font-size:0.86rem;line-height:2.1">
-            <div><span class="file">responses.json</span> <span class="comment">← jsPsych session file; 35 participants, nested VFT + SpAM arrays</span></div>
+            <div><span class="file">responses.json</span> <span class="comment">← raw session file; 35 participants, nested VFT + SpAM arrays</span></div>
             <div class="arrow">&nbsp;&nbsp;&nbsp;↓ parse response_times → IRT[i] = t[i] − t[i−1]</div>
             <div class="arrow">&nbsp;&nbsp;&nbsp;↓ tag language_type: Devanagari → Hindi, Latin → English</div>
-            <div class="arrow">&nbsp;&nbsp;&nbsp;↓ remove IRT &gt; 60,000 ms (task-interruption outliers)</div>
             <div><span class="highlight">vft_responses.csv</span> <span class="comment">← 35 × 4 domains × N words · cols: subject_id, domain, word, rt_ms, position, language_type</span></div>
             <div class="arrow">&nbsp;&nbsp;&nbsp;↓ filter language_type == "Hindi" → df_hh (712 valid IRTs; 53% of total)</div>
             <div class="arrow">&nbsp;&nbsp;&nbsp;↓ cluster detection: switch threshold = mean_IRT + 1 SD (per participant)</div>
             <div class="arrow">&nbsp;&nbsp;&nbsp;↓ join with SpAM spatial coordinates on subject_id + domain + word</div>
             <div><span class="file">merged_vft_spam_responses.csv</span> <span class="comment">← 1,040 rows; adds x_norm, y_norm ∈ [0,1] per word</span></div>
           </div>
-          <div class="grid grid-3" style="gap:13px">
-            <div class="card" style="padding:13px 16px">
-              <h3 style="font-size:0.83rem">Outlier Policy</h3>
-              <p>IRT &gt; 60,000 ms = task interruption, not a cognitive switch. Removes &lt;2% of responses. Preserves genuine long pauses (up to 42,634 ms).</p>
-            </div>
+          <div class="grid grid-2" style="gap:13px">
             <div class="card" style="padding:13px 16px">
               <h3 style="font-size:0.83rem">Language Subsetting</h3>
               <p>Primary analysis = Hindi tokens only (df_hh, 712 responses). Mixed Hindi+English results shown for context.</p>
@@ -578,17 +506,39 @@
             <div>
               <h3 style="margin-bottom:10px">Response Counts by Domain</h3>
               <table>
-                <thead><tr><th>Domain</th><th>Raw</th><th>After filter</th><th>% retained</th></tr></thead>
+                <thead><tr><th>Domain</th><th>Hindi responses</th></tr></thead>
                 <tbody>
-                  <tr><td><span style="color:var(--animals)">Animals</span></td><td>244</td><td>238</td><td>97.5%</td></tr>
-                  <tr><td><span style="color:var(--foods)">Foods</span></td><td>261</td><td>256</td><td>98.1%</td></tr>
-                  <tr><td><span style="color:var(--colours)">Colours</span></td><td>42</td><td>41</td><td>97.6%</td></tr>
-                  <tr><td><span style="color:var(--bodyparts)">Body-parts</span></td><td>181</td><td>177</td><td>97.8%</td></tr>
-                  <tr><td><strong style="color:var(--text)">Total</strong></td><td><strong style="color:var(--text)">728</strong></td><td><strong style="color:var(--text)">712</strong></td><td><strong style="color:var(--text)">97.8%</strong></td></tr>
+                  <tr><td><span style="color:var(--animals)">Animals</span></td><td>238</td></tr>
+                  <tr><td><span style="color:var(--foods)">Foods</span></td><td>256</td></tr>
+                  <tr><td><span style="color:var(--colours)">Colours</span></td><td>41</td></tr>
+                  <tr><td><span style="color:var(--bodyparts)">Body-parts</span></td><td>177</td></tr>
+                  <tr><td><strong style="color:var(--text)">Total</strong></td><td><strong style="color:var(--text)">712</strong></td></tr>
                 </tbody>
               </table>
-              <div style="margin-top:12px;background:rgba(210,153,34,0.07);border:1px solid rgba(210,153,34,0.25);border-radius:8px;padding:10px 14px">
-                <p style="font-size:0.82rem"><span class="gold">Observation:</span> Colours has fewest responses (~41) consistent with its small closed vocabulary (~10–15 basic colour terms in Hindi). Foods + Animals are most productive.</p>
+              <div style="margin-top:14px">
+                <svg viewBox="0 0 360 160" width="100%" style="display:block;max-width:360px;overflow:visible" aria-label="Bar chart of response counts by domain">
+                  <!-- Baseline -->
+                  <line x1="30" y1="138" x2="350" y2="138" stroke="#30363d" stroke-width="1"/>
+                  <!-- Y-axis label -->
+                  <text x="2" y="142" fill="#8b949e" font-size="9" font-family="Segoe UI,sans-serif">0</text>
+                  <text x="2" y="40" fill="#8b949e" font-size="9" font-family="Segoe UI,sans-serif">256</text>
+                  <!-- Animals bar (238) -->
+                  <rect x="40" y="37.4" width="58" height="100.6" fill="#3fb950" rx="3"/>
+                  <text x="69" y="30" fill="#3fb950" font-size="11" font-family="Segoe UI,sans-serif" text-anchor="middle">238</text>
+                  <text x="69" y="154" fill="#3fb950" font-size="10" font-family="Segoe UI,sans-serif" text-anchor="middle">Animals</text>
+                  <!-- Foods bar (256) -->
+                  <rect x="120" y="30" width="58" height="108" fill="#d29922" rx="3"/>
+                  <text x="149" y="22" fill="#d29922" font-size="11" font-family="Segoe UI,sans-serif" text-anchor="middle">256</text>
+                  <text x="149" y="154" fill="#d29922" font-size="10" font-family="Segoe UI,sans-serif" text-anchor="middle">Foods</text>
+                  <!-- Colours bar (41) -->
+                  <rect x="200" y="120.7" width="58" height="17.3" fill="#f778ba" rx="3"/>
+                  <text x="229" y="113" fill="#f778ba" font-size="11" font-family="Segoe UI,sans-serif" text-anchor="middle">41</text>
+                  <text x="229" y="154" fill="#f778ba" font-size="10" font-family="Segoe UI,sans-serif" text-anchor="middle">Colours</text>
+                  <!-- Body-parts bar (177) -->
+                  <rect x="280" y="63.1" width="58" height="74.9" fill="#bc8cff" rx="3"/>
+                  <text x="309" y="55" fill="#bc8cff" font-size="11" font-family="Segoe UI,sans-serif" text-anchor="middle">177</text>
+                  <text x="309" y="154" fill="#bc8cff" font-size="10" font-family="Segoe UI,sans-serif" text-anchor="middle">Body-parts</text>
+                </svg>
               </div>
             </div>
             <div>
@@ -609,7 +559,7 @@
             </div>
           </div>
           <div style="margin-top:16px;background:rgba(63,185,80,0.06);border:1px solid rgba(63,185,80,0.2);border-radius:8px;padding:12px 18px">
-            <p style="font-size:0.87rem"><strong style="color:var(--text)">Primary analysis dataset:</strong> 712 Hindi-only IRTs from <code>df_hh</code>. Cross-language comparisons shown as supplementary. IRT statistics, hypothesis tests, and BH correction all computed on this subset.</p>
+            <p style="font-size:0.87rem"><strong style="color:var(--text)">Primary analysis dataset:</strong> 712 Hindi-only IRTs from <code>df_hh</code>. Cross-language comparisons shown as supplementary. All IRT statistics and hypothesis tests computed on this subset.</p>
           </div>
         </div>
       </div>
@@ -624,7 +574,7 @@
           <div style="margin-top:40px;display:flex;gap:28px;justify-content:center;flex-wrap:wrap">
             <div><div class="stat-big" style="font-size:2.3rem;color:var(--green)">712</div><div class="stat-label">Valid Hindi IRTs</div></div>
             <div><div class="stat-big" style="font-size:2.3rem;color:var(--gold)">4</div><div class="stat-label">Semantic Domains</div></div>
-            <div><div class="stat-big" style="font-size:2.3rem;color:var(--purple)">3 min</div><div class="stat-label">Trial Duration</div></div>
+            <div><div class="stat-big" style="font-size:2.3rem;color:var(--purple)">1 min</div><div class="stat-label">Trial Duration</div></div>
             <div><div class="stat-big" style="font-size:2.3rem;color:var(--pink)">35</div><div class="stat-label">Participants</div></div>
           </div>
         </div>
@@ -678,39 +628,11 @@
             <div class="slide-label">VFT — Plot 2 &amp; Plot 3: Domain Comparison</div>
             <h2>Violin Plots &amp; Bar Charts: Colours Fastest, Body-parts Slowest</h2>
           </div>
-          <div class="img-grid img-grid-2">
+          <div class="img-grid img-grid-1">
             <div class="img-panel">
               <div class="img-caption">Fig 4 · Violin / Box Plot of IRT by Domain (Plot 2)</div>
               <img src="images/vft_fig02_violin_irt.png" class="slide-img" alt="Violin Box Plot IRT by Domain">
               <p class="img-desc">Colours: tightest distribution, lowest median (closed vocabulary). Body-parts: highest median, widest upper whisker. All domains: heavy right tail confirms switch pauses.</p>
-            </div>
-            <div class="img-panel">
-              <div class="img-caption">Fig 5 · Bar Chart of Mean &amp; Median IRT per Domain (Plot 3)</div>
-              <img src="images/vft_fig05_bar_mean_irt.png" class="slide-img" alt="Mean Median IRT Bar Chart">
-              <p class="img-desc">Error bars = ±1 SE. Mean consistently &gt; Median in all domains → right skew is domain-universal. Domain ANOVA: F(3,708)=2.18, p=.092, η²=.009 — non-significant after BH correction.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══ SLIDE 14 · SERIAL POSITION + RAINCLOUD ══════════ -->
-      <div class="slide slide-img-layout">
-        <div class="stripe" style="background:linear-gradient(90deg,var(--gold),var(--pink));"></div>
-        <div class="img-inner" style="max-width:1040px">
-          <div class="slide-header">
-            <div class="slide-label">VFT — Plot 4: Serial Position Effect · Raincloud</div>
-            <h2>Lexical Exhaustion &amp; Full Distribution View</h2>
-          </div>
-          <div class="img-grid img-grid-2">
-            <div class="img-panel">
-              <div class="img-caption">Fig 6 · Scatter: Serial Position vs IRT (Plot 4) — per domain OLS</div>
-              <img src="images/vft_fig07_word_irt_position.png" class="slide-img" alt="Serial Position vs IRT Scatter">
-              <p class="img-desc">Positive OLS slope in all domains: later positions → longer IRT. Confirms <strong>lexical exhaustion</strong> — early sub-clusters depleted; broader search required over time.</p>
-            </div>
-            <div class="img-panel">
-              <div class="img-caption">Raincloud Plot · Half-violin + Box + Jittered Points</div>
-              <img src="images/vft_fig03_raincloud_irt.png" class="slide-img" alt="Raincloud IRT">
-              <p class="img-desc">Richest single-panel view: density shape (half-violin), five-number summary (box), individual data points. Reinforces bimodal tendency (within-cluster vs between-cluster regimes).</p>
             </div>
           </div>
         </div>
@@ -724,7 +646,7 @@
             <div class="slide-label">VFT — Language Distribution &amp; Cluster Metrics</div>
             <h2>Hindi / English Mix &amp; Cluster Scoring by Domain</h2>
           </div>
-          <div class="img-grid img-grid-2">
+          <div class="img-grid img-grid-1">
             <div class="img-panel">
               <div class="img-caption">Fig 2 · Language Distribution — Pie Chart (overall) &amp; Domain Breakdown</div>
               <img src="images/vft_fig04_pie_language.png" class="slide-img" alt="Language Distribution">
@@ -744,7 +666,7 @@
         <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--accent));"></div>
         <div class="img-inner" style="max-width:1040px">
           <div class="slide-header">
-            <div class="slide-label">Hypothesis Testing — <span class="badge rq1">RQ1</span></div>
+            <div class="slide-label">Hypothesis Testing — <span class="badge rq1">Within-Cluster vs Between-Cluster IRT</span></div>
             <h2>Within-Cluster IRT &lt; Between-Cluster IRT <span class="badge done">✓ Reject H₀</span></h2>
           </div>
           <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
@@ -773,9 +695,6 @@
               <div style="background:rgba(63,185,80,0.08);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:10px 12px">
                 <p style="font-size:0.78rem"><span class="green">d = 1.51 = large effect.</span> Clustering-and-switching model replicated in Hindi-speaking participants. Between-cluster switching takes ~1.98× longer than within-cluster retrieval.</p>
               </div>
-              <div style="background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:10px 12px">
-                <p style="font-size:0.78rem"><span class="accent">Normality:</span> Shapiro-Wilk on per-participant mean WC and BC IRTs. Raw IRTs non-normal; CLT applies at n=35 participant means.</p>
-              </div>
             </div>
           </div>
         </div>
@@ -786,7 +705,7 @@
         <div class="stripe" style="background:linear-gradient(90deg,var(--gold),var(--purple));"></div>
         <div class="img-inner" style="max-width:1040px">
           <div class="slide-header">
-            <div class="slide-label">Hypothesis Testing — <span class="badge rq3">RQ3</span></div>
+            <div class="slide-label">Hypothesis Testing — <span class="badge rq3">Cluster Size &amp; Fluency</span></div>
             <h2>Cluster Size Predicts Fluency — r = .57 <span class="badge done">✓ Reject H₀</span></h2>
           </div>
           <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
@@ -822,56 +741,7 @@
         </div>
       </div>
 
-      <!-- ═══ SLIDE 18 · MULTIPLE COMPARISONS ══════════════════════ -->
-      <div class="slide">
-        <div class="stripe" style="background:linear-gradient(90deg,var(--red),var(--gold));"></div>
-        <div style="max-width:900px;width:100%">
-          <div class="slide-header">
-            <div class="slide-label">Multiple Comparisons</div>
-            <h2>Benjamini-Hochberg FDR Control — Why &amp; How</h2>
-          </div>
-          <div class="grid grid-2" style="gap:16px;margin-bottom:16px">
-            <div>
-              <h3 style="margin-bottom:8px">Without Correction</h3>
-              <div style="background:rgba(248,81,73,0.07);border:1px solid rgba(248,81,73,0.25);border-radius:8px;padding:12px 15px;margin-bottom:10px">
-                <p style="font-size:0.85rem">With m = 3 tests at α = .05:<br/>
-                  <strong style="color:var(--red)">FWER = 1 − (1−0.05)³ = 14.3%</strong><br/>
-                  Unacceptably high probability of at least one false positive.
-                </p>
-              </div>
-              <h3 style="margin-bottom:8px">BH vs Bonferroni</h3>
-              <table style="font-size:0.82rem">
-                <thead><tr><th>Property</th><th>Bonferroni</th><th>BH</th></tr></thead>
-                <tbody>
-                  <tr><td>Controls</td><td>FWER</td><td style="color:var(--green)">FDR</td></tr>
-                  <tr><td>Conservative?</td><td style="color:var(--red)">Very</td><td style="color:var(--green)">Less so</td></tr>
-                  <tr><td>Power</td><td style="color:var(--red)">Low</td><td style="color:var(--green)">Higher</td></tr>
-                  <tr><td>Best for</td><td>Critical safety settings</td><td style="color:var(--green)">Exploratory research</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <h3 style="margin-bottom:8px">BH Step-Up Procedure (m = 3, α = .05)</h3>
-              <table style="font-size:0.83rem">
-                <thead><tr><th>Rank k</th><th>Test</th><th>Raw p</th><th>BH threshold k/m · α</th><th>Sig?</th></tr></thead>
-                <tbody>
-                  <tr><td>1</td><td>RQ1: WC vs BC</td><td style="color:var(--green)">&lt;.001</td><td>0.017</td><td style="color:var(--green)">✓ Yes</td></tr>
-                  <tr><td>2</td><td>RQ3: Cluster→Fluency</td><td style="color:var(--green)">.003</td><td>0.033</td><td style="color:var(--green)">✓ Yes</td></tr>
-                  <tr><td>3</td><td>RQ2: Domain ANOVA</td><td style="color:var(--muted)">.092</td><td>0.050</td><td style="color:var(--red)">✗ No</td></tr>
-                </tbody>
-              </table>
-              <div style="margin-top:12px;background:rgba(63,185,80,0.07);border:1px solid rgba(63,185,80,0.25);border-radius:8px;padding:11px 14px">
-                <p style="font-size:0.83rem"><span class="green">Summary:</span> 2 of 3 tests survive BH correction. The domain ANOVA (η² = .009, &lt;1% variance) is non-significant — consistent with its negligible effect size.</p>
-              </div>
-              <div style="margin-top:10px;background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.2);border-radius:8px;padding:11px 14px">
-                <p style="font-size:0.83rem"><span class="accent">Phase 2 plan:</span> When SpAM correlations are added (RQ4), extended to full family with BH correction applied across all m tests jointly.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══ SLIDE 19 · SUMMARY + NEXT STEPS ═════════════════════ -->
+      <!-- ═══ SLIDE 16 · SUMMARY + NEXT STEPS ═════════════════════ -->
       <div class="slide">
         <div class="stripe" style="background:linear-gradient(90deg,var(--animals),var(--foods),var(--colours),var(--bodyparts));"></div>
         <div style="max-width:920px;width:100%">
@@ -890,7 +760,6 @@
                 <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ1 — Welch's t-test</div><div class="result">d=1.51, p&lt;.001 ✓ Reject H₀</div></div>
                 <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ3 — Pearson r</div><div class="result">r=.57, p=.005 ✓ Reject H₀</div></div>
                 <div class="status-row"><div class="status-dot" style="background:var(--muted)"></div><div class="label">RQ2 — Domain ANOVA</div><div class="result">F(3,708)=2.18, ns</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">BH multiple comparisons</div><div class="result">2/3 RQs significant</div></div>
               </div>
             </div>
             <div>
@@ -921,7 +790,7 @@
     <div id="kb-hint">← → arrows or click to navigate</div>
 
     <script>
-      const TOTAL = 19;
+      const TOTAL = 16;
       let cur = 0;
 
       const deck    = document.getElementById('deck');
