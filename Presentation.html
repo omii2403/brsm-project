@@ -1059,6 +1059,29 @@
         </div>
       </div>
 
+      <!-- ── Slide 7a2 · VFT Box Plot &amp; Bar Chart ──────────── -->
+      <div class="slide slide-img-layout">
+        <div class="stripe" style="background: linear-gradient(90deg, var(--green), var(--teal, #36b38e));"></div>
+        <div class="img-inner">
+          <div class="slide-header">
+            <div class="slide-label">VFT Analysis — Distribution Summaries</div>
+            <h2>Box Plots &amp; Mean IRT per Domain</h2>
+          </div>
+          <div class="img-grid img-grid-2">
+            <div class="img-panel">
+              <div class="img-caption">Fig 3 &middot; Box Plots: IRT by Domain (Plot 2)</div>
+              <img src="images/vft_fig02_violin_irt.png" class="slide-img" alt="Box Plots IRT by Domain">
+              <p class="img-desc">Five-number summary per domain. Colours: tightest IQR, fewest outliers. Animals &amp; Foods: widest spread and pronounced upper outliers (cluster-switch pauses).</p>
+            </div>
+            <div class="img-panel">
+              <div class="img-caption">Fig 4 &middot; Mean &amp; Median IRT per Domain (Plot 3)</div>
+              <img src="images/vft_fig05_bar_mean_irt.png" class="slide-img" alt="Bar Chart Mean and Median IRT per Domain">
+              <p class="img-desc">Mean &gt; Median in every domain confirms right-skew. Colours is fastest; Body-parts slowest. Error bars = &plusmn;1 SE.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── Slide 7b · VFT Clusters &amp; Fluency Images ───────── -->
       <div class="slide slide-img-layout">
         <div class="stripe" style="background: linear-gradient(90deg, var(--gold), var(--purple));"></div>
@@ -1077,6 +1100,29 @@
               <div class="img-caption">Fig 7 · Cluster Size vs Fluency — RQ3 (Pearson r)</div>
               <img src="images/vft_fig13_rq3_fluency_scatter.png" class="slide-img" alt="Cluster Size vs Fluency Scatter">
               <p class="img-desc">Positive r: larger mean cluster size predicts higher total Hindi words. Confirms clustering-and-switching model at individual level.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Slide 7b2 · RQ4 Cluster Metrics vs Fluency ──────── -->
+      <div class="slide slide-img-layout">
+        <div class="stripe" style="background: linear-gradient(90deg, var(--purple), var(--gold));"></div>
+        <div class="img-inner">
+          <div class="slide-header">
+            <div class="slide-label">VFT Analysis — RQ4 Deep Dive</div>
+            <h2>Cluster Metrics &amp; Individual Fluency</h2>
+          </div>
+          <div class="img-grid img-grid-2">
+            <div class="img-panel">
+              <div class="img-caption">Fig 6 &middot; RQ1 &mdash; Within vs Between-Cluster IRT</div>
+              <img src="images/vft_fig11_rq1_within_between.png" class="slide-img" alt="RQ1 Within vs Between Cluster IRT">
+              <p class="img-desc">Between-cluster IRT &asymp; 1.7&times; within-cluster IRT. Welch&rsquo;s t, p &lt; 0.001, Cohen&rsquo;s d = 1.51. Clustering-and-switching model confirmed.</p>
+            </div>
+            <div class="img-panel">
+              <div class="img-caption">Fig 8 &middot; RQ4 &mdash; Cluster Metrics vs Fluency <span class="badge rq4">RQ4</span></div>
+              <img src="images/vft_fig14_rq4_cluster_fluency.png" class="slide-img" alt="RQ4 Cluster Metrics vs Fluency">
+              <p class="img-desc">Both mean cluster size and total switch count show positive Pearson r with total fluency. High-fluency participants exploit clusters deeply <em>and</em> switch efficiently.</p>
             </div>
           </div>
         </div>
@@ -1620,7 +1666,7 @@
      JAVASCRIPT
 ═══════════════════════════════════════════════════════════ -->
     <script>
-      const TOTAL = 16;
+      const TOTAL = 18;
       let cur = 0;
       let prevIdx = -1;
 
