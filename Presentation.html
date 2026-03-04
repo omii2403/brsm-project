@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VFT + SpAM Study — BRSM Presentation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0d1117;
+    --surface:   #161b22;
+    --card:      #1c2128;
+    --border:    #30363d;
+    --text:      #e6edf3;
+    --muted:     #8b949e;
+    --accent:    #58a6ff;
+    --gold:      #d29922;
+    --green:     #3fb950;
+    --purple:    #bc8cff;
+    --pink:      #f778ba;
+    --animals:   #3fb950;
+    --foods:     #d29922;
+    --colours:   #f778ba;
+    --bodyparts: #bc8cff;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  /* ─── Deck ─────────────────────────────────────────────── */
+  #deck {
+    display: flex;
+    width: calc(12 * 100vw);
+    height: 100vh;
+    transition: transform 0.5s cubic-bezier(0.77,0,0.18,1);
+    will-change: transform;
+  }
+
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ─── Navigation ───────────────────────────────────────── */
+  .nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(88,166,255,0.12);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+  .nav-btn:hover { background: rgba(88,166,255,0.28); border-color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.2; cursor: default; }
+  #prev { left: 16px; }
+  #next { right: 16px; }
+
+  /* ─── Progress dots ────────────────────────────────────── */
+  #dots {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.25s, transform 0.25s;
+  }
+  .dot.active { background: var(--accent); transform: scale(1.4); }
+
+  /* ─── Slide counter ─────────────────────────────────────  */
+  #counter {
+    position: fixed;
+    bottom: 18px;
+    right: 72px;
+    font-size: 12px;
+    color: var(--muted);
+    z-index: 1000;
+  }
+
+  /* ─── Common typography ────────────────────────────────── */
+  h1 { font-size: 2.4rem; font-weight: 700; line-height: 1.15; }
+  h2 { font-size: 1.8rem; font-weight: 600; }
+  h3 { font-size: 1.2rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  p  { font-size: 1rem; line-height: 1.65; color: var(--muted); }
+  .accent { color: var(--accent); }
+  .gold   { color: var(--gold); }
+  .green  { color: var(--green); }
+  .pink   { color: var(--pink); }
+  .purple { color: var(--purple); }
+
+  .slide-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* ─── Decorative stripe ─────────────────────────────────  */
+  .stripe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+  }
+
+  /* ─── Card grid ─────────────────────────────────────────  */
+  .grid { display: grid; gap: 20px; width: 100%; }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card p { font-size: 0.88rem; margin-top: 6px; }
+
+  /* coloured top border per domain */
+  .card.animals   { border-top: 3px solid var(--animals); }
+  .card.foods     { border-top: 3px solid var(--foods); }
+  .card.colours   { border-top: 3px solid var(--colours); }
+  .card.bodyparts { border-top: 3px solid var(--bodyparts); }
+
+  /* ─── Code / pipeline block ─────────────────────────────  */
+  .pipe {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 24px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    color: var(--green);
+    width: 100%;
+    line-height: 2;
+  }
+  .pipe .arrow { color: var(--muted); }
+  .pipe .comment { color: var(--muted); font-style: italic; }
+
+  /* ─── Stat table ─────────────────────────────────────────  */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  th {
+    background: var(--surface);
+    color: var(--accent);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ─── Big number callout ────────────────────────────────  */
+  .stat-big {
+    font-size: 3.6rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+  /* ─── RQ finding section ────────────────────────────────  */
+  .finding-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .finding-box h3 { font-size: 0.9rem; color: var(--accent); margin-bottom: 6px; }
+  .finding-box p  { font-size: 0.85rem; }
+
+  /* ─── Divider slide ─────────────────────────────────────  */
+  .divider-slide { background: radial-gradient(ellipse at 30% 60%, rgba(88,166,255,0.07) 0%, transparent 70%); }
+
+  /* ─── Tag badge ─────────────────────────────────────────  */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .badge.rq1 { background: rgba(63,185,80,0.15);  color: var(--green); }
+  .badge.rq2 { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .badge.rq3 { background: rgba(210,153,34,0.15); color: var(--gold); }
+  .badge.rq4 { background: rgba(188,140,255,0.15);color: var(--purple); }
+
+  /* ─── Title slide ────────────────────────────────────────  */
+  .title-authors {
+    display: flex; gap: 24px; margin-top: 28px; flex-wrap: wrap; justify-content: center;
+  }
+  .author-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+  .author-pill span { color: var(--accent); font-weight: 600; }
+
+  /* ─── Conclusion bullets ────────────────────────────────  */
+  ul.bullets { list-style: none; width: 100%; margin-top: 6px; }
+  ul.bullets li {
+    padding: 9px 0 9px 32px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+    color: var(--muted);
+    position: relative;
+  }
+  ul.bullets li::before {
+    content: '›';
+    position: absolute; left: 8px;
+    color: var(--accent);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  ul.bullets li:last-child { border-bottom: none; }
+
+  /* ─── Scrollable content for dense slides ───────────────  */
+  .scroll-body {
+    overflow-y: auto;
+    width: 100%;
+    max-height: calc(100vh - 180px);
+    padding-right: 6px;
+  }
+  .scroll-body::-webkit-scrollbar { width: 4px; }
+  .scroll-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ─── Header row ─────────────────────────────────────────  */
+  .slide-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }
+  .slide-header h2 { margin-top: 4px; }
+
+  /* ─── Responsive tweaks ─────────────────────────────────  */
+  @media (max-width: 800px) {
+    .slide { padding: 32px 24px; }
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.3rem; }
+    .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .stat-big { font-size: 2.6rem; }
+  }
+  @media (max-width: 520px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DECK  (12 slides × 100vw)
+═══════════════════════════════════════════════════════════ -->
+<div id="deck">
+
+  <!-- ── Slide 1 · Title ──────────────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:linear-gradient(90deg,var(--animals),var(--foods),var(--colours),var(--bodyparts));"></div>
+    <div style="text-align:center;max-width:820px;">
+      <div class="slide-label">BRSM Final Project · March 2026 · IIIT Hyderabad</div>
+      <h1>Semantic Organisation &amp; Retrieval Dynamics<br>in <span class="accent">Hindi-English Bilingual</span> Verbal Fluency</h1>
+      <p style="margin-top:16px;font-size:1.05rem;color:var(--muted);">
+        A Verbal Fluency Task (VFT) + Spatial Arrangement Method (SpAM) Study<br>
+        combining <span style="color:var(--text);">35 Hindi-English bilingual participants</span>
+        across <span style="color:var(--text);">4 semantic domains</span>
+      </p>
+      <div class="title-authors">
+        <div class="author-pill"><span>Akshat</span> · 2025201005</div>
+        <div class="author-pill"><span>Om</span> · 2025201008</div>
+        <div class="author-pill"><span>Ankit</span> · 2025201046</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 2 · Motivation ─────────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--accent);"></div>
+    <div style="max-width:860px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">Background &amp; Motivation</div>
+        <h2>Why do words come out in <span class="accent">clusters</span>?</h2>
+      </div>
+      <div class="grid grid-2" style="gap:18px;margin-bottom:18px;">
+        <div class="card">
+          <h3>Clustering-and-Switching Model</h3>
+          <p>People retrieve words in bursts (clusters) separated by longer pauses at sub-category boundaries. Proposed by Troyer, Moscovitch &amp; Winocur (1997), tested in monolingual English speakers — <em>does it hold for Hindi-English bilinguals?</em></p>
+        </div>
+        <div class="card">
+          <h3>Lexical Foraging Hypothesis</h3>
+          <p>Semantic memory retrieval resembles foraging: exploit a local patch (cluster) until depleted, then switch. Hills et al. (2012) showed this maps onto graph-theoretic neighbourhood density — we test this directly with SpAM distances.</p>
+        </div>
+        <div class="card">
+          <h3>The Bilingual Angle</h3>
+          <p>Hindi-English bilinguals code-switch mid-sequence. Does Hinglish vs English script choice reflect the language of acquisition? Are retrieval dynamics the same regardless of script?</p>
+        </div>
+        <div class="card">
+          <h3>Why Both Tasks?</h3>
+          <p>VFT measures <em>behaviour</em> (timing, order, fluency). SpAM measures <em>representation</em> (subjective semantic geometry). Together they let us predict retrieval speed from semantic neighbourhood structure — a complete loop.</p>
+        </div>
+      </div>
+      <div style="background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.25);border-radius:8px;padding:14px 18px;">
+        <p style="color:var(--text);font-size:0.9rem;"><span class="accent">Core conjecture:</span> a word's retrieval speed in VFT is <em>not</em> just about familiarity — it depends on <strong>where it sits in the shared semantic map</strong> and how densely populated its local neighbourhood is.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 3 · Data Pipeline ──────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--green);"></div>
+    <div style="max-width:860px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">Data Engineering</div>
+        <h2>From Raw Clicks to Analysis-Ready CSV</h2>
+      </div>
+      <div class="pipe">
+        <div><span style="color:var(--gold);">responses.json</span>  <span class="comment">← custom web experiment; one entry per session; nested word + timestamp arrays</span></div>
+        <div class="arrow">    ↓  parse timestamps → compute IRT (inter-response time)</div>
+        <div class="arrow">    ↓  tag language_type (Hindi/Hinglish vs English)</div>
+        <div><span style="color:var(--green);">vft_responses.csv</span>  <span class="comment">← 35 participants × 4 domains × N words;  cols: subject_id, domain, word, rt_ms, position, language_type</span></div>
+        <div class="arrow">    ↓  join on subject_id + domain + word with SpAM (x, y) coordinates</div>
+        <div><span style="color:var(--accent);">merged_vft_spam_responses.csv</span>  <span class="comment">← VFT + SpAM integrated;  adds cols: x (0–1), y (0–1)</span></div>
+      </div>
+      <div class="grid grid-3" style="margin-top:20px;gap:14px;">
+        <div class="card" style="padding:14px 18px;">
+          <h3 style="font-size:0.85rem;">IRT Definition</h3>
+          <p>Gap (ms) between successive word outputs. First word IRT = time from trial start. Right-skewed: most &lt;3,000 ms; tail to 10,000+ ms marks cluster switches.</p>
+        </div>
+        <div class="card" style="padding:14px 18px;">
+          <h3 style="font-size:0.85rem;">SpAM Coordinates</h3>
+          <p>Participants dragged word tokens on a 2D board. Normalised x, y ∈ [0,1]. Pairwise Euclidean distance = subjective semantic distance.</p>
+        </div>
+        <div class="card" style="padding:14px 18px;">
+          <h3 style="font-size:0.85rem;">Consensus Matrix</h3>
+          <p>Averaged pairwise SpAM distances across 35 participants per domain → one 30×30 consensus distance matrix fed into MDS + clustering.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 4 · Participants & Setup ───────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--gold);"></div>
+    <div style="max-width:860px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">Participants &amp; Experimental Design</div>
+        <h2>35 Hindi-English Bilinguals · 4 Domains</h2>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:22px;gap:14px;">
+        <div style="text-align:center;">
+          <div class="stat-big">35</div>
+          <div class="stat-label">Participants<br>Hindi-English bilinguals</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="stat-big" style="color:var(--gold);">4</div>
+          <div class="stat-label">Semantic Domains<br>tested per participant</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="stat-big" style="color:var(--green);">2</div>
+          <div class="stat-label">Tasks<br>VFT + SpAM</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="stat-big" style="color:var(--purple);">4</div>
+          <div class="stat-label">Research Questions<br>RQ1–RQ4</div>
+        </div>
+      </div>
+      <div class="grid grid-4" style="gap:14px;">
+        <div class="card animals">
+          <h3 style="color:var(--animals);">Animals</h3>
+          <p>Rich multi-cluster domain: wild, domestic, birds. Hindi-dominated responses. Largest vocabulary. Slowest exhaustion.</p>
+        </div>
+        <div class="card foods">
+          <h3 style="color:var(--foods);">Foods</h3>
+          <p>Most semantically structured domain. Pulses, meals, snacks clusters. Heaviest Hindi/Hinglish. Cultural relativity visible.</p>
+        </div>
+        <div class="card colours">
+          <h3 style="color:var(--colours);">Colours</h3>
+          <p>Closed vocabulary — fastest exhaustion by position ~14. Most English responses. Perceptual warm/cool/achromatic structure.</p>
+        </div>
+        <div class="card bodyparts">
+          <h3 style="color:var(--bodyparts);">Body-parts</h3>
+          <p>Internal/external + face-region sub-clusters. Mixed Hindi anatomical + English clinical terms.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 5 · VFT Divider ────────────────────────────── -->
+  <div class="slide divider-slide">
+    <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--accent));"></div>
+    <div style="text-align:center;max-width:640px;">
+      <div class="slide-label" style="margin-bottom:28px;">Part I — Verbal Fluency Task</div>
+      <h1><span class="accent">VFT</span> Analysis</h1>
+      <p style="font-size:1.15rem;margin-top:18px;">Timing, clustering, switching, and fluency across 35 participants</p>
+      <div style="margin-top:40px;display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div><div class="stat-big" style="font-size:2.4rem;color:var(--green);">RQ1</div><div class="stat-label">Clustering &amp; Switching</div></div>
+        <div><div class="stat-big" style="font-size:2.4rem;color:var(--gold);">RQ3</div><div class="stat-label">Fluency vs IRT</div></div>
+        <div><div class="stat-big" style="font-size:2.4rem;color:var(--purple);">RQ4</div><div class="stat-label">Cluster Metrics</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 6 · VFT Key Plots ──────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--green);"></div>
+    <div style="max-width:920px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">VFT — Key Visualisations</div>
+        <h2>Three Plots That Tell the Full Story</h2>
+      </div>
+      <div class="grid grid-3" style="gap:18px;">
+
+        <div class="card" style="border-top:3px solid var(--gold);">
+          <h3 style="color:var(--gold);">Fig 3 · Serial Position vs IRT</h3>
+          <p><strong style="color:var(--text);">What it shows:</strong> IRT (ms) plotted against word position 1→N for each domain. Upward loess curve = lexical exhaustion.</p>
+          <div style="margin-top:12px;background:rgba(210,153,34,0.08);border-radius:6px;padding:10px 12px;">
+            <p style="font-size:0.82rem;"><span style="color:var(--gold);">Key inference:</span> Colours exhausted by position ~14 (closed vocabulary); Animals retain low slope far beyond position 20 (multiple sub-clusters). <em>Steeper slope = shallower semantic space.</em></p>
+          </div>
+        </div>
+
+        <div class="card" style="border-top:3px solid var(--green);">
+          <h3 style="color:var(--green);">Fig 4 · Within vs Between Cluster IRT <span class="badge rq1">RQ1</span></h3>
+          <p><strong style="color:var(--text);">What it shows:</strong> Grouped bar chart — mean within-cluster IRT vs mean between-cluster IRT per domain. Error bars = SE.</p>
+          <div style="margin-top:12px;background:rgba(63,185,80,0.08);border-radius:6px;padding:10px 12px;">
+            <p style="font-size:0.82rem;"><span style="color:var(--green);">Key inference:</span> Between-cluster IRT ≈ 1.7× within-cluster IRT. Welch's t, p &lt; 0.05, Cohen's d ≈ 0.5–0.8. Clustering-and-switching model replicated in bilinguals.</p>
+          </div>
+        </div>
+
+        <div class="card" style="border-top:3px solid var(--purple);">
+          <h3 style="color:var(--purple);">Fig 5 · Fluency Score Bubble Chart <span class="badge rq3">RQ3</span></h3>
+          <p><strong style="color:var(--text);">What it shows:</strong> Each bubble = one participant. X = mean IRT, Y = total Hindi/Hinglish word count. Bubble size = domains attempted.</p>
+          <div style="margin-top:12px;background:rgba(188,140,255,0.08);border-radius:6px;padding:10px 12px;">
+            <p style="font-size:0.82rem;"><span style="color:var(--purple);">Key inference:</span> Significant negative r — faster retrievers produce more words. Mean IRT is a valid individual-level proxy for lexical access efficiency.</p>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:18px;background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.2);border-radius:8px;padding:14px 18px;">
+        <p style="font-size:0.9rem;"><strong style="color:var(--accent);">RQ4 (not shown):</strong> Both mean cluster size and total switch count showed positive correlations with total fluency. High-fluency participants exploit clusters deeply <em>and</em> switch efficiently — both strategies matter.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 7 · SpAM Maps ───────────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--accent);"></div>
+    <div style="max-width:920px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">SpAM Analysis — Semantic Maps</div>
+        <h2>What Does Semantic Memory <span class="accent">Look Like</span>?</h2>
+      </div>
+      <div class="grid grid-4" style="gap:14px;margin-bottom:16px;">
+
+        <div class="card animals">
+          <h3 style="color:var(--animals);">Animals</h3>
+          <p>Three distinct clusters on MDS map: <em>wild</em> (sher, baag, cheetah), <em>domestic</em> (kutta, billi, gaay), <em>birds</em> (sparrow, crow, parrot). Wide map = high vocabulary diversity. Silhouette optimal k = 3.</p>
+        </div>
+        <div class="card foods">
+          <h3 style="color:var(--foods);">Foods</h3>
+          <p>Richest structure. Pulses cluster (dal, chana, rajma) tight and central. Snacks (samosa, maggi) peripheral. Meals (roti, chawal, sabzi) bridging. Highest optimal k of all domains.</p>
+        </div>
+        <div class="card colours">
+          <h3 style="color:var(--colours);">Colours</h3>
+          <p>Arranged in a near-perceptual colour wheel arc. Warm tones (laal, peela, naarangi) vs cool (neela, hara, ferozi) vs achromatic (kaala, safed). Tightest consensus of all domains.</p>
+        </div>
+        <div class="card bodyparts">
+          <h3 style="color:var(--bodyparts);">Body-parts</h3>
+          <p>Clear internal/external split. Face region (naak, ankh, kaan, munh) forms its own tight cluster. Limbs (haath, paon, ungli) separate. Clinical anatomical terms form periphery.</p>
+        </div>
+
+      </div>
+      <div class="grid grid-2" style="gap:16px;">
+        <div class="finding-box">
+          <h3>Heatmap Block Patterns</h3>
+          <p>Dense dark-diagonal blocks in consensus heatmaps confirm sub-categories are real and consistently perceived. A uniform heatmap would mean zero shared structure — our data shows strong agreement.</p>
+        </div>
+        <div class="finding-box" style="border-left-color:var(--green);">
+          <h3 style="color:var(--green);">MDS Semantic Maps</h3>
+          <p>Bubble size = VFT production frequency. Large bubbles at cluster centres are prototypical words. Small peripheral bubbles are atypical/rare. Spatial centrality predicts VFT accessibility.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 8 · RQ2 Divider ─────────────────────────────── -->
+  <div class="slide divider-slide">
+    <div class="stripe" style="background:linear-gradient(90deg,var(--accent),var(--purple));"></div>
+    <div style="text-align:center;max-width:640px;">
+      <div class="slide-label" style="margin-bottom:28px;">Part II — Cross-Task Integration</div>
+      <h1><span class="accent">SpAM × VFT</span></h1>
+      <p style="font-size:1.15rem;margin-top:18px;">Can semantic neighbourhood structure <em>predict</em> retrieval speed?</p>
+      <div style="margin-top:40px;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);border-radius:12px;padding:28px 36px;">
+        <p style="font-size:1.1rem;color:var(--text);line-height:1.8;">
+          <span class="accent">RQ2 Hypothesis:</span><br>
+          "Words with tighter semantic neighbourhoods (lower mean SpAM distance) should be retrieved faster (lower IRT), because they are surrounded by closely related words that <em>co-activate</em> each other in semantic memory."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 9 · RQ2 Detail ───────────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--accent);"></div>
+    <div style="max-width:900px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">Research Question 2 — Deep Dive</div>
+        <h2>Semantic Neighbourhood Density Predicts Retrieval Speed</h2>
+      </div>
+      <div class="grid grid-2" style="gap:18px;margin-bottom:18px;">
+        <div class="finding-box">
+          <h3>Hypothesis</h3>
+          <p>Words closer to their semantic neighbours in the SpAM consensus matrix should have lower mean VFT IRT. Co-activation from dense neighbourhoods accelerates retrieval.</p>
+        </div>
+        <div class="finding-box" style="border-left-color:var(--gold);">
+          <h3 style="color:var(--gold);">Method</h3>
+          <p>For each word: compute mean SpAM neighbourhood distance (mean pairwise distance to all other words) and mean VFT IRT across all participants who produced it. Pooled Pearson r across all 4 domains.</p>
+        </div>
+        <div class="finding-box" style="border-left-color:var(--green);">
+          <h3 style="color:var(--green);">Result</h3>
+          <p>Positive pooled Pearson r — words farther from their semantic neighbourhood took longer to retrieve. Effect strongest for <span class="green">animals</span> &amp; <span class="gold">foods</span> (open, rich domains), weaker for <span class="pink">colours</span> (closed, uniform domain).</p>
+        </div>
+        <div class="finding-box" style="border-left-color:var(--purple);">
+          <h3 style="color:var(--purple);">Implication</h3>
+          <p>First within-participant, bilingual-sample evidence for the lexical foraging model. Retrieval speed is not just familiarity — it is <em>topological position</em> in the shared semantic map. Confirms Hills et al. (2012) in a novel population.</p>
+        </div>
+      </div>
+      <div style="background:rgba(63,185,80,0.06);border:1px solid rgba(63,185,80,0.2);border-radius:8px;padding:14px 18px;">
+        <p style="font-size:0.9rem;"><strong style="color:var(--green);">Fig 8 — RQ2 Scatter:</strong> Each point = one word, colour-coded by domain. X = mean SpAM neighbourhood distance. Y = mean VFT IRT. Positive slope + significant r visible. Animals and foods points drive the strongest effect; colours points tightly clustered (low variance from uniform neighbourhood distances).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 10 · Stats Table ─────────────────────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--gold);"></div>
+    <div style="max-width:900px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">Statistical Summary</div>
+        <h2>All Four Research Questions — Results</h2>
+      </div>
+      <div class="scroll-body">
+        <table>
+          <thead>
+            <tr>
+              <th>RQ</th>
+              <th>Research Question</th>
+              <th>Test</th>
+              <th>Result</th>
+              <th>Effect</th>
+              <th>Conclusion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge rq1">RQ1</span></td>
+              <td>Do bilingual VFT sequences show clustering-and-switching?</td>
+              <td>Welch's t-test (within vs between cluster IRT)</td>
+              <td style="color:var(--green);">p &lt; 0.05, significant</td>
+              <td>Cohen's d ≈ 0.5–0.8<br>Between/within ≈ 1.7×</td>
+              <td>✓ Clustering-and-switching model confirmed in Hindi-English bilinguals</td>
+            </tr>
+            <tr>
+              <td><span class="badge rq2">RQ2</span></td>
+              <td>Does semantic neighbourhood density (SpAM) predict VFT retrieval speed?</td>
+              <td>Pearson r (mean SpAM dist vs mean VFT IRT)</td>
+              <td style="color:var(--accent);">Positive r, significant for open domains</td>
+              <td>Strongest: animals, foods<br>Weakest: colours</td>
+              <td>✓ Tighter semantic neighbourhood → faster retrieval; lexical foraging supported</td>
+            </tr>
+            <tr>
+              <td><span class="badge rq3">RQ3</span></td>
+              <td>Does mean IRT predict individual-level fluency score?</td>
+              <td>Pearson r (fluency score vs mean IRT)</td>
+              <td style="color:var(--purple);">Negative r, significant</td>
+              <td>Faster retrievers produce more words</td>
+              <td>✓ Mean IRT is a valid individual-level proxy for lexical access efficiency</td>
+            </tr>
+            <tr>
+              <td><span class="badge rq4">RQ4</span></td>
+              <td>Do cluster size and switch count predict fluency?</td>
+              <td>Pearson r (cluster metrics vs fluency score)</td>
+              <td style="color:var(--gold);">Positive r for both metrics</td>
+              <td>Both depth (cluster size) and breadth (switch count) correlate</td>
+              <td>✓ High-fluency retrievers exploit clusters deeply and switch efficiently</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:rgba(63,185,80,0.07);border:1px solid rgba(63,185,80,0.2);border-radius:8px;padding:14px 18px;">
+            <p style="color:var(--text);font-size:0.88rem;"><strong class="green">Key Cross-task Validation:</strong> The same words that sit tightly in the semantic map (SpAM) are also retrieved faster in VFT — the two tasks independently converge on the same semantic structure.</p>
+          </div>
+          <div style="background:rgba(188,140,255,0.07);border:1px solid rgba(188,140,255,0.2);border-radius:8px;padding:14px 18px;">
+            <p style="color:var(--text);font-size:0.88rem;"><strong class="purple">Domain Pattern:</strong> Animals &amp; foods show richest multi-cluster structure and drive the strongest effects. Colours (closed vocabulary) shows minimal variance across all metrics.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 11 · Conclusions & Limitations ──────────────── -->
+  <div class="slide">
+    <div class="stripe" style="background:var(--purple);"></div>
+    <div style="max-width:900px;width:100%;">
+      <div class="slide-header">
+        <div class="slide-label">Conclusions</div>
+        <h2>What We Found — and What Remains Open</h2>
+      </div>
+      <div class="grid grid-2" style="gap:20px;">
+        <div>
+          <h3 style="color:var(--green);font-size:1rem;margin-bottom:12px;">Core Findings</h3>
+          <ul class="bullets">
+            <li><span style="color:var(--text);">Clustering-and-switching</span> is universal: confirmed in Hindi-English bilinguals with Cohen's d 0.5–0.8</li>
+            <li><span style="color:var(--text);">Lexical foraging</span> has a measurable substrate: SpAM neighbourhood density directly predicts VFT IRT</li>
+            <li><span style="color:var(--text);">Language of acquisition</span> shapes retrieval: foods/body-parts → Hindi; colours → English</li>
+            <li><span style="color:var(--text);">Mean IRT</span> is a validated individual-efficiency proxy (RQ3 negative r)</li>
+            <li><span style="color:var(--text);">Both strategy types</span> matter: depth-of-exploitation and breadth-of-switching predict fluency (RQ4)</li>
+            <li><span style="color:var(--text);">Semantic maps</span> are consistent across 35 bilinguals — shared cultural-linguistic representations</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color:var(--gold);font-size:1rem;margin-bottom:12px;">Limitations &amp; Future Work</h3>
+          <ul class="bullets">
+            <li>Web-based self-timed paradigm: IRT includes typing latency — under-estimates true cognitive IRT</li>
+            <li>SpAM top-30 words per domain: infrequent/idiosyncratic words excluded from neighbourhood analysis</li>
+            <li>n = 35 is modest; confidence intervals especially for domain-level r are wide</li>
+            <li>All participants IIIT-H students: high-education, urban, tech-savvy — limits generalisability</li>
+            <li>Cross-sectional: longitudinal VFT+SpAM could track how semantic maps shift with L2 proficiency</li>
+            <li>Future: EEG synchrony during cluster transitions; clinical application to dementia screening</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 12 · Thank You ───────────────────────────────── -->
+  <div class="slide divider-slide">
+    <div class="stripe" style="background:linear-gradient(90deg,var(--animals),var(--foods),var(--colours),var(--bodyparts));"></div>
+    <div style="text-align:center;max-width:720px;">
+      <div class="slide-label" style="margin-bottom:28px;">BRSM Final Project · IIIT Hyderabad · March 2026</div>
+      <h1>Thank You</h1>
+      <p style="font-size:1.05rem;margin-top:14px;margin-bottom:36px;">Akshat (2025201005) · Om (2025201008) · Ankit (2025201046)</p>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px 32px;text-align:left;">
+        <h3 style="font-size:0.85rem;color:var(--muted);letter-spacing:0.1em;margin-bottom:16px;">KEY REFERENCES</h3>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:0.84rem;color:var(--muted);">Troyer, A. K., Moscovitch, M., &amp; Winocur, G. (1997). Clustering and switching as two components of verbal fluency. <em>Neuropsychology, 11</em>(1), 138–146.</li>
+          <li style="font-size:0.84rem;color:var(--muted);">Hills, T. T., Jones, M. N., &amp; Todd, P. M. (2012). Optimal foraging in semantic memory. <em>Psychological Review, 119</em>(2), 431–440.</li>
+          <li style="font-size:0.84rem;color:var(--muted);">Goldstone, R. L. (1994). An efficient method for obtaining similarity data. <em>Behavior Research Methods, 26</em>(4), 381–386. <em>[SpAM methodology basis]</em></li>
+          <li style="font-size:0.84rem;color:var(--muted);">Gruenenfelder, T. M., &amp; Shoben, E. J. (2009). Modeling free recall as retrieved by associative search. <em>Cognitive Psychology, 58</em>(3), 409–445.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAV CONTROLS
+═══════════════════════════════════════════════════════════ -->
+<button class="nav-btn" id="prev" onclick="go(-1)" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="next" onclick="go( 1)" aria-label="Next slide">&#8594;</button>
+
+<div id="dots"></div>
+<div id="counter"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════ -->
+<script>
+  const TOTAL = 12;
+  let cur = 0;
+
+  const deck    = document.getElementById('deck');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const dotsEl  = document.getElementById('dots');
+  const countEl = document.getElementById('counter');
+
+  /* ── Build dots ── */
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i + 1));
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  function render() {
+    deck.style.transform = 'translateX(calc(' + cur + ' * -100vw))';
+    dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === TOTAL - 1;
+    countEl.textContent = (cur + 1) + ' / ' + TOTAL;
+  }
+
+  function go(dir) {
+    goTo(cur + dir);
+  }
+
+  function goTo(idx) {
+    cur = Math.max(0, Math.min(TOTAL - 1, idx));
+    render();
+  }
+
+  /* ── Keyboard ── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown'  || e.key === 'PageDown') go(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp'    || e.key === 'PageUp')   go(-1);
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End')  goTo(TOTAL - 1);
+  });
+
+  /* ── Touch / swipe ── */
+  let touchX = null;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend',   e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    touchX = null;
+  }, { passive: true });
+
+  /* ── Initial render ── */
+  render();
+</script>
+</body>
+</html>
