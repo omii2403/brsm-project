@@ -45,8 +45,8 @@ abstract: |
   A total of 712 valid Hindi responses were recorded.
   Responses were collected via a custom web experiment recorded in \texttt{responses.json}.
   Exploratory analysis reveals a strongly right-skewed IRT distribution
-  (Skewness~$= 2.54$, Kurtosis~$= 9.89$), with mean 6{,}490~ms and median
-  5{,}389~ms. Hypothesis testing confirms that within-cluster IRTs are
+  (Skewness~$= 2.54$, Kurtosis~$= 9.89$), with mean 6490~ms and median
+  5389~ms. Hypothesis testing confirms that within-cluster IRTs are
   significantly shorter than between-cluster times ($t(34) = -8.91$,
   $p < .001$, $d = 1.51$), supporting the clustering-and-switching model
   \cite{troyer1997}.
@@ -165,7 +165,7 @@ most, reflecting their open-ended, hierarchically organised semantic structure.
 
 Table~2 presents descriptive statistics for all 712 valid Hindi IRTs.
 The distribution is strongly **right-skewed** (Skewness~$= 2.54$), with the
-mean (6{,}490~ms) substantially exceeding the median (5{,}389~ms).  The
+mean (6490~ms) substantially exceeding the median (5389~ms).  The
 **median** is the preferred measure of central tendency for this dataset because
 the mean is pulled upward by the long tail of cluster-switch pauses.  High
 kurtosis (9.89) indicates a leptokurtic distribution with heavier tails than a
@@ -176,21 +176,21 @@ Table: \textbf{Table 2.} Overall descriptive statistics for Hindi IRT ($n = 712$
 | Statistic           | Value (ms)        |
 |:--------------------|:-----------------:|
 | **N**               | 712               |
-| **Mean**            | 6{,}489.5         |
-| **Median**          | 5{,}389.4         |
-| **Std Dev**         | 5{,}018.8         |
+| **Mean**            | 6489.5         |
+| **Median**          | 5389.4         |
+| **Std Dev**         | 5018.8         |
 | **Min**             | 732.8             |
-| **Max**             | 42{,}634.4        |
-| **IQR**             | 4{,}874.8         |
+| **Max**             | 42634.4        |
+| **IQR**             | 4874.8         |
 | **Skewness**        | 2.54              |
 | **Kurtosis**        | 9.89              |
 
-![\textbf{Figure 3.} \textit{Plot 1 --- Histogram of Hindi IRT.} Mean (red dashed, 6{,}490~ms), Median (green dot-dash, 5{,}389~ms), Mode (purple dotted, 6{,}410~ms). Mean $>$ Median confirms positive skew. Domain-level histograms shown in right panel.](images/vft_fig01_irt_histogram.png){width=94%}
+![\textbf{Figure 3.} \textit{Plot 1 --- Histogram of Hindi IRT.} Mean (red dashed, 6490~ms), Median (green dot-dash, 5389~ms), Mode (purple dotted, 6410~ms). Mean $>$ Median confirms positive skew. Domain-level histograms shown in right panel.](images/vft_fig01_irt_histogram.png){width=94%}
 
 ## IRT by Semantic Domain
 
 Table~3 decomposes the statistics by domain.  Colours showed the lowest mean IRT
-(4{,}975~ms) and near-zero skewness (0.70), reflecting its small closed
+(4975~ms) and near-zero skewness (0.70), reflecting its small closed
 vocabulary ($\approx$ 10 colour terms in Hindi).  Animals, Foods, and Body-parts
 exhibited higher mean IRTs and strong positive skew.
 
@@ -198,10 +198,10 @@ Table: \textbf{Table 3.} IRT descriptive statistics by semantic domain.
 
 | Domain     |  $N$ | Mean (ms) | Median (ms) | SD (ms) | Skew |
 |:-----------|-----:|----------:|------------:|--------:|-----:|
-| Animals    |  238 | 6{,}391   | 5{,}414     | 4{,}647 | 3.06 |
-| Body-parts |  177 | 6{,}872   | 5{,}724     | 4{,}994 | 2.51 |
-| Colours    |   41 | 4{,}975   | 3{,}484     | 3{,}512 | 0.70 |
-| Foods      |  256 | 6{,}559   | 5{,}205     | 5{,}525 | 2.28 |
+| Animals    |  238 | 6391   | 5414     | 4647 | 3.06 |
+| Body-parts |  177 | 6872   | 5724     | 4994 | 2.51 |
+| Colours    |   41 | 4975   | 3484     | 3512 | 0.70 |
+| Foods      |  256 | 6559   | 5205     | 5525 | 2.28 |
 
 
 # Data Visualisation
@@ -224,8 +224,8 @@ $$H_0: \mu_{\text{WC}} = \mu_{\text{BC}} \qquad H_1: \mu_{\text{WC}} < \mu_{\tex
 Welch's one-tailed $t$-test comparing per-participant mean IRT conditions at
 $\alpha = .05$:
 
-Within-cluster IRTs ($M = 4{,}752$~ms, $SD = 1{,}320$~ms) were significantly
-shorter than between-cluster IRTs ($M = 9{,}418$~ms, $SD = 3{,}816$~ms),
+Within-cluster IRTs ($M = 4752$~ms, $SD = 1320$~ms) were significantly
+shorter than between-cluster IRTs ($M = 9418$~ms, $SD = 3816$~ms),
 $t(34) = -8.91$, $p < .001$, Cohen's $d = 1.51$ (large effect).
 
 **Decision:** Reject $H_0$.
