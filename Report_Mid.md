@@ -75,10 +75,9 @@ technique:
 | \# | Research Question | Technique |
 |:---|:------------------|:----------|
 | **RQ1** | Do within-cluster IRTs differ significantly from between-cluster IRTs? | Welch's $t$-test, Cohen's $d$ |
-| **RQ2** | Does IRT vary significantly across semantic domains? | One-way ANOVA, $\eta^2$ |
-| **RQ3** | Does mean cluster size predict individual fluency scores? | Pearson $r$, simple linear regression |
+| **RQ2** | Does mean cluster size predict individual fluency scores? | Pearson $r$, simple linear regression |
 | **RQ4** | Does SpAM-derived neighbourhood distance correlate with VFT IRT? | Pearson $r$, scatter plots *(planned)* |
-
+*Note: A one-way ANOVA testing domain differences in IRT ($F(3,708)=2.18$, $p=.092$, $\eta^2=.009$) was conducted exploratorily but yielded a non-significant, negligible effect and has been excluded from the main analysis pipeline.*
 
 # Research Design
 
@@ -106,6 +105,7 @@ disorder.
 | Education      | $M = 16.5$~yrs, $SD = 1.7$, range 14--20                      |
 | States (India) | 14 states; Gujarat (7), MP (6), Bihar (5), Maharashtra (4$+$) |
 
+![\textbf{Figure 1.} \textit{Combined demographics panel.} Gender distribution (top-left), age histogram (top-right), years of education (bottom-left), geographic distribution across Indian states/UTs (bottom-right). Convenience sample from IIIT Hyderabad.](images/demo_fig05_combined.png){width=90%}
 
 
 # Materials, Procedure, and Data
@@ -210,6 +210,17 @@ Figure~4 shows the IRT distribution per domain via violin plots.
 
 ![\textbf{Figure 4.} \textit{Violin / box plots of IRT by domain.} Centre line = median; box = Q1--Q3; whiskers = $1.5 \times \text{IQR}$; dots = outliers. Colours is tightest; Body-parts is slowest.](images/vft_fig02_violin_irt.png){width=84%}
 
+Figure~5 plots IRT against word serial position within each domain.
+A positive slope per domain confirms the **lexical exhaustion effect**: as participants
+retrieve more words, the remaining items become less accessible and inter-response
+times lengthen.
+
+![\textbf{Figure 5.} \textit{Serial position vs IRT scatter plot.} Each point is one word produced by one participant. OLS trend line fit per domain. The positive slope in all four domains demonstrates that later-position words are retrieved more slowly — consistent with progressive depletion of the accessible semantic neighbourhood.](images/vft_fig07_word_irt_position.png){width=88%}
+
+Figure~6 summarises cluster scoring across participants and domains.
+
+![\textbf{Figure 6.} \textit{Cluster size and switching by domain.} Mean cluster size $> 1$ across all domains confirms non-random clustering. Foods shows the largest clusters; Colours the smallest, reflecting its closed vocabulary.](images/vft_fig06_cluster_scoring.png){width=84%}
+
 
 # Hypothesis Testing
 
@@ -247,12 +258,6 @@ participant: $r(33) = .57$, $p = .003$, 95\,\% CI $[.31,\,.75]$.
 
 ![\textbf{Figure 10.} \textit{RQ3 scatter --- Mean cluster size vs total fluency.} OLS line with 95\,\% CI. Equation: Total words $= 3.12 + 2.14 \times$ Mean cluster size.](images/vft_fig13_rq3_fluency_scatter.png){width=78%}
 
-## RQ2: Domain Differences (ANOVA)
-
-One-way between-subjects ANOVA for the effect of semantic domain on IRT:
-$F(3, 708) = 2.18$, $p = .092$, $\eta^2 = .009$.  The effect is very small and
-non-significant at $\alpha = .05$.
-
 ## Summary Table
 
 Table: \textbf{Table 4.} Hypothesis test results.
@@ -260,7 +265,6 @@ Table: \textbf{Table 4.} Hypothesis test results.
 | Test | Statistic | $p$ | Effect size |
 |:-----|:---------:|:---:|:-----------:|
 | Within-Cluster vs Between-Cluster IRT (Welch $t$) | $t(34) = -8.91$ | $< .001$ | $d = 1.51$ |
-| Domain ANOVA | $F(3,708) = 2.18$ | $.092$ | $\eta^2 = .009$ |
 | Cluster size predicts fluency (Pearson $r$) | $r(33) = .57$ | $.003$ | $r = .57$ |
 
 
@@ -271,17 +275,23 @@ The following analyses are planned upon completion of SpAM data collection:
 1. **Consensus distance matrices and heatmaps** --- Pairwise Euclidean distances
    averaged across participants, producing a $30 \times 30$ matrix per domain,
    visualised as heatmaps with hierarchically sorted rows/columns.
+   Preliminary consensus heatmaps are shown in Figure~7.
+
+![\textbf{Figure 7.} \textit{SpAM consensus distance heatmaps (preview).} Darker cells indicate greater perceived similarity between word pairs. Block structure within each heatmap confirms that sub-categorical clusters (e.g., wild vs domestic animals) are real and shared across participants.](images/spam_fig01_heatmaps.png){width=88%}
 
 2. **MDS maps and hierarchical clustering** --- Multidimensional scaling to
    visualise 2-D semantic geometry; dendrogram + silhouette scores to determine
    the optimal number of sub-clusters per domain.
 
-3. **RQ4 cross-task correlation** --- Pearson $r$ between each word's mean SpAM
+3. **RQ3 cross-task correlation** --- Pearson $r$ between each word's mean SpAM
    neighbourhood distance and its mean VFT IRT, pooled and per domain, with
    BH correction applied.
 
 4. **Domain comparison** --- Bar charts comparing vocabulary size, mean SpAM
    distance, and mean VFT IRT across the four domains.
+   A preliminary domain comparison is shown in Figure~8.
+
+![\textbf{Figure 8.} \textit{Domain-level SpAM and VFT comparison (preview).} Animals and Foods have the richest vocabulary and widest SpAM distance spread. Colours form a tight, uniform neighbourhood consistent with its closed lexical class.](images/spam_fig08_domain_comparison.png){width=88%}
 
 
 # Summary
@@ -290,8 +300,7 @@ The following analyses are planned upon completion of SpAM data collection:
 > for Hindi-speaking participants at IIIT Hyderabad.  Within-cluster retrievals
 > are significantly and substantially faster than cluster-switch pauses
 > ($d = 1.51$, large effect).  Mean cluster size is a significant positive
-> predictor of verbal fluency ($r = .57$).  Domain differences in IRT are
-> non-significant ($\eta^2 < 1\,\%$).  Phase 2 (SpAM)
+predictor of verbal fluency ($r = .57$).  Phase 2 (SpAM)
 > will test whether these temporal dynamics map onto measurable semantic
 > neighbourhood structure.
 
