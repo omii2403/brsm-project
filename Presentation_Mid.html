@@ -29,7 +29,7 @@
       html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
 
       /* ─── Deck ─────────────────────────────────────────────── */
-      #deck { display: flex; width: calc(16 * 100vw); height: 100vh; transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
+      #deck { display: flex; width: calc(17 * 100vw); height: 100vh; transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
       .slide { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px 64px; position: relative; overflow: hidden; }
 
       /* ─── Navigation ──────────────────────────────────────── */
@@ -220,7 +220,7 @@
     <div id="progress-bar"></div>
 
     <!-- ══════════════════════════════════════════════════════════
-         DECK  (19 slides)
+         DECK  (17 slides)
     ══════════════════════════════════════════════════════════ -->
     <div id="deck">
 
@@ -546,15 +546,15 @@
               <table>
                 <thead><tr><th>Domain</th><th>Hindi %</th><th>English %</th></tr></thead>
                 <tbody>
-                  <tr><td><span style="color:var(--animals)">Animals</span></td><td>~62%</td><td>~38%</td></tr>
-                  <tr><td><span style="color:var(--foods)">Foods</span></td><td>~58%</td><td>~42%</td></tr>
-                  <tr><td><span style="color:var(--colours)">Colours</span></td><td>~34%</td><td>~66%</td></tr>
+                  <tr><td><span style="color:var(--animals)">Animals</span></td><td>64%</td><td>36%</td></tr>
+                  <tr><td><span style="color:var(--foods)">Foods</span></td><td>77%</td><td>23%</td></tr>
+                  <tr><td><span style="color:var(--colours)">Colours</span></td><td>28%</td><td>72%</td></tr>
                   <tr><td><span style="color:var(--bodyparts)">Body-parts</span></td><td>~55%</td><td>~45%</td></tr>
-                  <tr><td><strong style="color:var(--text)">Overall</strong></td><td><strong style="color:var(--green)">~53%</strong></td><td><strong style="color:var(--muted)">~47%</strong></td></tr>
+                  <tr><td><strong style="color:var(--text)">Overall</strong></td><td><strong style="color:var(--green)">53%</strong></td><td><strong style="color:var(--muted)">47%</strong></td></tr>
                 </tbody>
               </table>
               <div style="margin-top:12px;background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:10px 14px">
-                <p style="font-size:0.82rem"><span class="accent">Code-switching:</span> Colours domain shows highest English proportion (loanwords: red, blue, green, orange). This is culturally expected and not treated as an error.</p>
+                <p style="font-size:0.82rem"><span class="accent">Code-switching:</span> Colours has the lowest Hindi rate (28%) — English colour loanwords (<em>red, blue, green, orange</em>) are more accessible for this bilingual cohort. Foods is most Hindi-dominant (77%): food vocabulary is richly embedded in Hindi cultural context. Animals also high (64%). These ratios are a key participant characteristic, not data errors.</p>
               </div>
             </div>
           </div>
@@ -620,19 +620,79 @@
         </div>
       </div>
 
-      <!-- ═══ SLIDE 13 · DOMAIN COMPARISON (VIOLIN + BAR) ════════ -->
+      <!-- ═══ SLIDE 13 · DOMAIN COMPARISON (RAINCLOUD) ════════════ -->
       <div class="slide slide-img-layout">
         <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--gold));"></div>
         <div class="img-inner" style="max-width:1040px">
           <div class="slide-header">
-            <div class="slide-label">VFT — Plot 2 &amp; Plot 3: Domain Comparison</div>
-            <h2>Violin Plots &amp; Bar Charts: Colours Fastest, Body-parts Slowest</h2>
+            <div class="slide-label">VFT — IRT Distribution by Domain</div>
+            <h2>Raincloud Plots: Shape, Spread, Outliers &amp; Raw Data in One View</h2>
           </div>
-          <div class="img-grid img-grid-1">
-            <div class="img-panel">
-              <div class="img-caption">Fig 4 · Violin / Box Plot of IRT by Domain (Plot 2)</div>
-              <img src="images/vft_fig02_violin_irt.png" class="slide-img" alt="Violin Box Plot IRT by Domain">
-              <p class="img-desc">Colours: tightest distribution, lowest median (closed vocabulary). Body-parts: highest median, widest upper whisker. All domains: heavy right tail confirms switch pauses.</p>
+          <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
+            <div style="flex:1;min-height:0;display:flex;flex-direction:column">
+              <div class="img-caption">Fig 4 · Raincloud plot of IRT by semantic domain — half-violin + box + individual data points</div>
+              <img src="images/vft_fig03_raincloud_irt.png" class="slide-img" alt="Raincloud plot IRT by domain">
+              <p class="img-desc">Each domain's panel shows the full kernel density (half-violin), Q1–Q3 box with median, and individual participant-word observations as jittered dots. <strong>Colours</strong>: tightest distribution — small closed vocabulary exhausted quickly, few outliers. <strong>Body-parts</strong>: highest median (~5,724 ms) and widest spread — anatomical terms mix Hindi and English, increasing retrieval effort. <strong>Foods &amp; Animals</strong>: large right tails driven by cluster-switch pauses at subcategory boundaries (e.g., wild→domestic→birds). The right-skewed shape in every domain is the canonical signature of the clustering-and-switching model.</p>
+            </div>
+            <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;overflow-y:auto">
+              <div class="card" style="padding:11px 14px">
+                <h3 style="font-size:0.8rem;color:var(--text)">Domain Medians</h3>
+                <table style="font-size:0.78rem;margin-top:6px">
+                  <tr><td style="color:var(--animals)">Animals</td><td style="text-align:right">5,414 ms</td></tr>
+                  <tr><td style="color:var(--foods)">Foods</td><td style="text-align:right">5,205 ms</td></tr>
+                  <tr><td style="color:var(--colours)">Colours</td><td style="color:var(--green);text-align:right">3,484 ms ★</td></tr>
+                  <tr><td style="color:var(--bodyparts)">Body-parts</td><td style="color:var(--red);text-align:right">5,724 ms ●</td></tr>
+                </table>
+              </div>
+              <div style="background:rgba(63,185,80,0.08);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="green">★ Colours</span> — fastest (lowest median): closed-class vocabulary of ~10–15 Hindi colour terms; once exhausted, participants stop or switch to English, compressing the distribution.</p>
+              </div>
+              <div style="background:rgba(188,140,255,0.07);border:1px solid rgba(188,140,255,0.3);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="purple">● Body-parts</span> — slowest (highest median): face/limbs/internal sub-clusters require extra effort to access anatomical Hindi terms alongside English equivalents.</p>
+              </div>
+              <div style="background:rgba(210,153,34,0.07);border:1px solid rgba(210,153,34,0.3);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="gold">Why raincloud?</span> Violin plots hide the actual data points. Raincloud = violin + box + raw points — three layers of information in one compact panel.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLIDE 14 · SERIAL POSITION EFFECT ════════════════════ -->
+      <div class="slide slide-img-layout">
+        <div class="stripe" style="background:linear-gradient(90deg,var(--accent),var(--purple));"></div>
+        <div class="img-inner" style="max-width:1040px">
+          <div class="slide-header">
+            <div class="slide-label">VFT — Serial Position Effect</div>
+            <h2>Later Words Take Longer: <span class="accent">Lexical Exhaustion</span> in Action</h2>
+          </div>
+          <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
+            <div style="flex:1;min-height:0;display:flex;flex-direction:column">
+              <div class="img-caption">Fig 5 · IRT vs Serial Position — per-domain scatter with OLS trend lines and 95% CI bands</div>
+              <img src="images/vft_fig07_word_irt_position.png" class="slide-img" alt="Serial Position vs IRT scatter">
+              <p class="img-desc">Each dot = one word produced by one participant at a given ordinal rank (1st word, 2nd word, …). OLS trend lines are fitted independently per domain. <strong>All four lines slope upward</strong> — later-position words always cost more retrieval time. <strong>Colours</strong> has the steepest slope: by position ~10, most Hindi colour terms are exhausted, so each additional word demands genuine search effort. <strong>Foods</strong> has the shallowest slope: the large, hierarchically structured vocabulary (pulses → meals → snacks → condiments) keeps the semantic neighbourhood well-populated for longer.</p>
+            </div>
+            <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;overflow-y:auto">
+              <div style="background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.28);border-radius:8px;padding:12px 14px">
+                <h3 style="font-size:0.82rem;margin-bottom:6px">What is Serial Position?</h3>
+                <p style="font-size:0.78rem;color:var(--muted)">The <strong style="color:var(--text)">ordinal rank</strong> of a word within a single 60-s trial. Word 1 = first word typed, word N = last. Captures how retrieval speed changes as the word list grows longer.</p>
+              </div>
+              <div style="background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:10px 12px">
+                <h3 style="font-size:0.82rem;margin-bottom:6px;color:var(--accent)">Lexical Exhaustion</h3>
+                <p style="font-size:0.78rem">As words are retrieved, the local semantic neighbourhood depletes — like foraging a patch until it is stripped. The participant must either switch subcategory (cluster switch → large IRT) or slow down while searching the same depleted patch.</p>
+              </div>
+              <div class="card" style="padding:11px 14px">
+                <h3 style="font-size:0.8rem;color:var(--text)">Slope by Domain</h3>
+                <table style="font-size:0.78rem;margin-top:6px">
+                  <tr><td style="color:var(--colours)">Colours</td><td style="text-align:right">Steepest ↑↑</td></tr>
+                  <tr><td style="color:var(--bodyparts)">Body-parts</td><td style="text-align:right">Steep ↑</td></tr>
+                  <tr><td style="color:var(--animals)">Animals</td><td style="text-align:right">Moderate</td></tr>
+                  <tr><td style="color:var(--foods)">Foods</td><td style="text-align:right;color:var(--green)">Shallowest ↗</td></tr>
+                </table>
+              </div>
+              <div style="background:rgba(210,153,34,0.07);border:1px solid rgba(210,153,34,0.25);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="gold">Implication:</span> Vocabulary depth directly controls retrieval fatigue. Closed-set domains exhaust faster; open-set domains sustain lower-cost retrieval for longer.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -644,18 +704,18 @@
         <div class="img-inner" style="max-width:1040px">
           <div class="slide-header">
             <div class="slide-label">VFT — Language Distribution &amp; Cluster Metrics</div>
-            <h2>Hindi / English Mix &amp; Cluster Scoring by Domain</h2>
+            <h2>Hindi / English Mix &amp; Semantic Cluster Structure by Domain</h2>
           </div>
-          <div class="img-grid img-grid-1">
+          <div class="img-grid img-grid-2" style="gap:14px">
             <div class="img-panel">
-              <div class="img-caption">Fig 2 · Language Distribution — Pie Chart (overall) &amp; Domain Breakdown</div>
-              <img src="images/vft_fig04_pie_language.png" class="slide-img" alt="Language Distribution">
-              <p class="img-desc">Overall 53% Hindi. Colours most English-dominant (~66%) due to widespread Hindi loanword use. Animals most Hindi-dominant — culturally central, native vocabulary rich.</p>
+              <div class="img-caption">Fig 2 · Language mosaic — cell area = absolute count; colour = script (Hindi vs English)</div>
+              <img src="images/vft_fig10_mosaic_language.png" class="slide-img" alt="Language Distribution Mosaic">
+              <p class="img-desc">Mosaic encodes both <strong>proportion</strong> and <strong>raw count</strong> simultaneously. Foods has the largest total area (256 responses) and is 77% Hindi — food vocabulary is deeply embedded in Hindi culture. Colours is the smallest domain (41 responses) and overwhelmingly English (72%) — participants quickly exhaust Hindi colour terms and switch to loanwords. Animals (64% Hindi) and Body-parts (~55% Hindi) sit between these extremes.</p>
             </div>
             <div class="img-panel">
-              <div class="img-caption">Fig 8 · Cluster Scoring — Mean Cluster Size &amp; Switch Count by Domain</div>
+              <div class="img-caption">Fig 6 · Cluster scoring — mean cluster size (left) &amp; mean switch count per trial (right)</div>
               <img src="images/vft_fig06_cluster_scoring.png" class="slide-img" alt="Cluster Scoring">
-              <p class="img-desc">Foods + Animals: largest clusters (richest semantic structure). Colours: smallest cluster size — limited vocabulary constrains clustering depth. Switch count confirms more switching in open-vocabulary domains.</p>
+              <p class="img-desc">Cluster size &gt; 1 across all four domains confirms that retrieval is <strong>non-random</strong> — words are produced in semantically coherent bursts. <strong>Foods</strong> has the largest mean cluster size: its hierarchically rich subcategory structure (pulses → snacks → meals → condiments) sustains in-cluster runs for longer. <strong>Colours</strong> has the smallest cluster size but the highest switch count <em>relative to its short word lists</em> — the tiny closed vocabulary forces participants to switch subcategory or script almost immediately after the first few words.</p>
             </div>
           </div>
         </div>
@@ -759,7 +819,6 @@
                 <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">4 plot types</div><div class="result">Histogram, violin, bar, scatter</div></div>
                 <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ1 — Welch's t-test</div><div class="result">d=1.51, p&lt;.001 ✓ Reject H₀</div></div>
                 <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ3 — Pearson r</div><div class="result">r=.57, p=.005 ✓ Reject H₀</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--muted)"></div><div class="label">RQ2 — Domain ANOVA</div><div class="result">F(3,708)=2.18, ns</div></div>
               </div>
             </div>
             <div>
@@ -790,7 +849,7 @@
     <div id="kb-hint">← → arrows or click to navigate</div>
 
     <script>
-      const TOTAL = 16;
+      const TOTAL = 17;
       let cur = 0;
 
       const deck    = document.getElementById('deck');
