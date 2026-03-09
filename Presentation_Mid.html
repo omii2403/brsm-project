@@ -29,7 +29,7 @@
       html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
 
       /* ─── Deck ─────────────────────────────────────────────── */
-      #deck { display: flex; width: calc(17 * 100vw); height: 100vh; transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
+      #deck { display: flex; width: calc(19 * 100vw); height: 100vh; transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
       .slide { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px 64px; position: relative; overflow: hidden; }
 
       /* ─── Navigation ──────────────────────────────────────── */
@@ -113,7 +113,7 @@
       .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; margin-right: 5px; }
       .badge.rq1 { background: rgba(63,185,80,0.15); color: var(--green); }
       .badge.rq2 { background: rgba(88,166,255,0.15); color: var(--accent); }
-      .badge.rq3 { background: rgba(210,153,34,0.15); color: var(--gold); }
+      .badge.rq2 { background: rgba(210,153,34,0.15); color: var(--gold); }
       .badge.rq4 { background: rgba(188,140,255,0.15); color: var(--purple); }
       .badge.planned { background: rgba(248,81,73,0.15); color: var(--red); }
       .badge.done { background: rgba(63,185,80,0.15); color: var(--green); }
@@ -229,7 +229,7 @@
         <div class="stripe" style="background:linear-gradient(90deg,var(--animals),var(--foods),var(--colours),var(--bodyparts));"></div>
         <div style="text-align:center; max-width:840px">
           <div class="slide-label">BRSM Mid-Project · March 2026 · IIIT Hyderabad</div>
-          <h1>Semantic Organisation &amp; Retrieval Dynamics<br/>in <span class="accent">Hindi</span> Verbal Fluency</h1>
+          <h1><span class="accent">Hindi</span> Verbal Fluency</h1>
           <p style="margin-top:16px;font-size:1.05rem">
             <strong style="color:var(--text)">Mid-Project Report</strong> — Verbal Fluency Task (VFT) Analysis<br/>
             <span style="font-size:0.95rem">Experimental details · Research hypotheses · Exploratory results · Planned analyses</span>
@@ -256,61 +256,28 @@
         <div style="max-width:820px;width:100%">
           <div class="slide-header">
             <div class="slide-label">Presentation Outline</div>
-            <h2>What We Cover Today</h2>
+            <h2>Flow of Today's Presentation</h2>
           </div>
           <div class="grid grid-2" style="gap:16px">
             <div>
               <ul class="bullets" style="margin-top:0">
-                <li><strong>Background &amp; Motivation</strong> — Why study Hindi VFT?</li>
-                <li><strong>Experimental Design</strong> — Within-subjects, 4 domains, 1 min</li>
-                <li><strong>Participants &amp; Demographics</strong> — N=35, 14 states</li>
-                <li><strong>Data Platform</strong> — Custom web experiment, responses.json</li>
-                <li><strong>Data Pipeline</strong> — JSON → CSV → analysis</li>
+                <li><strong style="color:var(--accent)">① Experiment Explanation</strong> — Background, design, 4 domains, participants &amp; demographics</li>
+                <li><strong style="color:var(--gold)">② Data Explanation</strong> — Web platform, pipeline, response counts, language mix</li>
+                <li><strong style="color:var(--green)">③ Hypotheses</strong> — Formal H₀ / H₁ for RQ1 (Within vs Between-Cluster IRT) &amp; RQ2 (Cluster Size &amp; Fluency)</li>
               </ul>
             </div>
             <div>
               <ul class="bullets" style="margin-top:0">
-                <li><strong>Exploratory Analysis</strong> — Response counts, language mix</li>
-                <li><strong>Descriptive Stats</strong> — IRT distribution, domain breakdown</li>
-                <li><strong>Visualisations</strong> — 4 plot types (histogram, box, bar, scatter)</li>
-                <li><strong>Hypothesis Testing</strong> — Within-Cluster vs Between-Cluster IRT; Cluster Size &amp; Fluency</li>
-                <li><strong>Next Steps</strong> — SpAM spatial similarity task</li>
+                <li><strong style="color:var(--pink)">④ Exploratory Analysis</strong> — IRT distribution, domain breakdown, serial position, cluster scoring</li>
+                <li><strong style="color:var(--purple)">⑤ Plan</strong> — SpAM spatial similarity task (Phase 2)</li>
+                <li><strong style="color:var(--red)">⑥ Visual Results</strong> — Hypothesis test figures: Within/Between-Cluster IRT &amp; Cluster Size vs Fluency</li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- ═══ SLIDE 3 · BACKGROUND ═══════════════════════════════ -->
-      <div class="slide">
-        <div class="stripe" style="background:linear-gradient(90deg,var(--accent),var(--purple));"></div>
-        <div style="max-width:880px;width:100%">
-          <div class="slide-header">
-            <div class="slide-label">Background &amp; Motivation</div>
-            <h2>Why Do Words Come Out in <span class="accent">Clusters</span>?</h2>
-          </div>
-          <div class="grid grid-3" style="gap:16px;margin-bottom:16px">
-            <div class="card accent-top">
-              <h3>Clustering-and-Switching Model</h3>
-              <p>Troyer, Moscovitch &amp; Winocur (1997): free recall proceeds in bursts of semantically related words (clusters), separated by longer pauses at subcategory boundaries (switches). Proposed for English-speaking adults — does it hold for Hindi?</p>
-            </div>
-            <div class="card green-top">
-              <h3>The Hindi Context</h3>
-              <p>Hindi-speaking participants code-switch mid-sequence. IIIT Hyderabad cohort spans 14 Indian states with varied Hindi dialects. Does the clustering signature appear regardless of script choice?</p>
-            </div>
-            <div class="card purple-top">
-              <h3>Why VFT + SpAM?</h3>
-              <p>VFT = <em>behaviour</em> (timing, order, counts). SpAM = <em>representation</em> (spatial analogue of semantic similarity). Together they create a closed loop: predict retrieval speed from neighbourhood geometry.</p>
-            </div>
-          </div>
-          <div style="background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.24);border-radius:8px;padding:13px 18px;">
-            <p style="color:var(--text);font-size:0.88rem"><span class="accent">Core conjecture:</span> a word's retrieval speed is not just about familiarity — it depends on <strong>where it sits in the shared semantic map</strong> and how densely populated its local neighbourhood is.</p>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- ═══ SLIDE 4 · EXPERIMENTAL DESIGN ═══════════════════════ -->
+      
+      <!-- ═══ SLIDE 3 · EXPERIMENTAL DESIGN ═══════════════════════ -->
       <div class="slide">
         <div class="stripe" style="background:var(--gold);"></div>
         <div style="max-width:900px;width:100%">
@@ -330,7 +297,6 @@
                   <tr><td>Trial duration</td><td>1 min / domain (fixed)</td></tr>
                   <tr><td>Task order</td><td>Animals → Foods → Colours → Body-parts</td></tr>
                   <tr><td>Warm-up</td><td>1-min Furniture practice trial</td></tr>
-                  <tr><td>Potential confound</td><td>Serial position / primacy within trial</td></tr>
                 </tbody>
               </table>
             </div>
@@ -358,69 +324,7 @@
         </div>
       </div>
 
-      <!-- ═══ SLIDE 6 · PARTICIPANTS STATS ════════════════════════ -->
-      <div class="slide">
-        <div class="stripe" style="background:linear-gradient(90deg,var(--purple),var(--pink));"></div>
-        <div style="max-width:900px;width:100%">
-          <div class="slide-header">
-            <div class="slide-label">Participants &amp; Demographics</div>
-            <h2>35 Hindi-Speaking Students · 14 Indian States</h2>
-          </div>
-          <div class="grid grid-4" style="margin-bottom:22px;gap:14px">
-            <div style="text-align:center"><div class="stat-big">35</div><div class="stat-label">Participants<br/>Hindi-speaking</div></div>
-            <div style="text-align:center"><div class="stat-big" style="color:var(--gold)">32M/3F</div><div class="stat-label">Gender<br/>Male / Female</div></div>
-            <div style="text-align:center"><div class="stat-big" style="color:var(--green)">23.1</div><div class="stat-label">Mean Age (yrs)<br/>range 19–27</div></div>
-            <div style="text-align:center"><div class="stat-big" style="color:var(--purple)">14</div><div class="stat-label">Indian States<br/>represented</div></div>
-          </div>
-          <div class="grid grid-2" style="gap:16px">
-            <div>
-              <table>
-                <thead><tr><th>Variable</th><th>Value</th></tr></thead>
-                <tbody>
-                  <tr><td>N</td><td>35</td></tr>
-                  <tr><td>Gender</td><td>32 Male, 3 Female</td></tr>
-                  <tr><td>Age</td><td>M = 23.1 yrs, SD = 1.9, range 19–27</td></tr>
-                  <tr><td>Education</td><td>M = 16.5 yrs, SD = 1.7, range 14–20</td></tr>
-                  <tr><td>Top states</td><td>Gujarat (7), MP (6), Bihar (5), Maharashtra (4)</td></tr>
-                  <tr><td>Sampling method</td><td>Convenience (IIIT Hyderabad)</td></tr>
-                  <tr><td>Language</td><td>Native / highly proficient Hindi speakers</td></tr>
-                  <tr><td>Exclusion criteria</td><td>Neurological / psychiatric history</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <div class="finding-box" style="margin-bottom:12px">
-                <h3>Gender Imbalance</h3>
-                <p>32 M vs 3 F reflects IIIT Hyderabad's institutional composition. No gender-based IRT comparisons are made (low F-group power). A limitation noted for future work.</p>
-              </div>
-              <div class="finding-box" style="border-left-color:var(--gold)">
-                <h3 style="color:var(--gold)">Geographic Diversity</h3>
-                <p>14 states span North (Gujarat, MP, Bihar), East (West Bengal), South (Telangana, Karnataka). Hindi dialectal variation is present but not controlled — treated as natural variance.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══ SLIDE 7 · DEMOGRAPHICS FIGURE ══════════════════════ -->
-      <div class="slide slide-img-layout">
-        <div class="stripe" style="background:linear-gradient(90deg,var(--purple),var(--pink));"></div>
-        <div class="img-inner">
-          <div class="slide-header">
-            <div class="slide-label">Participants — Demographics Panel</div>
-            <h2>Who Were Our 35 Participants?</h2>
-          </div>
-          <div class="img-grid img-grid-1">
-            <div class="img-panel" style="max-width:920px;margin:0 auto">
-              <div class="img-caption">Combined Demographics: Gender · Age · Education · State/UT of Origin</div>
-              <img src="images/demo_fig05_combined.png" class="slide-img" alt="Combined Demograhics Panel" style="max-height:430px;width:auto;max-width:100%">
-              <p class="img-desc">A) Gender pie — 32 M, 3 F. &nbsp;B) Age histogram — M = 23.1, SD = 1.9. &nbsp;C) Education bar — M = 16.5 yrs. &nbsp;D) State-of-origin — Gujarat, MP, Bihar most represented; blue = North/Central, orange = South/East.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══ SLIDE 8 · DATA COLLECTION ══════════════════════════ -->
+      <!-- ═══ SLIDE 4 · PARTICIPANTS STATS ════════════════════════ -->
       <div class="slide">
         <div class="stripe" style="background:var(--green);"></div>
         <div style="max-width:900px;width:100%">
@@ -462,6 +366,68 @@
           </div>
         </div>
       </div>
+
+      <div class="slide">
+        <div class="stripe" style="background:linear-gradient(90deg,var(--purple),var(--pink));"></div>
+        <div style="max-width:900px;width:100%">
+          <div class="slide-header">
+            <div class="slide-label">Participants &amp; Demographics</div>
+            <h2>35 Hindi-Speaking Students · 14 Indian States</h2>
+          </div>
+          <div class="grid grid-4" style="margin-bottom:22px;gap:14px">
+            <div style="text-align:center"><div class="stat-big">35</div><div class="stat-label">Participants<br/>Hindi-speaking</div></div>
+            <div style="text-align:center"><div class="stat-big" style="color:var(--gold)">32M/3F</div><div class="stat-label">Gender<br/>Male / Female</div></div>
+            <div style="text-align:center"><div class="stat-big" style="color:var(--green)">23.1</div><div class="stat-label">Mean Age (yrs)<br/>range 19–27</div></div>
+            <div style="text-align:center"><div class="stat-big" style="color:var(--purple)">14</div><div class="stat-label">Indian States<br/>represented</div></div>
+          </div>
+          <div class="grid grid-2" style="gap:16px">
+            <div>
+              <table>
+                <thead><tr><th>Variable</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>N</td><td>35</td></tr>
+                  <tr><td>Gender</td><td>32 Male, 3 Female</td></tr>
+                  <tr><td>Age</td><td>M = 23.1 yrs, SD = 1.9, range 19–27</td></tr>
+                  <tr><td>Education</td><td>M = 16.5 yrs, SD = 1.7, range 14–20</td></tr>
+                  <tr><td>Top states</td><td>Gujarat (7), MP (6), Bihar (5), Maharashtra (4)</td></tr>
+                  <tr><td>Sampling method</td><td>Convenience (IIIT Hyderabad)</td></tr>
+                  <tr><td>Language</td><td>Native / highly proficient Hindi speakers</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div class="finding-box" style="margin-bottom:12px">
+                <h3>Gender Imbalance</h3>
+                <p>32 M vs 3 F reflects IIIT Hyderabad's institutional composition. No gender-based IRT comparisons are made (low F-group power). A limitation noted for future work.</p>
+              </div>
+              <div class="finding-box" style="border-left-color:var(--gold)">
+                <h3 style="color:var(--gold)">Geographic Diversity</h3>
+                <p>14 states span North (Gujarat, MP, Bihar), East (West Bengal), South (Telangana, Karnataka). Hindi dialectal variation is present but not controlled — treated as natural variance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLIDE 7 · DEMOGRAPHICS FIGURE ══════════════════════ -->
+      <div class="slide slide-img-layout">
+        <div class="stripe" style="background:linear-gradient(90deg,var(--purple),var(--pink));"></div>
+        <div class="img-inner">
+          <div class="slide-header">
+            <div class="slide-label">Participants — Demographics Panel</div>
+            <h2>Who Were Our 35 Participants?</h2>
+          </div>
+          <div class="img-grid img-grid-1">
+            <div class="img-panel" style="max-width:920px;margin:0 auto">
+              <div class="img-caption">Combined Demographics: Gender · Age · Education · State/UT of Origin</div>
+              <img src="images/demo_fig05_combined.png" class="slide-img" alt="Combined Demograhics Panel" style="max-height:430px;width:auto;max-width:100%">
+              <p class="img-desc">A) Gender pie — 32 M, 3 F. &nbsp;B) Age histogram — M = 23.1, SD = 1.9. &nbsp;C) Education bar — M = 16.5 yrs. &nbsp;D) State-of-origin — Gujarat, MP, Bihar most represented; blue = North/Central, orange = South/East.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLIDE 8 · DATA COLLECTION ══════════════════════════ -->
 
       <!-- ═══ SLIDE 9 · DATA PIPELINE ═════════════════════════════ -->
       <div class="slide">
@@ -564,6 +530,42 @@
         </div>
       </div>
 
+      <!-- ═══ SLIDE 10 · RESEARCH HYPOTHESES ══════════════════════ -->
+      <div class="slide">
+        <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--gold));"></div>
+        <div style="max-width:880px;width:100%">
+          <div class="slide-header">
+            <div class="slide-label">Research Hypotheses</div>
+            <h2>Formal <span class="accent">H₀ / H₁</span> Statements — Before We Look at Data</h2>
+          </div>
+          <div class="grid grid-2" style="gap:18px;margin-bottom:18px">
+            <div>
+              <div style="margin-bottom:12px"><span class="badge rq1">RQ1 · Within vs Between-Cluster IRT</span></div>
+              <div class="eq-box" style="margin-bottom:12px">
+                <div class="h0">H₀: µ_WC = µ_BC &nbsp;(no IRT difference)</div>
+                <div class="h1">H₁: µ_WC &lt; µ_BC &nbsp;(one-tailed)</div>
+              </div>
+              <div style="background:rgba(63,185,80,0.07);border:1px solid rgba(63,185,80,0.22);border-radius:8px;padding:12px 16px">
+                <p style="font-size:0.84rem"><strong style="color:var(--text)">Rationale:</strong> If words cluster semantically during retrieval (Troyer et al., 1997), pauses between subcategories (between-cluster) should be significantly longer than pauses within a coherent run (within-cluster). Test: Welch's independent-samples t-test.</p>
+              </div>
+            </div>
+            <div>
+              <div style="margin-bottom:12px"><span class="badge rq2">RQ2 · Cluster Size &amp; Fluency</span></div>
+              <div class="eq-box" style="margin-bottom:12px">
+                <div class="h0">H₀: ρ(cluster size, fluency) = 0</div>
+                <div class="h1">H₁: ρ &gt; 0 &nbsp;(one-tailed)</div>
+              </div>
+              <div style="background:rgba(210,153,34,0.07);border:1px solid rgba(210,153,34,0.22);border-radius:8px;padding:12px 16px">
+                <p style="font-size:0.84rem"><strong style="color:var(--text)">Rationale:</strong> Participants who sustain longer within-cluster runs have better-organised semantic neighbourhoods and should produce more total words overall. Test: Pearson r with BH correction.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:12px 18px">
+            <p style="font-size:0.87rem"><span class="accent">Both hypotheses are directional (one-tailed)</span> — derived from the Clustering-and-Switching Model. We first examine the data exploratorily, then present formal test results &amp; visualisations as the final section.</p>
+          </div>
+        </div>
+      </div>
+
       <!-- ═══ SLIDE 11 · VFT DIVIDER ══════════════════════════════ -->
       <div class="slide divider-slide">
         <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--accent));"></div>
@@ -586,7 +588,7 @@
         <div class="img-inner" style="max-width:1040px">
           <div class="slide-header">
             <div class="slide-label">Descriptive Statistics — Plot 1: Histogram</div>
-            <h2>IRT Distribution: Right-Skewed, Leptokurtic</h2>
+            <h2>IRT Distribution: Right-Skewed</h2>
           </div>
           <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
             <div style="flex:1;min-height:0;display:flex;flex-direction:column">
@@ -658,7 +660,6 @@
         </div>
       </div>
 
-      <!-- ═══ SLIDE 14 · SERIAL POSITION EFFECT ════════════════════ -->
       <div class="slide slide-img-layout">
         <div class="stripe" style="background:linear-gradient(90deg,var(--accent),var(--purple));"></div>
         <div class="img-inner" style="max-width:1040px">
@@ -703,25 +704,78 @@
         <div class="stripe" style="background:linear-gradient(90deg,var(--pink),var(--purple));"></div>
         <div class="img-inner" style="max-width:1040px">
           <div class="slide-header">
-            <div class="slide-label">VFT — Language Distribution &amp; Cluster Metrics</div>
-            <h2>Hindi / English Mix &amp; Semantic Cluster Structure by Domain</h2>
+            <div class="slide-label">VFT — Cluster Metrics</div>
+            <h2>Semantic Cluster Structure by Domain</h2>
           </div>
-          <div class="img-grid img-grid-2" style="gap:14px">
-            <div class="img-panel">
-              <div class="img-caption">Fig 2 · Language mosaic — cell area = absolute count; colour = script (Hindi vs English)</div>
-              <img src="images/vft_fig10_mosaic_language.png" class="slide-img" alt="Language Distribution Mosaic">
-              <p class="img-desc">Mosaic encodes both <strong>proportion</strong> and <strong>raw count</strong> simultaneously. Foods has the largest total area (256 responses) and is 77% Hindi — food vocabulary is deeply embedded in Hindi culture. Colours is the smallest domain (41 responses) and overwhelmingly English (72%) — participants quickly exhaust Hindi colour terms and switch to loanwords. Animals (64% Hindi) and Body-parts (~55% Hindi) sit between these extremes.</p>
-            </div>
-            <div class="img-panel">
+          <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
+            <div style="flex:1;min-height:0;display:flex;flex-direction:column">
               <div class="img-caption">Fig 6 · Cluster scoring — mean cluster size (left) &amp; mean switch count per trial (right)</div>
               <img src="images/vft_fig06_cluster_scoring.png" class="slide-img" alt="Cluster Scoring">
               <p class="img-desc">Cluster size &gt; 1 across all four domains confirms that retrieval is <strong>non-random</strong> — words are produced in semantically coherent bursts. <strong>Foods</strong> has the largest mean cluster size: its hierarchically rich subcategory structure (pulses → snacks → meals → condiments) sustains in-cluster runs for longer. <strong>Colours</strong> has the smallest cluster size but the highest switch count <em>relative to its short word lists</em> — the tiny closed vocabulary forces participants to switch subcategory or script almost immediately after the first few words.</p>
+            </div>
+            <div style="width:250px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;overflow-y:auto">
+              <div class="card" style="padding:11px 14px">
+                <h3 style="font-size:0.8rem;color:var(--text)">Mean Cluster Size</h3>
+                <table style="font-size:0.78rem;margin-top:6px">
+                  <tr><td style="color:var(--animals)">Animals</td><td style="text-align:right">5.02</td></tr>
+                  <tr><td style="color:var(--foods)">Foods</td><td style="color:var(--gold);text-align:right">5.58 ★</td></tr>
+                  <tr><td style="color:var(--colours)">Colours</td><td style="color:var(--red);text-align:right">4.06 ●</td></tr>
+                  <tr><td style="color:var(--bodyparts)">Body-parts</td><td style="text-align:right">5.24</td></tr>
+                  <tr><td style="color:var(--muted)">Overall mean</td><td style="color:var(--text);text-align:right">4.99</td></tr>
+                </table>
+              </div>
+              <div style="background:rgba(210,153,34,0.07);border:1px solid rgba(210,153,34,0.28);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="gold">★ Foods</span> — largest clusters: hierarchically rich vocabulary (pulses → snacks → meals → condiments) lets participants stay in-cluster longer before needing to switch.</p>
+              </div>
+              <div style="background:rgba(248,119,186,0.07);border:1px solid rgba(248,119,186,0.28);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="pink">● Colours</span> — smallest clusters + highest switch rate: the closed ~10-term vocabulary is exhausted rapidly, forcing frequent subcategory or script switches.</p>
+              </div>
+              <div style="background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:10px 12px">
+                <p style="font-size:0.78rem"><span class="accent">Mean switches per trial:</span> Mean = 1.9. Participants switch subcategory almost twice per 1-min trial on average — consistent with the clustering-and-switching model.</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ═══ SLIDE 16 · HYPOTHESIS TEST RQ1 ══════════════════════ -->
+      <div class="slide">
+        <div class="stripe" style="background:linear-gradient(90deg,var(--animals),var(--foods),var(--colours),var(--bodyparts));"></div>
+        <div style="max-width:920px;width:100%">
+          <div class="slide-header">
+            <div class="slide-label">Mid-Project Summary &amp; Next Steps</div>
+            <h2>Where We Are &amp; Where We're Going</h2>
+          </div>
+          <div class="grid grid-2" style="gap:16px">
+            <div>
+              <h3 style="margin-bottom:10px">Completed: VFT Phase</h3>
+              <div>
+                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">Data collection</div><div class="result">N=35, 712 Hindi IRTs</div></div>
+                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">Data exploration</div><div class="result">Counts, language mix, pipeline</div></div>
+                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">Descriptive statistics</div><div class="result">Skew=2.54, Median=5,389 ms</div></div>
+                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">4 plot types</div><div class="result">Histogram, violin, bar, scatter</div></div>
+                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ1 — Welch's t-test</div><div class="result">d=1.51, p&lt;.001 ✓ Reject H₀</div></div>
+                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ2 — Pearson r</div><div class="result">r=.57, p=.005 ✓ Reject H₀</div></div>
+              </div>
+            </div>
+            <div>
+              <h3 style="margin-bottom:10px">Planned: SpAM Phase (Phase 2)</h3>
+              <ul class="bullets">
+                <li><strong>Consensus distance matrices</strong> — pairwise SpAM distances averaged across 35 participants per domain</li>
+                <li><strong>Heatmap visualisation</strong> — block structure confirms sub-category organisation</li>
+                <li><strong>MDS maps</strong> — 2-D semantic geometry per domain</li>
+                <li><strong>Hierarchical clustering</strong> — dendrogram + silhouette (optimal k)</li>
+                <li><strong>RQ4 cross-task correlation</strong> — SpAM distance vs VFT IRT (Pearson r + BH)</li>
+                <li><strong>Domain comparison</strong> — vocab size vs SpAM distance vs mean IRT</li>
+              </ul>
+              <div style="margin-top:14px;background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:12px 16px">
+                <p style="font-size:0.85rem"><span class="accent">Core conjecture (to be tested in Phase 2):</span> Words with smaller mean SpAM neighbourhood distance will show significantly lower mean VFT IRT — confirming that semantic proximity drives retrieval speed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLIDE 17 · HYPOTHESIS TEST RQ1 ══════════════════════ -->
       <div class="slide slide-img-layout">
         <div class="stripe" style="background:linear-gradient(90deg,var(--green),var(--accent));"></div>
         <div class="img-inner" style="max-width:1040px">
@@ -760,82 +814,80 @@
         </div>
       </div>
 
-      <!-- ═══ SLIDE 17 · HYPOTHESIS TEST RQ3 ══════════════════════ -->
-      <div class="slide slide-img-layout">
+      <!-- ═══ SLIDE 18 · HYPOTHESIS TEST RQ3 ══════════════════════ -->
+      <div class="slide">
         <div class="stripe" style="background:linear-gradient(90deg,var(--gold),var(--purple));"></div>
-        <div class="img-inner" style="max-width:1040px">
+        <div style="max-width:900px;width:100%">
           <div class="slide-header">
             <div class="slide-label">Hypothesis Testing — <span class="badge rq3">Cluster Size &amp; Fluency</span></div>
             <h2>Cluster Size Predicts Fluency — r = .57 <span class="badge done">✓ Reject H₀</span></h2>
           </div>
-          <div style="display:flex;gap:18px;flex:1;min-height:0;overflow:hidden">
-            <div style="flex:1;min-height:0;display:flex;flex-direction:column">
-              <div class="img-caption">Fig 10 · Cluster Size vs Total Fluency Scatter with OLS Regression Line and 95% CI Band</div>
-              <img src="images/vft_fig13_rq3_fluency_scatter.png" class="slide-img" alt="Cluster Size vs Fluency">
-              <p class="img-desc">Each point = one participant. Positive slope confirmed. Equation: Total words = 3.12 + 2.14 × Mean cluster size. Higher cluster size → more total Hindi words produced.</p>
-            </div>
-            <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;overflow-y:auto">
-              <div class="eq-box">
+          <div class="grid grid-2" style="gap:18px;margin-bottom:18px">
+            <div>
+              <div class="eq-box" style="margin-bottom:14px">
                 <div class="h0">H₀: ρ(cluster size, fluency) = 0</div>
                 <div class="h1">H₁: ρ &gt; 0 &nbsp;(one-tailed)</div>
               </div>
-              <div class="card" style="padding:11px 14px">
-                <h3 style="font-size:0.8rem;color:var(--text)">Test Results</h3>
-                <table style="font-size:0.78rem;margin-top:6px">
-                  <tr><td style="color:var(--muted)">Test</td><td style="color:var(--text);text-align:right">Pearson r</td></tr>
-                  <tr><td style="color:var(--muted)">r(33)</td><td style="color:var(--gold);text-align:right">0.57</td></tr>
-                  <tr><td style="color:var(--muted)">95% CI</td><td style="color:var(--text);text-align:right">[0.31, 0.75]</td></tr>
-                  <tr><td style="color:var(--muted)">p (raw)</td><td style="color:var(--text);text-align:right">.003</td></tr>
-                  <tr><td style="color:var(--muted)">p (BH-adj)</td><td style="color:var(--green);text-align:right">.005</td></tr>
-                  <tr><td style="color:var(--muted)">Decision</td><td style="color:var(--green);text-align:right">Reject H₀ ✓</td></tr>
+              <div class="card" style="padding:13px 16px">
+                <h3 style="font-size:0.83rem;color:var(--text);margin-bottom:8px">Test Results</h3>
+                <table>
+                  <thead><tr><th>Statistic</th><th>Value</th></tr></thead>
+                  <tbody>
+                    <tr><td>Test</td><td>Pearson r</td></tr>
+                    <tr><td>N</td><td>35 participants</td></tr>
+                    <tr><td>r(33)</td><td><span class="gold">0.57</span></td></tr>
+                    <tr><td>r²</td><td>0.33</td></tr>
+                    <tr><td>95% CI</td><td>[0.31, 0.75]</td></tr>
+                    <tr><td>p (one-tailed)</td><td><span class="green">.005</span></td></tr>
+                    <tr><td>Decision</td><td><span class="green">Reject H₀ ✓</span></td></tr>
+                  </tbody>
                 </table>
               </div>
-              <div style="background:rgba(210,153,34,0.08);border:1px solid rgba(210,153,34,0.3);border-radius:8px;padding:10px 12px">
-                <p style="font-size:0.78rem"><span class="gold">r = .57 = moderate-large.</span> Cluster size explains ~33% of variance in fluency (r² = 0.33). Participants who cluster effectively recall more words overall.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:13px">
+              <div class="finding-box">
+                <h3>What the result means</h3>
+                <p>A Pearson correlation of r = .57 (p = .005, one-tailed) was found between mean cluster size and total Hindi words produced per participant. The 95% CI [0.31, 0.75] excludes zero, confirming a significant positive relationship. Cluster size explains <strong style="color:var(--text)">33% of the variance</strong> in fluency (r² = 0.33).</p>
               </div>
-              <div style="background:rgba(188,140,255,0.07);border:1px solid rgba(188,140,255,0.22);border-radius:8px;padding:10px 12px">
-                <p style="font-size:0.78rem"><span class="purple">Regression:</span> Total words = 3.12 + 2.14 × Mean cluster size. Both clustering and switching contribute to high fluency.</p>
+              <div class="finding-box" style="border-left-color:var(--gold)">
+                <h3 style="color:var(--gold)">Regression equation</h3>
+                <p>Total words = <strong style="color:var(--text)">3.12 + 2.14 × Mean cluster size</strong>. Each additional unit of cluster size predicts approximately 2 extra words produced within the 1-minute trial. Participants who sustain longer in-cluster runs — indicating better-organised semantic sub-networks — retrieve more words overall.</p>
+              </div>
+              <div class="finding-box" style="border-left-color:var(--purple)">
+                <h3 style="color:var(--purple)">Interpretation</h3>
+                <p>Clustering efficiency is a strong predictor of verbal fluency in Hindi. Participants with richer, more densely connected semantic sub-networks can stay within a subcategory longer before switching, thereby producing more total responses in the fixed time window.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ═══ SLIDE 16 · SUMMARY + NEXT STEPS ═════════════════════ -->
-      <div class="slide">
+      <!-- ═══ SLIDE 19 · THANK YOU ═════════════════════════════ -->
+      <div class="slide divider-slide">
         <div class="stripe" style="background:linear-gradient(90deg,var(--animals),var(--foods),var(--colours),var(--bodyparts));"></div>
-        <div style="max-width:920px;width:100%">
-          <div class="slide-header">
-            <div class="slide-label">Mid-Project Summary &amp; Next Steps</div>
-            <h2>Where We Are &amp; Where We're Going</h2>
+        <div style="text-align:center;max-width:720px">
+          <div class="slide-label" style="margin-bottom:24px">BRSM Mid-Project · March 2026 · IIIT Hyderabad</div>
+          <h1>Thank <span class="accent">You</span></h1>
+          <p style="font-size:1.05rem;margin-top:18px;max-width:560px;margin-left:auto;margin-right:auto">
+            Hindi Verbal Fluency — Mid-Project Presentation
+          </p>
+          <div class="title-authors" style="margin-top:32px">
+            <div class="author-pill"><span>Akshat Kotadia</span> &mdash; 2025201005</div>
+            <div class="author-pill"><span>Om Mehra</span> &mdash; 2025201008</div>
+            <div class="author-pill"><span>Ankit Chavda</span> &mdash; 2025201045</div>
           </div>
-          <div class="grid grid-2" style="gap:16px">
-            <div>
-              <h3 style="margin-bottom:10px">Completed: VFT Phase</h3>
-              <div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">Data collection</div><div class="result">N=35, 712 Hindi IRTs</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">Data exploration</div><div class="result">Counts, language mix, pipeline</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">Descriptive statistics</div><div class="result">Skew=2.54, Median=5,389 ms</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">4 plot types</div><div class="result">Histogram, violin, bar, scatter</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ1 — Welch's t-test</div><div class="result">d=1.51, p&lt;.001 ✓ Reject H₀</div></div>
-                <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="label">RQ3 — Pearson r</div><div class="result">r=.57, p=.005 ✓ Reject H₀</div></div>
-              </div>
+          <div style="margin-top:36px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+            <div style="background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:10px 20px;font-size:0.85rem;">
+              <span class="green">RQ1</span> &nbsp;Welch's t: d = 1.51, p &lt; .001
             </div>
-            <div>
-              <h3 style="margin-bottom:10px">Planned: SpAM Phase (Phase 2)</h3>
-              <ul class="bullets">
-                <li><strong>Consensus distance matrices</strong> — pairwise SpAM distances averaged across 35 participants per domain</li>
-                <li><strong>Heatmap visualisation</strong> — block structure confirms sub-category organisation</li>
-                <li><strong>MDS maps</strong> — 2-D semantic geometry per domain</li>
-                <li><strong>Hierarchical clustering</strong> — dendrogram + silhouette (optimal k)</li>
-                <li><strong>RQ4 cross-task correlation</strong> — SpAM distance vs VFT IRT (Pearson r + BH)</li>
-                <li><strong>Domain comparison</strong> — vocab size vs SpAM distance vs mean IRT</li>
-              </ul>
-              <div style="margin-top:14px;background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.22);border-radius:8px;padding:12px 16px">
-                <p style="font-size:0.85rem"><span class="accent">Core conjecture (to be tested in Phase 2):</span> Words with smaller mean SpAM neighbourhood distance will show significantly lower mean VFT IRT — confirming that semantic proximity drives retrieval speed.</p>
-              </div>
+            <div style="background:rgba(210,153,34,0.1);border:1px solid rgba(210,153,34,0.3);border-radius:8px;padding:10px 20px;font-size:0.85rem;">
+              <span class="gold">RQ2</span> &nbsp;Pearson r = .57, p = .005
+            </div>
+            <div style="background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);border-radius:8px;padding:10px 20px;font-size:0.85rem;">
+              <span class="accent">Next</span> &nbsp;SpAM Phase 2
             </div>
           </div>
+          <p style="margin-top:36px;font-size:0.82rem;color:var(--border)">Questions &amp; Discussion</p>
         </div>
       </div>
 
@@ -849,7 +901,7 @@
     <div id="kb-hint">← → arrows or click to navigate</div>
 
     <script>
-      const TOTAL = 17;
+      const TOTAL = 18;
       let cur = 0;
 
       const deck    = document.getElementById('deck');
