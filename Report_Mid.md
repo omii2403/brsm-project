@@ -87,11 +87,6 @@ four semantic domains.
 | Education      | M = 16.5 yrs, SD = 1.7, range 14--20                        |
 | States (India) | 14 states; Gujarat (7), MP (6), Bihar (5), \ldots           |
 
-Inclusion criteria: self-reported native/near-native Hindi proficiency; no
-neurological or psychiatric history.
-
-![*Combined demographics panel.* Top: gender distribution and age histogram. Bottom: years of education histogram and geographic distribution by Indian state. The cohort is young (19--27 yrs), predominantly male, and geographically diverse.](images/demo_fig05_combined.png){width=70%}
-
 ## Stimuli, Apparatus, and Procedure
 
 Four domains were chosen to span vocabulary size and structure: **Animals**
@@ -291,8 +286,6 @@ rather than task ambiguity.
 | Foods      | 56.1%          | 43.9%            | Specific dishes     |
 | **Colours**| **25.8%**      | **74.2%**        | Lexical exhaustion  |
 | Body-parts | 55.0%          | 45.0%            | Technical terms     |
-
-![*Language distribution pie charts per domain.* Colours is the only domain where English tokens constitute the clear majority, confirming script-specific vocabulary depletion.](images/vft_fig04_pie_language.png){width=60%}
 
 **EH4 -- Cluster Metric Profiles.** Three cluster-level metrics were computed per
 participant: mean cluster size, total switch count, and total cluster count.
