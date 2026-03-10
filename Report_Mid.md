@@ -12,7 +12,7 @@ geometry: "a4paper, margin=1.8cm, top=2cm, bottom=2cm"
 fontsize: 10pt
 linestretch: 1.15
 numbersections: true
-toc: true
+toc: false
 secnumdepth: 2
 header-includes:
   - \usepackage{booktabs}
@@ -90,6 +90,8 @@ four semantic domains.
 Inclusion criteria: self-reported native/near-native Hindi proficiency; no
 neurological or psychiatric history.
 
+![*Combined demographics panel.* Top: gender distribution and age histogram. Bottom: years of education histogram and geographic distribution by Indian state. The cohort is young (19--27 yrs), predominantly male, and geographically diverse.](images/demo_fig05_combined.png){width=70%}
+
 ## Stimuli, Apparatus, and Procedure
 
 Four domains were chosen to span vocabulary size and structure: **Animals**
@@ -113,6 +115,21 @@ Raw `responses.json` was processed in five steps: (1) IRT computation
 Latin = English); (3) Hindi filter retaining 712 of 1340 tokens (53%);
 (4) adaptive cluster scoring -- switch when IRT $>$ (mean + 1 SD) per
 participant; (5) export to `vft_responses.csv`.
+
+## Dataset Variables
+
+| Column | Type | Description |
+|:-------|:----:|:------------|
+| `subject_id` | Integer | Anonymised participant identifier |
+| `domain` | String | Animals / Foods / Colours / Body-parts |
+| `word` | String | Word as typed (original script) |
+| `rt_ms` | Float | Inter-response time (ms) |
+| `position` | Integer | Serial position within trial (1 = first word) |
+| `language_type` | String | "Hindi/Hinglish" or "English" |
+
+Derived per participant: *within-cluster IRT* (mean IRT where `is_switch = False`),
+*between-cluster IRT* (mean IRT where `is_switch = True`), *mean cluster size*
+(mean words per cluster), and *total fluency score* (count of Hindi tokens).
 
 ## Response Counts and Language Distribution
 
@@ -171,9 +188,17 @@ within every domain, suggesting lower retrieval effort for English alternatives.
 
 Adaptive thresholds (mean + 1 SD per participant) prevent over-/under-clustering
 by speed.  Mean cluster size $> 1$ in all domains confirms genuine subcategory-burst
-retrieval.  Foods produces the deepest clusters; Colours the shallowest.
+retrieval.  Foods produces the deepest clusters (large multi-tier subcategory structure
+permits sustained within-cluster bursts); Colours the shallowest (small closed lexicon
+depleted early, forcing frequent switches to English).
 
 ![*Cluster size (left) and switch count (right) by domain.* Foods supports deepest clustering; Colours shallowest.](images/vft_fig06_cluster_scoring.png){width=62%}
+
+The scatter plot below validates mean IRT as an efficiency proxy: participants with
+faster retrieval speeds also produce more Hindi words overall ($r = -.21$, token level).
+This confirms that the temporal cost of lexical search translates directly into output quantity.
+
+![*Mean IRT vs total fluency score per participant.* Each point = one participant (n = 35). Negative relationship: faster retrievers produce more words. OLS line with 95\% CI.](images/vft_fig09_fluency_vs_irt.png){width=58%}
 
 
 ---
@@ -251,6 +276,33 @@ Foods.
 
 ![*Serial position vs IRT by domain (OLS trend lines).* All four domains show positive slopes; gradient steepest for Colours, shallowest for Foods.](images/vft_fig07_word_irt_position.png){width=65%}
 
+**EH3 -- Bilingual Code-Switching.** A proportion of responses in every trial
+appear in Latin script (English), even when the category cue was given in Hindi.
+Code-switching is not random: it is concentrated in the **Colours** domain, where
+the small Devanagari inventory is exhausted earliest.  Participants effectively
+borrow English colour terms ("red", "blue", "pink") once Hindi options are depleted.
+This pattern reveals a domain-specific ceiling on Hindi lexical availability and
+suggests that bilingual retrieval strategies are triggered by vocabulary exhaustion
+rather than task ambiguity.
+
+| Domain     | % Hindi tokens | % English tokens | Code-switch trigger |
+|:-----------|:--------------:|:----------------:|:--------------------|
+| Animals    | 60.5%          | 39.5%            | Peripheral items    |
+| Foods      | 56.1%          | 43.9%            | Specific dishes     |
+| **Colours**| **25.8%**      | **74.2%**        | Lexical exhaustion  |
+| Body-parts | 55.0%          | 45.0%            | Technical terms     |
+
+![*Language distribution pie charts per domain.* Colours is the only domain where English tokens constitute the clear majority, confirming script-specific vocabulary depletion.](images/vft_fig04_pie_language.png){width=60%}
+
+**EH4 -- Cluster Metric Profiles.** Three cluster-level metrics were computed per
+participant: mean cluster size, total switch count, and total cluster count.
+Pearson correlations with total fluency show that all three are positive predictors
+($r_{\text{cluster size}} = .54$, $r_{\text{switches}} = .57$, $r_{\text{clusters}} = .74$;
+all $p < .001$).  Notably, *total cluster count* is the strongest predictor: participants
+who formed more clusters overall (even if small) produced the most words, suggesting
+that breadth of exploration across subcategory patches drives output more than depth
+alone.
+
 
 ---
 
@@ -259,11 +311,48 @@ Foods.
 
 SpAM data were collected in the same web session: participants dragged word tokens
 onto a blank canvas, with Euclidean drag-distance indexing subjective semantic
-similarity.  Phase 2 analyses will: (1) compute per-domain consensus distance
-matrices; (2) run MDS + hierarchical clustering to recover subcategory structure;
-(3) test **RQ3** -- whether SpAM inter-word distance positively correlates with
-VFT IRT (H1: $\rho > 0$, BH-corrected across four domains); and (4) compare
-neighbourhood density across domains.
+similarity.  Phase 2 analyses will proceed in four steps.
+
+**1. Consensus distance matrices.**  For each domain, pairwise Euclidean distances
+between word tokens are averaged across all 35 participants, producing a group-level
+semantic proximity matrix per category.  These matrices represent the "averaged"
+subjective semantic space of the cohort.
+
+**2. MDS and hierarchical clustering.**  Multi-Dimensional Scaling (MDS) projects
+each consensus matrix into 2-D for visual inspection.  Agglomerative hierarchical
+clustering (Ward linkage) on the distance matrix will recover latent subcategory
+boundaries (e.g., wild vs domestic animals) and be compared against the temporal
+cluster boundaries identified in Phase 1.
+
+**3. RQ3 -- Cross-task correlation.**  The primary confirmatory test:
+- **H0:** $\rho$(SpAM distance, VFT IRT) = 0
+- **H1:** $\rho$(SpAM distance, VFT IRT) $> 0$ *(one-tailed)*
+
+Word pairs rated close in SpAM (low distance) should produce short VFT IRTs
+(retrieved within the same cluster); pairs rated far apart should produce long IRTs
+(switch-boundary pauses).  $p$-values will be Benjamini--Hochberg corrected across
+the four domains tested.
+
+**4. Domain vocabulary-breadth comparison.**  Neighbourhood density from the SpAM
+matrices will be compared across domains to test whether Foods and Animals
+(which supported deeper VFT clustering) have denser semantic neighbourhoods than
+Colours and Body-parts.
+
+
+---
+
+
+# Code and Data Availability
+
+All analysis code, raw data, and figures are openly available in the project
+GitHub repository:
+
+> <https://github.com/omii2403/Hindi-Fluency>
+
+The repository contains: `responses.json` (raw session data), `vft_responses.csv`
+(processed per-word dataset), `VFT_Final_Analysis.ipynb` (all Phase 1 analyses
+and figures), `gen_demographics.py` (participant demographics pipeline), and
+this report source (`Report_Mid.md`).
 
 
 ---
