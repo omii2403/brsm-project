@@ -3,11 +3,11 @@ title: |
   Semantic Organisation and Retrieval Dynamics in
   Hindi Verbal Fluency
 subtitle: |
-  Mid-Project Analysis Report — Verbal Fluency Task (VFT)
+  Mid-Project Analysis Report --- Verbal Fluency Task (VFT)
 author:
-  - "Akshat Kotadia (Roll No.~2025201005)"
-  - "Om Mehra (Roll No.~2025201008)"
-  - "Ankit Chavda (Roll No.~2025201045)"
+  - "Akshat Kotadia (Roll No. 2025201005)"
+  - "Om Mehra (Roll No. 2025201008)"
+  - "Ankit Chavda (Roll No. 2025201045)"
 institute: "International Institute of Information Technology, Hyderabad"
 date: "March 2026"
 geometry: "a4paper, margin=2cm, top=2.2cm, bottom=2.2cm"
@@ -15,7 +15,7 @@ fontsize: 11pt
 linestretch: 1.2
 numbersections: true
 toc: true
-secnumdepth: 2
+secnumdepth: 3
 header-includes:
   - \usepackage{booktabs}
   - \usepackage{float}
@@ -28,331 +28,339 @@ header-includes:
   - \usepackage{longtable}
   - \usepackage{fancyhdr}
   - \pagestyle{fancy}
-  - \fancyhead[L]{\small\textit{Hindi Verbal Fluency — Mid-Project}}
+  - \fancyhead[L]{\small\textit{Hindi Verbal Fluency --- Mid-Project}}
   - \fancyhead[R]{\small\textit{BRSM Course Report}}
   - \fancyfoot[C]{\thepage}
   - \usepackage{parskip}
-  - \setlength{\parskip}{3pt}
+  - \setlength{\parskip}{4pt}
   - \renewcommand{\abstractname}{Abstract}
 abstract: |
-  This mid-project report presents the experimental design, data collection
-  pipeline, and complete Verbal Fluency Task (VFT) analysis for an ongoing study
-  of Hindi semantic retrieval at IIIT Hyderabad.
-  The VFT was administered across four semantic domains (Animals, Foods, Colours,
-  Body-parts) to 35 participants (32~male, 3~female;
-  $M_{\text{age}} = 23.1$~yrs, $SD = 1.9$, range 19--27; 14 Indian states
-  represented).  A total of 712 valid Hindi responses were recorded from a
-  custom web-based experiment stored in \texttt{responses.json}.
-  Raw session data were parsed in Python to produce a tidy per-word CSV,
-  with inter-response times (IRTs) computed as successive timestamp differences.
-  Exploratory analysis reveals a strongly right-skewed IRT distribution
-  (Skewness~$= 2.54$, Kurtosis~$= 9.89$), mean 6490~ms, median 5389~ms.
-  Hypothesis testing confirms that within-cluster IRTs are significantly
-  shorter than between-cluster IRTs ($t(34) = -8.91$, $p < .001$, $d = 1.51$),
-  replicating the clustering-and-switching model \cite{troyer1997} in a
-  Hindi-speaking sample.  Mean cluster size significantly predicts total fluency
-  score ($r(33) = .57$, $p = .003$).  A Spatial Arrangement Method (SpAM)
-  task constitutes the planned second phase of the project.
+  This mid-project report documents the experimental design, data pipeline,
+  and analyses conducted on a Hindi Verbal Fluency Task (VFT) at IIIT
+  Hyderabad.  Thirty-five participants generated category members across
+  four semantic domains (Animals, Foods, Colours, Body-parts), producing
+  712 valid Hindi responses.  Inter-response times (IRTs) are strongly
+  right-skewed (Skewness = 2.54, Kurtosis = 9.89; mean 6490 ms, median
+  5389 ms).  Confirmatory testing finds that within-cluster IRTs are
+  significantly shorter than between-cluster IRTs (t(34) = -8.91,
+  p < .001, d = 1.51), replicating the clustering-and-switching model in a
+  Hindi-speaking sample.  Mean cluster size significantly predicts total
+  fluency (r(33) = .57, p = .003).  Exploratory analyses uncover domain-level
+  IRT differences, a serial-position exhaustion effect, and systematic
+  bilingual code-switching concentrated in the Colours domain.  The Spatial
+  Arrangement Method (SpAM) constitutes the planned Phase 2.
 ---
 
-# Introduction
 
-## Background and Motivation
+# Background and Information
 
-The **Verbal Fluency Task (VFT)** is one of the most widely used cognitive
-paradigms in neuropsychology and psycholinguistics.  Participants are asked to
-freely generate category members within a fixed time window, typically one
-minute \cite{troyer1997}.  The temporal pattern of responses is not random:
-people retrieve words in bursts of semantically related items (**clusters**),
-separated by longer pauses when they shift subcategory (**switches**).  This
-clustering-and-switching signature, first quantified by Troyer, Moscovitch,
-and Winocur (1997), has been replicated extensively in English-speaking
-populations but remains comparatively underexplored in Hindi.
+## The Verbal Fluency Task
 
-The present study has two broader goals.  First, it applies the full BRSM
-statistical pipeline to characterise VFT retrieval dynamics in a Hindi-speaking
-student cohort at IIIT Hyderabad.  Second, it lays the groundwork for a
-cross-task comparison with the Spatial Arrangement Method (SpAM)
-\cite{hout2013}, which will be conducted as Phase~2 of the project.  SpAM
-directly measures the subjective geometry of semantic memory by having
-participants arrange word tokens in 2-D space according to perceived similarity.
-Together, the two tasks offer a uniquely complete picture: VFT captures
-*retrieval behaviour* (timing, order, fluency), while SpAM captures
-*semantic representation* (neighbourhood structure).
+The **Verbal Fluency Task (VFT)** is a cornerstone paradigm in cognitive
+psychology and neuropsychology.  Participants are given a semantic category cue
+(e.g., "Animals") and asked to generate as many category members as they can
+within a fixed time window, typically 60 seconds.  The resulting sequence of
+responses, and the timing between them, encodes rich information about how
+semantic memory is organised and accessed.
 
-An important and under-studied dimension is the bilingual nature of the sample.
-Hindi-speaking participants at IIIT Hyderabad frequently code-switch, producing
-a mix of Devanagari-script Hindi words and Latin-script English words within a
-single trial.  The present analysis focuses exclusively on the Hindi (Devanagari)
-subset, enabling direct comparison with the monolingual English literature.
+Retrieval is not random.  People naturally generate words in tight
+**clusters** of subcategory-related items (e.g., "lion, tiger, leopard") and
+then pause when they exhaust one subcategory and **switch** to another (e.g.,
+a longer pause before "elephant").  This **clustering-and-switching model**
+(Troyer, Moscovitch & Winocur, 1997) is the most widely cited framework for
+interpreting VFT behaviour.  The core empirical prediction is that
+inter-response times (IRTs) within a cluster are shorter than the pauses that
+precede a switch to a new subcategory.
 
-## Research Questions
+## Why Hindi?
 
-Two research questions are tested in this mid-project report, each mapped to a
-specific statistical technique.  A third question relating to SpAM is deferred
-to Phase~2.
+Virtually all previous clustering-and-switching research has used English or
+European-language participants.  Hindi presents three important differences:
 
-| \# | Research Question | Technique |
-|:---|:------------------|:----------|
-| **RQ1** | Do within-cluster IRTs differ significantly from between-cluster IRTs? | Welch's $t$-test (one-tailed), Cohen's $d$ |
-| **RQ2** | Does mean cluster size predict individual verbal fluency scores? | Pearson $r$, simple linear regression |
-| **RQ3** *(planned)* | Does SpAM-derived neighbourhood distance correlate with VFT IRT? | Pearson $r$, scatter plots |
+1. **Script complexity** -- Devanagari typing is cognitively and motorically
+   more demanding than Latin typing for many participants, potentially inflating
+   IRTs uniformly.
+2. **Bilingual code-switching** -- educated Hindi speakers at IIIT Hyderabad
+   regularly interleave English and Hindi lexical items within a single trial.
+   A proportion of responses appear in Latin script even when the cue is given
+   in Hindi.
+3. **Cultural semantic structure** -- category vocabularies (especially Foods
+   and Animals) reflect Indian rather than Western cultural content, potentially
+   yielding different subcategory boundaries.
 
+This study applies the clustering-and-switching framework to a Hindi-speaking
+student cohort, with explicit handling of bilingual code-switching.
 
-# Research Design
+## Broader Project Goals and Research Questions
 
-## Experimental Design
+The project has two phases.  Phase 1 (this report) analyses the raw temporal
+and cluster structure of the VFT data.  Phase 2 will administer the Spatial
+Arrangement Method (SpAM) to the same participants, capturing subjective
+semantic neighbourhood geometry, and test whether spatial proximity predicts
+temporal proximity in retrieval.
 
-The study employs a **within-subjects** repeated-measures design.  The
-independent variable is **semantic domain** (nominal; 4 levels: Animals, Foods,
-Colours, Body-parts).  The primary dependent variable is **inter-response time**
-(IRT, ratio scale, ms); the secondary DV is **total words produced** (fluency
-score, count).  Trial duration is fixed at 60~seconds per domain.
+The research questions addressed in this mid-project report are:
 
-## Participants and Demographics
-
-Thirty-five students were recruited from IIIT~Hyderabad via **convenience
-sampling**.  Inclusion criteria: (1) self-reported native or near-native Hindi
-proficiency; (2) no reported neurological or psychiatric history.  The sample
-was predominantly male (32~M, 3~F), consistent with the institutional gender
-composition.  Participants represented 14 Indian states, with the largest
-contingents from Gujarat ($n = 7$), Madhya Pradesh ($n = 6$), Bihar ($n = 5$),
-and Maharashtra ($n = 4$).
-
-A proportion of responses contained code-mixed vocabulary — a characteristic
-feature of this bilingual population — which was retained in the raw dataset
-but excluded from the Hindi-only analysis via script tagging.
-
-**Demographic summary:**
-
-| Variable       | Value                                                          |
-|:---------------|:---------------------------------------------------------------|
-| $N$            | 35                                                             |
-| Gender         | 32 Male, 3 Female                                              |
-| Age            | $M = 23.1$~yrs, $SD = 1.9$, range 19--27                      |
-| Education      | $M = 16.5$~yrs, $SD = 1.7$, range 14--20                      |
-| States (India) | 14 states; Gujarat (7), MP (6), Bihar (5), Maharashtra (4$+$) |
-
-![\textit{Combined demographics panel.} Clockwise from top-left: gender distribution (bar chart), age histogram, geographic distribution by Indian state/UT (bar chart), and years of education histogram. The sample is young (19--27 yrs), predominantly male, and drawn from across India via convenience sampling at IIIT Hyderabad.](images/demo_fig05_combined.png){width=92%}
-
-## Four Semantic Domains
-
-The four target domains were selected to span a range of vocabulary sizes,
-semantic structures, and linguistic register:
-
-| Domain | Character | Expected structure |
-|:-------|:----------|:-------------------|
-| **Animals** | Open, hierarchical | Wild / domestic / birds sub-clusters |
-| **Foods** | Open, culturally rich | Pulses / meals / snacks sub-clusters |
-| **Colours** | Closed, perceptual | Warm / cool / achromatic arc |
-| **Body-parts** | Semi-closed, anatomical | Face / limbs / internal sub-clusters |
+| # | Research Question | Type | Method |
+|:--|:------------------|:----:|:-------|
+| **RQ1** | Do within-cluster IRTs differ significantly from between-cluster IRTs? | Confirmatory | Welch's t-test (one-tailed), Cohen's d |
+| **RQ2** | Does mean cluster size predict individual verbal fluency scores? | Confirmatory | Pearson r, linear regression |
+| **EH1** | How do IRT distributions differ across the four semantic domains? | Exploratory | Descriptive statistics, raincloud plots |
+| **EH2** | Does IRT increase with serial position within a trial? | Exploratory | OLS regression per domain |
+| **RQ3** *(Phase 2)* | Does SpAM neighbourhood distance correlate with VFT IRT? | Confirmatory | Pearson r, cross-task scatter |
 
 
-# Materials, Procedure, and Data Pipeline
+---
 
-## Experimental Platform
+
+# Experiment Explanation
+
+## Design
+
+The study uses a **within-subjects** repeated-measures design.  Every
+participant completed the VFT in all four semantic domains, so each individual
+contributes data across all conditions.
+
+| Variable | Role | Scale | Levels / Range |
+|:---------|:----:|:-----:|:---------------|
+| Semantic domain | Independent | Nominal | Animals, Foods, Colours, Body-parts |
+| Inter-response time (IRT) | Primary DV | Ratio (ms) | 733 -- 42634 ms |
+| Total words produced (fluency score) | Secondary DV | Count | Varies per participant |
+
+## Participants
+
+Thirty-five students were recruited from IIIT Hyderabad via convenience
+sampling.  Inclusion criteria: (1) self-reported native or near-native Hindi
+proficiency; (2) no reported neurological or psychiatric history.
+
+| Variable       | Value                                                           |
+|:---------------|:----------------------------------------------------------------|
+| N              | 35                                                              |
+| Gender         | 32 Male, 3 Female                                               |
+| Age            | M = 23.1 yrs, SD = 1.9, range 19--27                           |
+| Education      | M = 16.5 yrs, SD = 1.7, range 14--20                           |
+| States (India) | 14 states; Gujarat (7), MP (6), Bihar (5), Maharashtra (4+)    |
+
+The sample is young, predominantly male, and drawn from across India, which is
+characteristic of the IIIT Hyderabad student body.  Fourteen Indian states are
+represented, ensuring broad regional linguistic diversity.
+
+![*Combined demographics panel.* Top row: gender distribution (bar) and age histogram. Bottom row: years of education histogram and geographic distribution by Indian state. The sample is young (19--27 yrs), predominantly male, and geographically diverse across India.](images/demo_fig05_combined.png){width=94%}
+
+## Stimuli and Semantic Domains
+
+Four semantic domains were chosen to span a range of vocabulary sizes,
+structural organisation, and cultural salience:
+
+| Domain | Type | Vocabulary size | Subcategory structure |
+|:-------|:-----|:---------------:|:----------------------|
+| **Animals** | Open, hierarchical | Large | Wild / domestic / birds / aquatic |
+| **Foods** | Open, culturally rich | Very large | Pulses / meals / snacks / fruits |
+| **Colours** | Closed, perceptual | Small (~15) | Warm / cool / achromatic |
+| **Body-parts** | Semi-closed, anatomical | Medium | Face / limbs / torso / internal |
+
+Colours is theoretically the most informative domain for testing vocabulary
+exhaustion because its small closed inventory is depleted quickly,
+after which participants must either stop or switch to English colour names.
+
+## Apparatus and Procedure
 
 The experiment was delivered through a **custom web application**.  Each
-participant's complete session was captured as a single JSON object in
-\texttt{responses.json}, keyed by a unique \texttt{session\_id}.  The JSON
-schema for each session contains:
+session was logged as a JSON object in `responses.json` keyed by `session_id`,
+capturing:
 
-- \texttt{subject\_id} — anonymised participant identifier
-- \texttt{domain} — trial category (e.g., `"Animals"`)
-- \texttt{response\_times} — array of cumulative timestamps in milliseconds,
-  one entry per submitted word (recorded on each ENTER key-press)
-- \texttt{tagged\_responses} — array of objects `{word, script}` where
-  `script` is `"Hindi"` (Devanagari) or `"English"` (Latin)
-- \texttt{droppedwords} — array of `{word, x, y}` objects recording the
-  participant's spatial placement of word tokens in the SpAM phase
-  *(used in Phase~2)*
+- Cumulative timestamps for every word submission (ENTER key-press, to the nearest 100 ms)
+- The typed word in its original script (Devanagari or Latin)
+- A spatial token placement for the SpAM phase (Phase 2)
 
-## VFT Procedure
+Participants saw one category cue per trial (presented in Hindi, e.g.,
+*"Jaanwar"* for Animals) and were instructed to type as many category members
+as possible within **60 seconds**.  A 1-minute **Furniture warm-up trial**
+preceded the four target domains to familiarise participants with the typing
+interface.  Domain order was fixed: Animals --> Foods --> Colours --> Body-parts.
 
-Participants were shown one category cue at a time (e.g., *"Jaanwar"* for
-Animals) and instructed to type as many category members as possible within a
-**60-second** window.  Each submission (ENTER key-press) was time-stamped to the
-nearest 100~ms.  A **1-minute Furniture practice trial** preceded the four
-target domains to warm up the typing interface and familiarise participants with
-the paradigm.  The four target domains were administered in a fixed order:
-Animals → Foods → Colours → Body-parts.
 
-## From Raw JSON to Analysis-Ready CSV
+---
 
-The raw \texttt{responses.json} was processed through a five-step Python
-pipeline:
-(1)~**IRT computation** — each word's IRT as $\text{IRT}_i = t_i - t_{i-1}$
-from cumulative timestamps, where $t_0 = 0$ marks trial onset;
-(2)~**language tagging** — Devanagari-script words labelled \texttt{Hindi},
-Latin-script labelled \texttt{English};
-(3)~**Hindi filter** — 712 valid Hindi tokens retained (53\,\% of all
-submissions);
-(4)~**cluster identification** — adaptive switch threshold
-$\bar{\text{IRT}} + 1 \times SD_{\text{IRT}}$ per participant \cite{troyer1997};
-(5)~**export** to \texttt{vft\_responses.csv}.
+
+# Data Explanation
+
+## Processing Pipeline
+
+The raw `responses.json` was transformed into an analysis-ready dataset through
+five steps:
+
+1. **IRT computation** -- for each word at position i, IRT_i = t_i - t_(i-1),
+   where t_0 = 0 (trial onset).  First-word IRT equals the initial access
+   latency from the cue presentation.
+2. **Language tagging** -- words in Devanagari script are labelled *Hindi*;
+   words in Latin script are labelled *English*.
+3. **Hindi filter** -- only Devanagari tokens retained, yielding 712 valid
+   Hindi responses (53% of all 1340 raw submissions).
+4. **Cluster scoring** -- consecutive words are grouped into a cluster when
+   pairwise IRTs fall below an adaptive threshold of
+   (mean IRT + 1 SD) computed per participant.  A new `cluster_id` is assigned
+   after each detected switch.
+5. **CSV export** -- one row per word: `vft_responses.csv`.
 
 ```
-responses.json  →  IRT computation  →  language tagging
-  →  Hindi filter (712 tokens)  →  cluster scoring  →  vft_responses.csv
+responses.json
+  --> IRT computation  --> language tagging
+  --> Hindi filter (712 tokens)
+  --> cluster scoring (cluster_id, is_switch)
+  --> vft_responses.csv
 ```
 
-### \texttt{vft\_responses.csv} — Column Descriptions
-
-The output CSV contains one row per word per participant per domain (1,340 rows
-total before Hindi filtering; 712 rows in the Hindi-only analysis dataset
-\texttt{df\_hh}).  Table~2 describes every column.
-
-Table: Column descriptions for \texttt{vft\_responses.csv}.
+## Dataset Variables
 
 | Column | Type | Description |
 |:-------|:----:|:------------|
-| \texttt{subject\_id} | Integer | Anonymised numeric participant identifier (e.g., 10255). Unique per person across all trials. |
-| \texttt{domain} | String | Semantic category of the trial: \texttt{Animals}, \texttt{Foods}, \texttt{Colours}, or \texttt{Body-parts}. |
-| \texttt{word} | String | The word typed by the participant, in its original script (Devanagari or Latin). |
-| \texttt{rt\_ms} | Float | **Inter-response time (IRT)** in milliseconds. For word $i$: $\text{IRT}_i = t_i - t_{i-1}$. First word's IRT = latency from trial onset. Scale: ratio. |
-| \texttt{position} | Integer | **Serial position** — ordinal rank of the word within the trial (1 = first word typed, 2 = second, …). Captures retrieval order. |
-| \texttt{language\_type} | String | Script of the word: \texttt{Hindi} (Devanagari, e.g., \textit{jānavar}) or \texttt{English} (Latin, e.g., \textit{dog}). Derived from the \texttt{tagged\_responses} field in the raw JSON. Core analysis uses \texttt{Hindi} rows only. |
-| \texttt{cluster\_id} | Integer | Cluster membership label. Consecutive words whose pairwise IRT falls below the adaptive threshold ($\bar{\text{IRT}} + 1\,SD$) share the same \texttt{cluster\_id}. A new ID is assigned after every detected switch. |
-| \texttt{is\_switch} | Boolean | \texttt{True} if the current word marks the start of a new cluster (i.e., the preceding IRT exceeded the switch threshold); \texttt{False} within a cluster. Used to split the dataset into within-cluster and between-cluster subsets for RQ1. |
+| `subject_id` | Integer | Anonymised participant identifier |
+| `domain` | String | Animals / Foods / Colours / Body-parts |
+| `word` | String | Word as typed (original script) |
+| `rt_ms` | Float | IRT in milliseconds |
+| `position` | Integer | Serial position within the trial (1 = first word) |
+| `language_type` | String | "Hindi" (Devanagari) or "English" (Latin) |
+| `cluster_id` | Integer | Cluster membership; new ID after each switch |
+| `is_switch` | Boolean | True if this word opened a new cluster |
 
-**Derived variables used in analysis:**
+**Derived variables:**
 
-- **Mean IRT per participant** — average \texttt{rt\_ms} across all trials; used as an individual-level proxy for lexical access speed.
-- **Mean cluster size** — average number of words sharing a \texttt{cluster\_id}, computed per participant across all four domains; predictor variable in RQ2.
-- **Total fluency score** — total count of \texttt{Hindi}-tagged words produced by a participant across all domains; outcome variable in RQ2.
-- **Within-cluster IRT** — mean \texttt{rt\_ms} for rows where \texttt{is\_switch} $=$ \texttt{False}; compared against between-cluster IRT in RQ1.
-- **Between-cluster IRT** — mean \texttt{rt\_ms} for rows where \texttt{is\_switch} $=$ \texttt{True} (the long pauses at category boundaries).
+| Variable | Definition | Used in |
+|:---------|:-----------|:--------|
+| Within-cluster IRT | Mean rt_ms where is_switch = False | RQ1 |
+| Between-cluster IRT | Mean rt_ms where is_switch = True | RQ1 |
+| Mean cluster size | Mean words per cluster_id, per participant | RQ2 |
+| Total fluency score | Count of Hindi tokens per participant | RQ2 |
+
+## Response Counts and Language Distribution
+
+### Domain-Level Counts
+
+| Domain      | Hindi tokens | % of total |
+|:------------|:-----------:|:----------:|
+| Animals     | 238         | 33.4%      |
+| Foods       | 256         | 36.0%      |
+| Colours     | 41          |  5.8%      |
+| Body-parts  | 177         | 24.9%      |
+| **Total**   | **712**     | **100%**   |
+
+Foods and Animals dominate the Hindi token counts, reflecting their
+open-ended hierarchical vocabulary structure and the large number of
+culturally salient Hindi terms available.  Colours has the fewest Hindi tokens:
+once the small Hindi colour lexicon (~15 terms) is exhausted, participants
+invariably switch to English colour names.
+
+![*Hindi vs English token counts by domain.* Side-by-side bars for Devanagari (Hindi, dark) and Latin-script (English, light) submissions per domain. Animals and Foods are strongly Hindi-dominant; Colours is the only domain where English submissions rival Hindi, reflecting the faster exhaustion of the Hindi colour lexicon.](images/domain-hin-en.png)
+
+The mosaic plot above encodes both absolute count (cell area) and script
+(colour) for each domain, making it easy to see that Colours is the only domain
+where English-script tokens outnumber Hindi.
+
+### Participant-Level Language Dominance
+
+Individual participants vary considerably in their reliance on Hindi.
+The figure below ranks participants by their Hindi-script proportion across
+all four domains.  The majority (>80%) produced more than half of their tokens
+in Hindi; a small tail of participants is near-balanced or English-dominant,
+consistent with urban STEM-cohort bilingualism.
+
+![*Hindi-script proportion per participant, sorted descending.* Each bar = one participant. The dashed line at 0.5 separates Hindi-dominant (above) from English-dominant (below). Most participants are clearly Hindi-dominant; a small subset produced approximately equal proportions in each script.](images/dominant-lang.png){width=88%}
+
+The domain-specific breakdown of **total words by participant dominant language**
+shows that Hindi-dominant participants consistently produce more Hindi tokens
+in every domain.  The gap is largest for Animals and Foods (richest Hindi
+vocabularies) and collapses for Colours, where even strongly Hindi-dominant
+participants run out of Devanagari colour terms and switch to English.
+
+![*Total Hindi words per domain split by participant dominant language.* Blue bars = Hindi-dominant participants; orange = English-dominant. Hindi-dominant participants produce more Hindi tokens in every domain. The gap is smallest in Colours, confirming that Devanagari colour vocabulary is limited even for the most Hindi-fluent participants.](images/total-words-per-domain-per-dominant-lang.png){width=88%}
+
+## IRT Descriptive Statistics
+
+### Overall Distribution
+
+| Statistic | Value (ms) |
+|:----------|:----------:|
+| N         | 712        |
+| Mean      | 6489.5     |
+| Median    | 5389.4     |
+| SD        | 5018.8     |
+| Min       | 732.8      |
+| Max       | 42634.4    |
+| IQR       | 4874.8     |
+| Skewness  | 2.54       |
+| Kurtosis  | 9.89       |
+
+The distribution is strongly **right-skewed** (Skewness = 2.54) with heavy
+tails (Kurtosis = 9.89).  The median (5389 ms) is a better central tendency
+estimate than the mean (6490 ms), which is pulled upward by occasional very long
+between-cluster pauses.  This leptokurtic shape -- sharp peak of fast
+within-cluster retrievals plus a heavy right tail of switch pauses -- is the
+canonical IRT signature of the clustering-and-switching model.
+
+![*IRT histogram -- overall and by domain.* Left panel: overall distribution with mean (red dashed, 6490 ms), median (green dot-dash, 5389 ms), and mode (purple dotted) annotated. The strong right skew is evident. Right panels: per-domain histograms. Colours produces the tightest, lowest-skew distribution; Animals and Foods show the longest tails.](images/vft_fig01_irt_histogram.png){width=96%}
+
+### IRT by Semantic Domain
+
+| Domain     |  N  | Mean (ms) | Median (ms) | SD (ms) | Skew |
+|:-----------|----:|----------:|------------:|--------:|-----:|
+| Animals    | 238 |      6391 |        5414 |    4647 | 3.06 |
+| Body-parts | 177 |      6872 |        5724 |    4994 | 2.51 |
+| Colours    |  41 |      4975 |        3484 |    3512 | 0.70 |
+| Foods      | 256 |      6559 |        5205 |    5525 | 2.28 |
+
+Colours has the lowest mean IRT (4975 ms) and minimal skew (0.70), consistent
+with rapid depletion of a small closed lexicon.  Body-parts has the highest mean
+(6872 ms), reflecting greater retrieval difficulty for anatomical vocabulary.
+Foods shows the widest spread (SD = 5525 ms), reflecting its rich multi-tier
+subcategory structure.
+
+The **raincloud plots** below combine kernel-density shape, boxplot summary, and
+individual data points into a single panel, giving a complete picture of each
+domain's IRT distribution simultaneously.
+
+![*Raincloud plots of IRT by semantic domain.* Half-violin = kernel density; box = Q1--Q3 with median; individual dots = raw observations (jittered). Body-parts has the highest median IRT; Colours is the tightest and fastest. The right-skewed shape visible in all four domains is the temporal signature of clustering-and-switching retrieval.](images/vft_fig03_raincloud_irt.png){width=88%}
+
+### IRT Separated by Language Script
+
+English-script (Latin) responses appear faster than Hindi-script (Devanagari)
+responses within every domain.  This is consistent with the hypothesis that
+participants access English category members with lower retrieval effort --
+either because those items were acquired earlier (in English-medium schooling)
+or because fewer English alternatives are available, reducing search time.
+
+![*IRT by domain and language script.* Grouped box plots comparing Devanagari (Hindi, dark) and Latin-script (English, light) response times within each domain. English IRTs are consistently lower than Hindi IRTs. Within the Hindi subset, the ordering Colours < Animals < Foods < Body-parts matches the overall domain ranking.](images/rt-domain-lang.png){width=90%}
+
+## Cluster Structure
+
+### Adaptive Threshold and Scoring
+
+Cluster boundaries were detected using per-participant adaptive thresholds:
+a switch was scored whenever the IRT exceeded (mean IRT + 1 SD) for that
+participant.  This approach accounts for individual differences in baseline
+typing speed and prevents fast typists from being over-clustered and slow
+typists from being under-clustered.
+
+The figure below shows mean cluster size (left) and mean switch count per trial
+(right) broken down by domain.  Mean cluster size > 1 in every domain confirms
+that participants are genuinely grouping responses into subcategory bursts rather
+than retrieving items in an unclustered stream.  Foods produces the
+largest clusters (rich multi-tier subcategory structure); Colours the smallest
+(small closed vocabulary rapidly depleted, frequent switches to English).
+
+![*Cluster size and switch count by domain.* Left: mean cluster size (words per cluster). Right: mean number of switches per trial. Foods supports the deepest clustering; Colours the shallowest. Mean cluster size > 1 across all domains confirms non-random subcategory-based retrieval.](images/vft_fig06_cluster_scoring.png){width=88%}
+
+### Fluency and IRT
+
+The scatter plot below shows that participants with faster mean IRTs tend to
+produce more Hindi words overall (r = -.57, p < .001 at token level).  Mean IRT
+is therefore a valid individual-level proxy for lexical access efficiency:
+faster retrieval capacity translates directly into higher fluency output.
+
+![*Mean IRT vs total fluency score per participant.* Each point = one participant (n = 35). The negative relationship confirms that faster retrievers produce more words. OLS regression line with 95% CI band. This validates mean IRT as an efficiency proxy at the participant level.](images/vft_fig09_fluency_vs_irt.png){width=78%}
 
 
-# Exploratory Data Analysis
-
-## Response Counts and Data Coverage
-
-Table~1 summarises Hindi response counts by domain.
-
-Table: Hindi response counts by domain.
-
-| Domain      | Responses | \% of total |
-|:------------|:---------:|:-----------:|
-| Animals     | 238       | 33.4\%      |
-| Foods       | 256       | 36.0\%      |
-| Colours     | 41        |  5.8\%      |
-| Body-parts  | 177       | 24.9\%      |
-| **Total**   | **712**   | **100\%**   |
-
-Foods and Animals dominate the dataset, reflecting their open-ended,
-hierarchically organised semantic structure and the large number of culturally
-salient Hindi vocabulary items available.  Colours has the fewest tokens,
-consistent with the closed-class nature of the colour lexicon
-($\approx$~10--15 basic colour terms in Hindi) and the tendency of participants
-to switch to English colour names (e.g., *red*, *blue*, *green*) once the
-core Hindi inventory is exhausted.  This pattern is characteristic of
-Hindi--English bilinguals: colour terms are often acquired in English-medium
-schooling and are thus more accessible in the Latin script.
-
-## Language Distribution
-
-Overall, 53\,\% of tokens were in Devanagari (Hindi) and 47\,\% in Latin
-script.  Hindi dominance was highest for Foods (77\,\%) and Animals (64\,\%),
-and lowest for Colours (28\,\%) — reflecting earlier English-medium acquisition
-of colour terms by this bilingual cohort.
-
-![\textit{Language distribution mosaic by domain.} Cell area encodes absolute count; colour encodes script. Colours is the only domain where English-script tokens outnumber Hindi; Foods is the most Hindi-dominant.](images/vft_fig10_mosaic_language.png){width=84%}
-
-
-# Descriptive Statistics
-
-## Overall IRT Distribution
-
-Table~3 presents descriptive statistics for all 712 valid Hindi IRTs.
-
-Table: Overall descriptive statistics for Hindi IRT ($n = 712$).
-
-| Statistic           | Value (ms)  |
-|:--------------------|:-----------:|
-| **N**               | 712         |
-| **Mean**            | 6489.5      |
-| **Median**          | 5389.4      |
-| **Std Dev**         | 5018.8      |
-| **Min**             | 732.8       |
-| **Max**             | 42634.4     |
-| **IQR**             | 4874.8      |
-| **Skewness**        | 2.54        |
-| **Kurtosis**        | 9.89        |
-
-The distribution is strongly **right-skewed** (Skewness~$= 2.54$): the median
-(5389~ms) is the preferred central-tendency measure as the mean is inflated by
-long-tail switch pauses.  High kurtosis (9.89) reflects a leptokurtic shape —
-a sharp peak of fast within-cluster retrievals alongside a heavy right tail of
-slower cluster-switch pauses — the canonical signature of the
-clustering-and-switching model \cite{troyer1997}.
-
-![\textit{IRT histogram (overall and by domain).} Left panel: overall distribution with mean (red dashed, 6490~ms), median (green dot-dash, 5389~ms), and mode (purple dotted, 6410~ms) marked. Mean $>$ Median confirms positive skew. Right panels: per-domain histograms showing that Colours (closed vocabulary) is tightest while Animals and Foods have the longest tails.](images/vft_fig01_irt_histogram.png){width=96%}
-
-## IRT by Semantic Domain
-
-Table~4 decomposes the IRT statistics by domain.
-
-Table: IRT descriptive statistics by semantic domain.
-
-| Domain     |  $N$ | Mean (ms) | Median (ms) |  SD (ms) | Skew |
-|:-----------|-----:|----------:|------------:|---------:|-----:|
-| Animals    |  238 |      6391 |        5414 |     4647 | 3.06 |
-| Body-parts |  177 |      6872 |        5724 |     4994 | 2.51 |
-| Colours    |   41 |      4975 |        3484 |     3512 | 0.70 |
-| Foods      |  256 |      6559 |        5205 |     5525 | 2.28 |
-
-Colours has the lowest mean IRT (4975~ms) and minimal skew (0.70): once the
-small Hindi colour lexicon is exhausted, participants stop or switch to English,
-compressing the distribution.  Body-parts has the highest mean (6872~ms),
-reflecting greater retrieval effort for anatomical vocabulary.  Foods shows the
-largest SD (5525~ms) due to its rich multi-tier subcategory structure.
-
-
-# Data Visualisation
-
-This section presents the full suite of VFT visualisations used to characterise
-the dataset.
-
-## IRT Distribution by Domain
-
-Figure~4 shows per-domain IRT distributions as **raincloud plots** combining
-a kernel-density half-violin, a box-whisker summary, and individual data points.
-This single panel conveys shape, spread, central tendency, and outliers
-simultaneously — Body-parts has the highest median (longest retrievals),
-Colours the narrowest distribution (closed vocabulary), and all four domains
-exhibit the characteristic right skew of the clustering-and-switching process.
-
-![\textit{Raincloud plots of IRT by semantic domain.} Half-violin = kernel density; box = Q1--Q3 with median; dots = individual observations. Body-parts has the highest median IRT; Colours is tightest (closed vocabulary). Right-skewed shapes across all domains reflect fast within-cluster retrievals and slow switch pauses.](images/vft_fig03_raincloud_irt.png){width=88%}
-
-## Serial Position Effect
-
-Figure~5 plots IRT against word serial position for each domain separately
-(OLS trend lines fitted per domain).  A positive slope in all four domains
-confirms the **lexical exhaustion effect**: the semantic neighbourhood depletes
-as retrieval progresses, so later-position words require longer search.  The
-slope is steepest for Colours (small closed set exhausted quickly) and
-shallowest for Foods (large open vocabulary with many subcategories).
-
-![\textit{Serial position vs IRT scatter plot.} Each point = one word from one participant. OLS trend line with 95\,\% CI band per domain. All four domains show a positive slope; the gradient is steepest for Colours and shallowest for Foods.](images/vft_fig07_word_irt_position.png){width=90%}
-
-## Cluster Scoring: Size and Switching
-
-Figure~6 summarises cluster-level metrics: mean cluster size and mean switch
-count per participant per domain.  Cluster size~$> 1$ across all domains
-confirms non-random clustering.  Foods has the largest clusters (rich
-multi-tier subcategory structure); Colours the smallest (small closed
-vocabulary rapidly depleted).
-
-![\textit{Cluster size and switch count by domain.} Left: mean cluster size; right: mean switches per trial. Foods clusters are largest; Colours depletes fastest. Mean cluster size $> 1$ across all domains confirms non-random semantic grouping.](images/vft_fig06_cluster_scoring.png){width=88%}
-
-## Fluency Score vs Mean IRT
-
-Figure~7 plots each participant's mean IRT against their total Hindi word count.
-The negative relationship confirms that faster retrievers produce more words —
-mean IRT is a valid individual-level proxy for lexical access efficiency.
-
-![\textit{Mean IRT vs total fluency score.} Each point = one participant. Negative relationship: faster retrievers produce more words. OLS regression line with 95\,\% CI band.](images/vft_fig09_fluency_vs_irt.png){width=78%}
+---
 
 
 # Hypothesis Testing
@@ -361,95 +369,184 @@ mean IRT is a valid individual-level proxy for lexical access efficiency.
 
 ### Rationale
 
-Within a cluster the current subcategory is active, enabling fast lexical
-access; a switch requires patch disengagement and new subcategory activation,
-manifesting as a longer pause \cite{troyer1997}.
+The clustering-and-switching model makes a specific and falsifiable prediction:
+the IRT immediately *before* a switch (entering a new subcategory) should be
+substantially longer than IRTs *within* a cluster.  This is because switching
+requires releasing the current subcategory context, searching for a new patch,
+and initiating access into it -- all processes that consume additional time
+beyond simple lexical retrieval.
 
 ### Hypotheses
 
-$$H_0: \mu_{\text{WC}} = \mu_{\text{BC}} \qquad H_1: \mu_{\text{WC}} < \mu_{\text{BC}} \quad\text{(one-tailed)}$$
+- **H0:** Mean within-cluster IRT = Mean between-cluster IRT
+- **H1:** Mean within-cluster IRT < Mean between-cluster IRT  *(one-tailed)*
 
-where WC~= within-cluster IRT and BC~= between-cluster IRT, computed as
-per-participant means across all domains.
+### Method
 
-### Test and Results
+Per-participant mean within-cluster IRT (rows where `is_switch = False`) and
+mean between-cluster IRT (rows where `is_switch = True`) were computed across
+all four domains.  A **Welch's independent-samples t-test** (one-tailed,
+alpha = .05) was applied.  Welch's variant was chosen because the two groups
+have markedly different variances (within: SD ~ 1320 ms; between: SD ~ 3816 ms).
 
-A Welch's independent-samples $t$-test (one-tailed, $\alpha = .05$) was
-performed on per-participant mean within-cluster and between-cluster IRTs
-(35 pairs).  Welch's variant was used because the two conditions have markedly
-different variances.
+### Results
 
-Within-cluster IRTs ($M = 4752$~ms, $SD = 1320$~ms) were significantly shorter
-than between-cluster IRTs ($M = 9418$~ms, $SD = 3816$~ms):
-$$t(34) = -8.91, \quad p < .001, \quad d = 1.51 \text{ (large effect)}$$
+| Condition | M (ms) | SD (ms) |
+|:----------|:------:|:-------:|
+| Within-cluster | 4752 | 1320 |
+| Between-cluster | 9418 | 3816 |
 
-**Decision:** Reject $H_0$.  Between-cluster IRT is $\approx 1.98\times$
-within-cluster IRT; $d = 1.51$ (large effect), confirming the
-clustering-and-switching model in this Hindi-speaking sample.
+    t(34) = -8.91,  p < .001,  d = 1.51
 
-![\textit{RQ1 — Within- vs between-cluster IRT by domain.} Grouped bars with $\pm 1$ SE. Between-cluster IRTs exceed within-cluster IRTs across all four domains. Effect largest for Foods; smallest for Colours.](images/vft_fig11_rq1_within_between.png){width=82%}
+**Decision:** Reject H0.  Between-cluster IRT is 1.98x within-cluster IRT.
+The effect size d = 1.51 is large, confirming the clustering-and-switching
+model clearly and robustly in this Hindi-speaking sample.
+
+![*RQ1 -- Within- vs between-cluster IRT by domain.* Grouped bars (mean +/- 1 SE) per semantic domain. Between-cluster IRTs (rightmost bar of each pair, lighter shade) exceed within-cluster IRTs (darker) in every domain. The effect is largest for Foods (deepest clustering) and smallest for Colours (shallowest clustering, fewest switch events).](images/vft_fig11_rq1_within_between.png){width=84%}
 
 ## RQ2: Cluster Size as Predictor of Fluency
 
 ### Rationale
 
-Deep within-cluster exploitation is more efficient than frequent switching;
-participants who form larger clusters should therefore produce more total words.
+A participant who forms larger clusters (exploits subcategories deeply before
+switching) should generate more words in total than a participant who switches
+frequently between small clusters.  Deep exploitation is more time-efficient
+than constant re-searching across subcategory boundaries.
 
 ### Hypotheses
 
-$$H_0: \rho = 0 \qquad H_1: \rho > 0$$
+- **H0:** rho (cluster size, fluency score) = 0
+- **H1:** rho (cluster size, fluency score) > 0  *(one-tailed)*
+
+### Method
+
+Per-participant mean cluster size (averaged across all four domains) was
+correlated with total Hindi words produced using **Pearson r** (one-tailed).
+A simple OLS regression was also fit to quantify the linear relationship.
 
 ### Results
 
-Pearson correlation between per-participant mean cluster size (averaged across
-all four domains) and total Hindi words produced:
+    r(33) = .57,  p = .003,  95% CI [.31, .75]
+    Total words = 3.12 + 2.14 * Mean cluster size
+    F(1,33) = 16.2,  p < .001,  R^2 = .33
 
-$$r(33) = .57, \quad p = .003, \quad 95\,\% \text{ CI } [.31,\,.75]$$
+**Decision:** Reject H0.  Mean cluster size explains 33% of the variance in
+total fluency score.  Each one-word increase in average cluster size predicts
+approximately two additional Hindi words produced overall.
 
-**Decision:** Reject $H_0$.  Larger clusters predict more total words
-($R^2 = .33$), confirming that deeper within-cluster exploitation is more
-efficient than frequent switching.
+![*RQ2 -- Mean cluster size vs total Hindi fluency score.* Each point = one participant (n = 35). Positive slope (r = .57): participants who exploit subcategory clusters more deeply produce more words overall. OLS regression line with 95% CI. The relationship holds across the full range of cluster sizes observed.](images/vft_fig13_rq3_fluency_scatter.png){width=80%}
 
-Regression: Total words $= 3.12 + 2.14 \times$ Mean cluster size
-($F(1,33) = 16.2$, $p < .001$).
+## Summary
 
-![\textit{RQ2 — Mean cluster size vs total Hindi fluency.} Each point = one participant. Positive slope ($r = .57$): deeper clustering → higher fluency. OLS line with 95\,\% CI.](images/vft_fig13_rq3_fluency_scatter.png){width=80%}
+| # | Test | Statistic | p | Effect | Decision |
+|:--|:-----|:---------:|:-:|:------:|:--------:|
+| RQ1 | Within- vs between-cluster IRT (Welch t, one-tailed) | t(34) = -8.91 | < .001 | d = 1.51 | Reject H0 |
+| RQ2 | Cluster size predicts fluency (Pearson r, one-tailed) | r(33) = .57 | .003 | R^2 = .33 | Reject H0 |
 
-## Summary of Hypothesis Tests
-
-Table: Hypothesis test results.
-
-| Test | Statistic | $p$ | Effect size | Decision |
-|:-----|:---------:|:---:|:-----------:|:--------:|
-| Within-Cluster vs Between-Cluster IRT (Welch $t$, one-tailed) | $t(34) = -8.91$ | $< .001$ | $d = 1.51$ | Reject $H_0$ |
-| Cluster size predicts fluency (Pearson $r$) | $r(33) = .57$ | $.003$ | $r^2 = .33$ | Reject $H_0$ |
+Both confirmatory hypotheses are strongly supported.  The clustering-and-switching
+model is robustly replicated in Hindi, and cluster depth is a meaningful
+predictor of fluency output.
 
 
-# Planned Next Steps (Phase 2 — SpAM)
-
-Phase~2 will administer the **Spatial Arrangement Method (SpAM)** task
-\cite{hout2013} to the same 35 participants.  Planned analyses include:
-(i)~per-domain consensus distance heatmaps; (ii)~2-D MDS maps and hierarchical
-clustering; (iii)~RQ3 cross-task Pearson $r$ between SpAM neighbourhood
-distance and VFT IRT (Benjamini--Hochberg corrected \cite{benjamini1995});
-(iv)~four-domain vocabulary-breadth comparison.
+---
 
 
-# Summary and Conclusions
+# Exploratory Hypotheses
 
-> **Mid-project conclusion:** The clustering-and-switching model \cite{troyer1997}
-> is strongly supported in this Hindi-speaking student sample.  Within-cluster
-> retrievals are significantly and substantially faster than cluster-switch pauses
-> ($t(34) = -8.91$, $p < .001$, $d = 1.51$, large effect), with between-cluster
-> IRTs nearly double within-cluster IRTs.  Mean cluster size is a significant
-> positive predictor of verbal fluency ($r(33) = .57$, $p = .003$,
-> $r^2 = .33$) — participants who exploit clusters more deeply produce more
-> words in total.  The lexical exhaustion effect (rising IRT with serial
-> position) is confirmed across all four domains.  The data pipeline from raw
-> \texttt{responses.json} to tidy analysis-ready CSV has been validated.
-> Phase~2 (SpAM) will test whether these temporal retrieval dynamics map onto
-> measurable semantic neighbourhood structure.
+The following patterns emerged from EDA and are reported as exploratory findings
+without adjustment for multiple comparisons.  They are not counted as
+confirmatory evidence but inform the design of Phase 2 analyses.
+
+## EH1: Domain-Level IRT Differences
+
+Semantic domain systematically modulates IRT.  Closed-vocabulary domains
+(Colours: M = 4975 ms) are substantially faster than open hierarchical domains
+(Body-parts: M = 6872 ms).  The pattern is explained by vocabulary size:
+larger domains sustain fast within-cluster retrieval for longer before
+participants reach the semantic periphery, paradoxically producing more
+between-cluster switches that lengthen the tail.  Colours, however, exhausts
+its Hindi inventory quickly and suppresses the right tail entirely.
+
+> **EH1 finding:** Closed-class domains (Colours) produce shorter, less-skewed
+> IRT distributions than open hierarchical domains (Animals, Foods), consistent
+> with vocabulary-size modulation of retrieval dynamics.
+
+## EH2: Serial Position Effect (Lexical Exhaustion)
+
+As participants progress through a trial, their IRTs increase -- a pattern
+known as the **lexical exhaustion effect**.  Earlier serial positions access
+the most strongly activated, most central category members; later positions
+require search into the semantic periphery, which takes longer.
+
+The scatter plots below show word-level IRT plotted against serial position
+for each domain, with OLS trend lines.  All four domains show a positive slope.
+The gradient is steepest for Colours (small inventory exhausted by position ~8)
+and shallowest for Foods (large multi-tier vocabulary sustains fast access for
+much longer).
+
+![*Serial position vs IRT by domain.* Each point = one word from one participant. OLS trend line with 95% CI per domain. All four domains show a positive slope (IRT increases with position), confirming the lexical exhaustion effect. The gradient is steepest for Colours and shallowest for Foods, reflecting the relative sizes of their Hindi lexicons.](images/vft_fig07_word_irt_position.png){width=90%}
+
+> **EH2 finding:** IRT increases with serial position in all four domains,
+> confirming lexical exhaustion. The rate of increase is inversely proportional
+> to domain vocabulary size.
+
+---
+
+
+# Future Plan: Phase 2 (SpAM)
+
+## Overview
+
+Phase 2 will administer the **Spatial Arrangement Method (SpAM)** to the same
+35 participants.  In the SpAM task (Hout, Goldinger & Ferguson, 2013),
+participants drag word tokens onto a blank 2-D canvas and arrange them so that
+semantically similar words are placed close together and dissimilar words far
+apart.  The Euclidean distance between any two word positions in a participant's
+arrangement directly indexes their subjective semantic similarity for those words.
+
+Crucially, the SpAM data is already collected -- participants completed the
+spatial arrangement as part of the same web-session as the VFT, with their
+token placements recorded in the `droppedwords` field of `responses.json`.
+Phase 2 therefore requires parsing and analysis rather than new data collection.
+
+## Planned Analyses
+
+**1. Consensus distance matrices (per domain)**
+
+For each domain, pairwise Euclidean distances will be averaged across all 35
+participants to compute a consensus semantic proximity matrix.  This produces
+a 2-D representation of the "group-level" semantic space for each category.
+
+**2. MDS visualisation and hierarchical clustering**
+
+Multi-Dimensional Scaling (MDS) will project each domain's consensus matrix
+into 2-D space for visual inspection.  Agglomerative hierarchical clustering
+on the distance matrix will recover the latent subcategory structure (e.g.,
+wild animals vs domestic animals within the Animals domain).
+
+**3. RQ3: Cross-task correlation (SpAM distance vs VFT IRT)**
+
+The primary confirmatory test for Phase 2 is:
+
+- **H0:** rho (SpAM distance, VFT IRT) = 0
+- **H1:** rho (SpAM distance, VFT IRT) > 0
+
+Word pairs with low SpAM distance (semantically close) should produce short
+VFT IRTs (retrieved within the same cluster); word pairs with high SpAM
+distance (semantically distant) should produce long VFT IRTs (retrieved across
+a switch boundary).  This prediction follows directly from the
+clustering-and-switching model.  p-values will be Benjamini--Hochberg corrected
+for the four domains tested.
+
+**4. Domain vocabulary-breadth comparison**
+
+Neighbourhood density from the SpAM matrices will be compared across the four
+domains to test whether Foods and Animals (which supported deeper VFT clustering)
+genuinely have denser, more tightly structured semantic neighbourhoods than
+Colours and Body-parts.
+
+
+---
 
 
 # References
