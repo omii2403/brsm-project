@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" version="1.0">
+  <info>
+    <title>IEEE</title>
+    <id>http://www.zotero.org/styles/ieee</id>
+    <link href="http://www.zotero.org/styles/ieee" rel="self"/>
+    <author>
+      <name>IEEE</name>
+    </author>
+    <category citation-format="numeric"/>
+    <updated>2021-01-01T00:00:00+00:00</updated>
+  </info>
+  <citation>
+    <layout delimiter=", ">
+      <text variable="citation-number" prefix="[" suffix="]"/>
+    </layout>
+  </citation>
+  <bibliography>
+    <layout>
+      <text variable="citation-number" prefix="[" suffix="] "/>
+      <text variable="author" suffix=", "/>
+      <text variable="title" suffix=", "/>
+      <text variable="container-title" suffix=", "/>
+      <text variable="volume" prefix="vol. " suffix=", "/>
+      <text variable="issue" prefix="no. " suffix=", "/>
+      <text variable="page" prefix="pp. " suffix=", "/>
+      <text variable="issued" prefix="(" suffix=")"/>
+      <text variable="DOI" prefix=", DOI: " suffix=""/>
+      <text variable="URL" prefix=", URL: " suffix=""/>
+    </layout>
+  </bibliography>
+</style>

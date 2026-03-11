@@ -1,13 +1,12 @@
 ﻿---
 title: |
-  Semantic Organisation and Retrieval Dynamics in Hindi Verbal Fluency
-subtitle: Mid-Project Report --- Verbal Fluency Task (VFT)
+  Hindi Verbal Fluency
+subtitle: Mid-Project Report --- Team- CTRL+ALT+DEL
 author:
   - "Akshat Kotadia (2025201005)"
   - "Om Mehra (2025201008)"
   - "Ankit Chavda (2025201045)"
 institute: "IIIT Hyderabad"
-date: "March 2026"
 geometry: "a4paper, margin=1.8cm, top=2cm, bottom=2cm"
 fontsize: 10pt
 linestretch: 1.15
@@ -33,7 +32,7 @@ header-includes:
 abstract: |
   Thirty-five IIIT Hyderabad students completed a Hindi Verbal Fluency Task
   across four semantic domains (Animals, Foods, Colours, Body-parts), yielding
-  712 valid Devanagari responses (mean IRT 6490 ms, Skewness = 2.54).
+  712 valid Hindi responses (mean IRT 6490 ms, Skewness = 2.54).
   Within-cluster IRTs were significantly shorter than between-cluster IRTs
   (t(34) = -8.91, p < .001, d = 1.51), replicating the clustering-and-switching
   model in Hindi.  Mean cluster size significantly predicted total fluency
@@ -41,6 +40,17 @@ abstract: |
   similarity data to test whether neighbourhood distance predicts IRT.
 ---
 
+# Code and Data Availability
+
+All analysis code, raw data, and figures are openly available in the project
+GitHub repository:
+
+> <https://github.com/omii2403/Hindi-Fluency>
+
+The repository contains: `responses.json` (raw session data), `vft_responses.csv`
+(processed per-word dataset), `VFT_Final_Analysis.ipynb` (all Phase 1 analyses
+and figures), `gen_demographics.py` (participant demographics pipeline), and
+this report source (`Report_Mid.md`).
 
 # Background and Information
 
@@ -49,13 +59,13 @@ abstract: |
 The **Verbal Fluency Task (VFT)** requires participants to generate category
 members (e.g., "Animals") within 60 seconds.  Responses are structured: people
 produce tight **clusters** of related items and pause when switching to a new
-subcategory.  This **clustering-and-switching model** (Troyer et al., 1997)
+subcategory.  This **clustering-and-switching model** was first described by Troyer et al. [@troyer1997].
 predicts that within-cluster IRTs are shorter than between-cluster IRTs.
 
 ## Hindi Context and Project Goals
 
-Prior VFT research is almost exclusively English/European-language.  Hindi adds
-three complications: (1) Devanagari typing demands inflate IRTs; (2) educated
+Prior VFT research is almost exclusively English/European-language [@bhatt2022].  Hindi adds
+three complications: (1) Hindi typing demands inflate IRTs; (2) educated
 IIIT students code-switch into English mid-trial; (3) Foods and Animals reflect
 Indian cultural content.  Phase 1 (this report) tests the clustering-and-switching
 model in Hindi.  Phase 2 will add SpAM spatial similarity data.
@@ -105,11 +115,16 @@ Colours -- Body-parts.
 
 ## Processing Pipeline
 
-Raw `responses.json` was processed in five steps: (1) IRT computation
-($\text{IRT}_i = t_i - t_{i-1}$); (2) language tagging (Devanagari = Hindi,
-Latin = English); (3) Hindi filter retaining 712 of 1340 tokens (53%);
-(4) adaptive cluster scoring -- switch when IRT $>$ (mean + 1 SD) per
-participant; (5) export to `vft_responses.csv`.
+Raw `responses.json` was processed in five steps: 
+(1) IRT computation ($\text{IRT}_i = t_i - t_{i-1}$), where $t_i$ is the cumulative timestamp of the $i$-th response.
+
+(2) language tagging.
+
+(3) Hindi filter retaining 712 of 1340 tokens (53%).
+
+(4) adaptive cluster scoring -- switch when IRT $>$ (mean + 1 SD) per participant.
+
+(5) export to `vft_responses.csv`.
 
 ## Dataset Variables
 
@@ -139,19 +154,19 @@ Derived per participant: *within-cluster IRT* (mean IRT where `is_switch = False
 | **Total**  | **712**     | **100%**   |
 
 Animals and Foods dominate; Colours has the fewest Hindi tokens because the
-small Devanagari colour lexicon (~15 items) is quickly exhausted, after which
+small Hindi colour lexicon (~15 items) is quickly exhausted, after which
 participants switch to English.
 
-![*Hindi vs English token counts by domain.* Animals and Foods are Hindi-dominant; Colours is the only domain where English rivals Hindi.](images/domain-hin-en.png){width=60%}
+![*Hindi vs English token counts by domain.* Animals and Foods are Hindi-dominant; Colours is the only domain where English rivals Hindi.](images/domain-hin-en.png){width=54%}
 
 ### Participant-Level Language Dominance
 
 Most participants (>80%) produced the majority of tokens in Hindi; a small tail
 is near-balanced or English-dominant.  Hindi-dominant participants produce more
 tokens in every domain; the gap collapses for Colours, confirming its limited
-Devanagari vocabulary.
+Hindi vocabulary.
 
-![*Hindi-script proportion per participant, sorted descending.* Dashed line at 0.5 separates Hindi-dominant from English-dominant.](images/dominant-lang.png){width=55%}
+![*Hindi-script proportion per participant, sorted descending.* Dashed line at 0.5 separates Hindi-dominant from English-dominant.](images/dominant-lang.png){width=49.5%}
 
 ## IRT Descriptive Statistics
 
@@ -160,7 +175,7 @@ Mdn = 5389 ms, SD = 5019 ms, IQR = 4875 ms, Skewness = 2.54, Kurtosis = 9.89.
 The median is the better central-tendency estimate; the long right tail captures
 between-cluster switch pauses.
 
-![*IRT histogram (overall and by domain).* Overall distribution (left) with mean and median annotated. Domain histograms (right); Colours is tightest, Foods widest.](images/vft_fig01_irt_histogram.png){width=72%}
+![*IRT histogram (overall and by domain).* Overall distribution (left) with mean and median annotated. Domain histograms (right); Colours is tightest, Foods widest.](images/vft_fig01_irt_histogram.png){width=64.8%}
 
 | Domain     |  N  | Mean (ms) | Median (ms) | SD (ms) | Skew |
 |:-----------|----:|----------:|------------:|--------:|-----:|
@@ -172,12 +187,12 @@ between-cluster switch pauses.
 Colours is fastest (closed lexicon depleted quickly); Body-parts is slowest;
 Foods has the widest spread (rich multi-tier subcategory structure).
 
-![*Raincloud plots of IRT by domain.* Half-violin = KDE; box = Q1--Q3; dots = raw IRTs. Right-skewed shape consistent across all domains.](images/vft_fig03_raincloud_irt.png){width=62%}
+![*Raincloud plots of IRT by domain.* Half-violin = KDE; box = Q1--Q3; dots = raw IRTs. Right-skewed shape consistent across all domains.](images/vft_fig03_raincloud_irt.png){width=55.8%}
 
 English-script responses are consistently faster than Hindi-script responses
 within every domain, suggesting lower retrieval effort for English alternatives.
 
-![*IRT by domain and script.* English IRTs (light) are lower than Hindi IRTs (dark) in every domain.](images/rt-domain-lang.png){width=62%}
+![*IRT by domain and script.* English IRTs (light) are lower than Hindi IRTs (dark) in every domain.](images/rt-domain-lang.png){width=55.8%}
 
 ## Cluster Structure
 
@@ -185,15 +200,15 @@ Adaptive thresholds (mean + 1 SD per participant) prevent over-/under-clustering
 by speed.  Mean cluster size $> 1$ in all domains confirms genuine subcategory-burst
 retrieval.  Foods produces the deepest clusters (large multi-tier subcategory structure
 permits sustained within-cluster bursts); Colours the shallowest (small closed lexicon
-depleted early, forcing frequent switches to English).
+depleted early, forcing frequent switches to English [@hills2012].
 
-![*Cluster size (left) and switch count (right) by domain.* Foods supports deepest clustering; Colours shallowest.](images/vft_fig06_cluster_scoring.png){width=62%}
+![*Cluster size (left) and switch count (right) by domain.* Foods supports deepest clustering; Colours shallowest.](images/vft_fig06_cluster_scoring.png){width=55.8%}
 
 The scatter plot below validates mean IRT as an efficiency proxy: participants with
 faster retrieval speeds also produce more Hindi words overall ($r = -.21$, token level).
 This confirms that the temporal cost of lexical search translates directly into output quantity.
 
-![*Mean IRT vs total fluency score per participant.* Each point = one participant (n = 35). Negative relationship: faster retrievers produce more words. OLS line with 95\% CI.](images/vft_fig09_fluency_vs_irt.png){width=58%}
+![*Mean IRT vs total fluency score per participant.* Each point = one participant (n = 35). Negative relationship: faster retrievers produce more words. OLS line with 95\% CI.](images/vft_fig09_fluency_vs_irt.png){width=52.2%}
 
 
 ---
@@ -223,7 +238,7 @@ means across all four domains.
 Effect size d = 1.51 is large; the clustering-and-switching model is robustly
 replicated in Hindi.
 
-![*RQ1 -- Within- vs between-cluster IRT by domain.* Between-cluster IRTs (lighter) exceed within-cluster IRTs in every domain.](images/vft_fig11_rq1_within_between.png){width=62%}
+![*RQ1 -- Within- vs between-cluster IRT by domain.* Between-cluster IRTs (lighter) exceed within-cluster IRTs in every domain.](images/vft_fig11_rq1_within_between.png){width=55.8%}
 
 ## RQ2: Cluster Size as Predictor of Fluency
 
@@ -243,7 +258,7 @@ mean cluster size, averaged across domains per participant.
 **Decision:** Reject H0.  Cluster depth explains 30% of fluency variance; each
 unit increase in mean cluster size predicts ~2.6 additional Hindi words.
 
-![*RQ2 -- Mean cluster size vs total fluency.* r = .55; OLS line with 95% CI (y = 7.25 + 2.59x).](images/vft_fig13_rq3_fluency_scatter.png){width=58%}
+![*RQ2 -- Mean cluster size vs total fluency.* r = .55; OLS line with 95% CI (y = 7.25 + 2.59x).](images/vft_fig13_rq3_fluency_scatter.png){width=52.2%}
 
 ## Summary
 
@@ -261,7 +276,7 @@ unit increase in mean cluster size predicts ~2.6 additional Hindi words.
 **EH1 -- Domain-Level IRT Differences.** Closed-vocabulary domains (Colours:
 M = 4975 ms) produced shorter, less-skewed IRTs than open domains (Body-parts:
 M = 6872 ms), consistent with vocabulary-size modulation of retrieval dynamics.
-The small Devanagari colour lexicon is exhausted quickly, suppressing the right tail.
+The small Hindi colour lexicon is exhausted quickly, suppressing the right tail.
 
 **EH2 -- Serial Position / Lexical Exhaustion.** IRT increases with serial
 position in all four domains (positive OLS slopes), confirming that later
@@ -269,12 +284,12 @@ positions require deeper search into the semantic periphery.  The gradient is
 steepest for Colours (inventory depleted by ~position 8) and shallowest for
 Foods.
 
-![*Serial position vs IRT by domain (OLS trend lines).* All four domains show positive slopes; gradient steepest for Colours, shallowest for Foods.](images/vft_fig07_word_irt_position.png){width=65%}
+![*Serial position vs IRT by domain (OLS trend lines).* All four domains show positive slopes; gradient steepest for Colours, shallowest for Foods.](images/vft_fig07_word_irt_position.png){width=58.5%}
 
 **EH3 -- Bilingual Code-Switching.** A proportion of responses in every trial
 appear in Latin script (English), even when the category cue was given in Hindi.
 Code-switching is not random: it is concentrated in the **Colours** domain, where
-the small Devanagari inventory is exhausted earliest.  Participants effectively
+the small Hindi inventory is exhausted earliest.  Participants effectively
 borrow English colour terms ("red", "blue", "pink") once Hindi options are depleted.
 This pattern reveals a domain-specific ceiling on Hindi lexical availability and
 suggests that bilingual retrieval strategies are triggered by vocabulary exhaustion
@@ -304,7 +319,7 @@ alone.
 
 SpAM data were collected in the same web session: participants dragged word tokens
 onto a blank canvas, with Euclidean drag-distance indexing subjective semantic
-similarity.  Phase 2 analyses will proceed in four steps.
+similarity [@hout2013].  Phase 2 analyses will proceed in four steps.
 
 **1. Consensus distance matrices.**  For each domain, pairwise Euclidean distances
 between word tokens are averaged across all 35 participants, producing a group-level
@@ -324,7 +339,7 @@ cluster boundaries identified in Phase 1.
 Word pairs rated close in SpAM (low distance) should produce short VFT IRTs
 (retrieved within the same cluster); pairs rated far apart should produce long IRTs
 (switch-boundary pauses).  $p$-values will be Benjamini--Hochberg corrected across
-the four domains tested.
+the four domains tested [@benjamini1995].
 
 **4. Domain vocabulary-breadth comparison.**  Neighbourhood density from the SpAM
 matrices will be compared across domains to test whether Foods and Animals
@@ -334,50 +349,24 @@ Colours and Body-parts.
 
 ---
 
+# Contributions
+This project was completed by the team CTRL+ALT+DEL:
 
-# Code and Data Availability
+**Akshat Kotadia (2025201005)**, **Om Mehra (2025201008)**, and **Ankit Chavda (2025201045)** contributed to the following tasks:
 
-All analysis code, raw data, and figures are openly available in the project
-GitHub repository:
+- Data collection and preprocessing: Akshat Kotadia & Om Mehra
+- Demographics pipeline development: Om Mehra & Ankit Chavda
+- Statistical analysis: Akshat Kotadia & Ankit Chavda
+- Figure generation: Om Mehra & Akshat Kotadia
+- Report writing and editing: Ankit Chavda & Om Mehra
+- Code review and validation: Akshat Kotadia & Ankit Chavda
+- Literature review: Om Mehra & Ankit Chavda
+- Presentation preparation: Akshat Kotadia & Om Mehra
 
-> <https://github.com/omii2403/Hindi-Fluency>
-
-The repository contains: `responses.json` (raw session data), `vft_responses.csv`
-(processed per-word dataset), `VFT_Final_Analysis.ipynb` (all Phase 1 analyses
-and figures), `gen_demographics.py` (participant demographics pipeline), and
-this report source (`Report_Mid.md`).
-
+All tasks were discussed collaboratively, and each member contributed to multiple aspects, ensuring balanced participation and shared responsibility throughout the project.
 
 ---
 
-
 # References
 
-\begin{thebibliography}{7}
-
-\bibitem{troyer1997}
-Troyer, A.\,K., Moscovitch, M., \& Winocur, G. (1997).
-Clustering and switching as two components of verbal fluency.
-\textit{Neuropsychology}, \textit{11}(1), 138--146.
-
-\bibitem{hills2012}
-Hills, T.\,T., Jones, M.\,N., \& Todd, P.\,M. (2012).
-Optimal foraging in semantic memory.
-\textit{Psychological Review}, \textit{119}(2), 431--440.
-
-\bibitem{hout2013}
-Hout, M.\,C., Goldinger, S.\,D., \& Ferguson, R.\,W. (2013).
-The versatility of SpAM.
-\textit{Journal of Experimental Psychology: General}, \textit{142}(1), 256--281.
-
-\bibitem{benjamini1995}
-Benjamini, Y., \& Hochberg, Y. (1995).
-Controlling the false discovery rate.
-\textit{JRSS-B}, \textit{57}(1), 289--300.
-
-\bibitem{bhatt2022}
-Bhatt, R., Anderson, N.\,D., \& Bhatt, M. (2022).
-Verbal fluency in bilingual South Asian older adults.
-\textit{J. Int. Neuropsychol. Soc.}, \textit{28}(4), 412--421.
-
-\end{thebibliography}
+[@troyer1997; @hills2012; @hout2013; @benjamini1995; @bhatt2022]
